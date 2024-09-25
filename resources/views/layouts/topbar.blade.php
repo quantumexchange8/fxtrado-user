@@ -20,10 +20,10 @@
                 <img src="assets/img/svg-icon/wallet.svg" class="svgInject" alt="svg">
             </div>
             <div class="header__user-balance-text">
-                <h2>Balance: <span>$2900.29</span></h2>
-                <span class="green">Growth: <img src="assets/img/svg-icon/up-arrow.svg" class="svgInject"
+                <h2>Balance: <span>$ {{ Auth::user()->wallet->balance ?? 'No wallet found' }}</span></h2>
+                {{-- <span class="green">Growth: <img src="assets/img/svg-icon/up-arrow.svg" class="svgInject"
                     alt="svg"> 29.9%
-                </span>
+                </span> --}}
             </div>
             </div>
             <div class="header__user-profile dropdown-toggle" style="background-color: #171717" id="dropdownMenuButton" data-toggle="dropdown"

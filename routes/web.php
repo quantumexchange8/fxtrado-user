@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\WalletController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -11,6 +12,14 @@ Route::get('/', function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // Wallet
+    Route::get('/wallet', [WalletController::class, 'wallet'])->name('wallet');
+    Route::post('/deposit', [WalletController::class, 'deposit'])->name('wallet.deposit');
+    Route::post('/withdrawal', [WalletController::class, 'withdrawal'])->name('wallet.withdrawal');
+
+    Route::get('/deposit_return', [WalletController::class, 'deposit_return'])->name('deposit_return');
+    Route::post('/deposit_callback', [WalletController::class, 'deposit_callback'])->name('deposit_callback');
 });
 
 require __DIR__.'/auth.php';
