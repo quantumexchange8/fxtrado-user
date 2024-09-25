@@ -8,12 +8,12 @@
     </div>
     <div class="navigation__list">
       <ul>
-        <li class="navigation__item"><a href="#" class="navigation__item-link active">
+        <li class="navigation__item"><a href="dashboard" class="navigation__item-link active">
           <span class="navigation__item-icon-wrapper"><img src="assets/img/svg-icon/dash.svg"
               class="svgInject navigation__item-icon" alt="svg"></span>
           <span class="navigation__item-label">Dashboard</span>
         </a></li>
-        <li class="navigation__item"><a href="index.html" class="navigation__item-link">
+        <li class="navigation__item"><a href="forex_pair" class="navigation__item-link">
             <span class="navigation__item-icon-wrapper"><img src="assets/img/svg-icon/dash.svg"
                 class="svgInject navigation__item-icon" alt="svg"></span>
             <span class="navigation__item-label">Exchange</span>

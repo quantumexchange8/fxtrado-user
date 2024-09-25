@@ -2,13 +2,7 @@
     <div class="header">
     <div class="row">
         <div class="col-lg-12 col-xl-6">
-        <div class="header__price-update">
-            <ul>
-            <li>3.33223838 BTC<span>Last Trade Price</span></li>
-            <li>4.55% <span>Price (24h)</span></li>
-            <li>4.82383 BTC<span>Volume (24h)</span></li>
-            </ul>
-        </div>
+        
         </div>
         <div class="col-lg-12 col-xl-6">
         <div class="header__user">

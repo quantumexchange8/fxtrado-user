@@ -4,246 +4,28 @@
 <div class="exchange__wrapper">
     <div class="container-fluid">
       <div class="row sm-gutters">
-        <div class="col-md-12">
-          <div class="header">
-            <div class="row">
-              <div class="col-lg-12 col-xl-6">
-                <div class="header__price-update">
-                  <ul>
-                    <li>3.33223838 BTC<span>Last Trade Price</span></li>
-                    <li>4.55% <span>Price (24h)</span></li>
-                    <li>4.82383 BTC<span>Volume (24h)</span></li>
-                  </ul>
-                </div>
-              </div>
-              <div class="col-lg-12 col-xl-6">
-                <div class="header__user">
-                  <div class="header__sidebar-icon">
-                    <img src="assets/img/svg-icon/left-bar.svg" class="svgInject" alt="svg">
-                  </div>
-                  <div class="header__user-balance">
-                    <div class="header__user-balance-icon">
-                      <img src="assets/img/svg-icon/wallet.svg" class="svgInject" alt="svg">
-                    </div>
-                    <div class="header__user-balance-text">
-                      <h2>Balance: <span>$2900.29</span></h2>
-                      <span class="green">Growth: <img src="assets/img/svg-icon/up-arrow.svg" class="svgInject"
-                          alt="svg"> 29.9%
-                      </span>
-                    </div>
-                  </div>
-                  <div class="header__user-profile dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown"
-                    aria-haspopup="true" aria-expanded="false">
-                    <div class="header__user-profile-icon">
-                      <img src="assets/img/svg-icon/avatar.svg" class="svgInject" alt="svg">
-                      <span>9</span>
-                    </div>
-                    <div class="header__user-profile-text">
-                      <h2>Elon Musk</h2>
-                      <span><img src="assets/img/svg-icon/check.svg" class="svgInject" alt="svg"> verified</span>
-                    </div>
-                  </div>
-                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="settings.html"><img src="assets/img/svg-icon/settings-line.svg"
-                        class="svgInject" alt="svg"> Settings</a>
-                    <a class="dropdown-item" href="verification.html"><img src="assets/img/svg-icon/user.svg"
-                        class="svgInject" alt="svg"> Verification</a>
-                    <a class="dropdown-item" href="security.html"><img src="assets/img/svg-icon/lock.svg"
-                        class="svgInject" alt="svg"> Security</a>
-                    <a class="dropdown-item" href="api.html"><img src="assets/img/svg-icon/code.svg" class="svgInject"
-                        alt="svg"> API</a>
-                    <a class="dropdown-item" id="themeChange" href="#"><img src="assets/img/svg-icon/sun.svg"
-                        class="svgInject sun-icon" alt="svg"><img src="assets/img/svg-icon/moon.svg"
-                        class="svgInject moon-icon" alt="svg"> Theme</a>
-                    <a class="dropdown-item red" href="login.html"><img src="assets/img/svg-icon/power.svg"
-                        class="svgInject" alt="svg"> Logout</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        @include('layouts.topbar')
         <div class="col-lg-4 col-xl-3">
           <div class="exchange__widget">
-            <ul class="nav nav-pills" role="tablist">
-              <li class="nav-item">
-                <a class="nav-link active" data-toggle="pill" href="#BTC" role="tab" aria-selected="true">BTC</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" data-toggle="pill" href="#USD" role="tab" aria-selected="false">USD</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" data-toggle="pill" href="#EUR" role="tab" aria-selected="false">EUR</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" data-toggle="pill" href="#ETH" role="tab" aria-selected="false">ETH</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" data-toggle="pill" href="#LTC" role="tab" aria-selected="false">LTC</a>
-              </li>
-            </ul>
+            
             <div class="tab-content">
               <div class="tab-pane fade show active" id="BTC" role="tabpanel">
                 <table class="table">
                   <thead>
                     <tr>
                       <th>Name</th>
-                      <th>Price</th>
-                      <th>Change</th>
+                      <th>Bid</th>
+                      <th>Ask</th>
                     </tr>
                   </thead>
                   <tbody class="exchange__widget__table">
-                    <tr>
-                      <td><img src="assets/img/coin/btc.svg" class="svgInject" alt="svg"> btc</td>
-                      <td>0.0255</td>
-                      <td class="red"><img src="assets/img/svg-icon/down.svg" class="svgInject" alt="svg">2.5%</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/abt.svg" class="svgInject" alt="svg"> abt</td>
-                      <td>0.0192</td>
-                      <td class="green"><img src="assets/img/svg-icon/up.svg" class="svgInject" alt="svg">5.6%</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/act.svg" class="svgInject" alt="svg"> act</td>
-                      <td>0.0003</td>
-                      <td class="red"><img src="assets/img/svg-icon/down.svg" class="svgInject" alt="svg">2.5%</td>
-                    </tr>
-
-                    <tr>
-                      <td><img src="assets/img/coin/actn.svg" class="svgInject" alt="svg"> actn</td>
-                      <td>0.0103</td>
-                      <td class="green"><img src="assets/img/svg-icon/up.svg" class="svgInject" alt="svg">1.8%</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/add.svg" class="svgInject" alt="svg"> add</td>
-                      <td>0.0003</td>
-                      <td class="red"><img src="assets/img/svg-icon/down.svg" class="svgInject" alt="svg">1.5%</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/agi.svg" class="svgInject" alt="svg"> agi</td>
-                      <td>0.0203</td>
-                      <td class="green"><img src="assets/img/svg-icon/up.svg" class="svgInject" alt="svg">1.5%</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/amp.svg" class="svgInject" alt="svg"> amp</td>
-                      <td>0.0033</td>
-                      <td class="green"><img src="assets/img/svg-icon/up.svg" class="svgInject" alt="svg">2.3%</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/auto.svg" class="svgInject" alt="svg"> auto</td>
-                      <td>0.0003</td>
-                      <td class="red"><img src="assets/img/svg-icon/down.svg" class="svgInject" alt="svg">3.2%</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/bab.svg" class="svgInject" alt="svg"> bab</td>
-                      <td>0.0033</td>
-                      <td class="green"><img src="assets/img/svg-icon/up.svg" class="svgInject" alt="svg">2.3%</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/band.svg" class="svgInject" alt="svg"> band</td>
-                      <td>0.0296</td>
-                      <td class="red"><img src="assets/img/svg-icon/down.svg" class="svgInject" alt="svg">1.5%</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/bch.svg" class="svgInject" alt="svg"> bch</td>
-                      <td>0.113</td>
-                      <td class="green"><img src="assets/img/svg-icon/up.svg" class="svgInject" alt="svg">3.5%</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/bdl.svg" class="svgInject" alt="svg"> bdl</td>
-                      <td>0.2243</td>
-                      <td class="red"><img src="assets/img/svg-icon/down.svg" class="svgInject" alt="svg">4.5%</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/beam.svg" class="svgInject" alt="svg"> beam</td>
-                      <td>0.0296</td>
-                      <td class="green"><img src="assets/img/svg-icon/up.svg" class="svgInject" alt="svg">2.5%</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/bnty.svg" class="svgInject" alt="svg"> bnty</td>
-                      <td>0.3423</td>
-                      <td class="red"><img src="assets/img/svg-icon/down.svg" class="svgInject" alt="svg">1.5%</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/btcd.svg" class="svgInject" alt="svg"> btcd</td>
-                      <td>0.0296</td>
-                      <td class="green"><img src="assets/img/svg-icon/up.svg" class="svgInject" alt="svg">1.5%</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/btch.svg" class="svgInject" alt="svg"> btch</td>
-                      <td>0.0296</td>
-                      <td class="red"><img src="assets/img/svg-icon/down.svg" class="svgInject" alt="svg">1.5%</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/btcz.svg" class="svgInject" alt="svg"> btcz</td>
-                      <td>0.0296</td>
-                      <td class="green"><img src="assets/img/svg-icon/up.svg" class="svgInject" alt="svg">1.5%</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/cdn.svg" class="svgInject" alt="svg"> cdn</td>
-                      <td>0.0296</td>
-                      <td class="red"><img src="assets/img/svg-icon/down.svg" class="svgInject" alt="svg">1.5%</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/chain.svg" class="svgInject" alt="svg"> chain</td>
-                      <td>0.0296</td>
-                      <td class="red"><img src="assets/img/svg-icon/down.svg" class="svgInject" alt="svg">1.5%</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/clam.svg" class="svgInject" alt="svg"> clam</td>
-                      <td>0.0296</td>
-                      <td class="red"><img src="assets/img/svg-icon/down.svg" class="svgInject" alt="svg">1.5%</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/cob.svg" class="svgInject" alt="svg"> cob</td>
-                      <td>0.0296</td>
-                      <td class="green"><img src="assets/img/svg-icon/up.svg" class="svgInject" alt="svg">1.5%</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/comp.svg" class="svgInject" alt="svg"> comp</td>
-                      <td>0.0296</td>
-                      <td class="green"><img src="assets/img/svg-icon/up.svg" class="svgInject" alt="svg">1.5%</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/coqui.svg" class="svgInject" alt="svg"> coqui</td>
-                      <td>0.0296</td>
-                      <td class="green"><img src="assets/img/svg-icon/up.svg" class="svgInject" alt="svg">1.5%</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/cvc.svg" class="svgInject" alt="svg"> cvc</td>
-                      <td>0.0296</td>
-                      <td class="green"><img src="assets/img/svg-icon/up.svg" class="svgInject" alt="svg">1.5%</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/dew.svg" class="svgInject" alt="svg"> dew</td>
-                      <td>0.0296</td>
-                      <td class="red"><img src="assets/img/svg-icon/down.svg" class="svgInject" alt="svg">1.5%</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/elec.svg" class="svgInject" alt="svg"> elec</td>
-                      <td>0.0296</td>
-                      <td class="red"><img src="assets/img/svg-icon/down.svg" class="svgInject" alt="svg">1.5%</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/elf.svg" class="svgInject" alt="svg"> elf</td>
-                      <td>0.0296</td>
-                      <td class="green"><img src="assets/img/svg-icon/up.svg" class="svgInject" alt="svg">1.5%</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/emc.svg" class="svgInject" alt="svg"> emc</td>
-                      <td>0.0296</td>
-                      <td class="red"><img src="assets/img/svg-icon/down.svg" class="svgInject" alt="svg">1.5%</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/equa.svg" class="svgInject" alt="svg"> equa</td>
-                      <td>0.0296</td>
-                      <td class="green"><img src="assets/img/svg-icon/up.svg" class="svgInject" alt="svg">1.5%</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/ethos.svg" class="svgInject" alt="svg"> ethos</td>
-                      <td>0.0296</td>
-                      <td class="green"><img src="assets/img/svg-icon/up.svg" class="svgInject" alt="svg">1.5%</td>
-                    </tr>
+                    @foreach ($allPairs as $allPair)
+                      <tr data-symbol="{{ $allPair->currency_pair }}">
+                        <td><img src="assets/img/coin/btc.svg" class="svgInject" alt="svg"> {{ $allPair->currency_pair }}</td>
+                          <td class="bid">0.0000</td> <!-- Bid placeholder -->
+                          <td class="ask">0.0000</td> <!-- Ask placeholder -->
+                      </tr>
+                    @endforeach
                   </tbody>
                 </table>
               </div>
@@ -646,7 +428,7 @@
               </div>
             </div>
           </div>
-          <div class="exchange__widget">
+          {{-- <div class="exchange__widget">
             <h2 class="exchange__widget-title">Top Offers</h2>
             <table class="table">
               <thead>
@@ -732,8 +514,8 @@
                 </tr>
               </tbody>
             </table>
-          </div>
-          <div class="exchange__widget exchange__widget__transaction">
+          </div> --}}
+          {{-- <div class="exchange__widget exchange__widget__transaction">
             <h2 class="exchange__widget-title">Latest Transactions</h2>
             <table class="table">
               <thead>
@@ -806,8 +588,10 @@
                 </tr>
               </tbody>
             </table>
-          </div>
+          </div> --}}
         </div>
+
+        {{-- chart --}}
         <div class="col-lg-8 col-xl-9">
           <div class="exchange__widget__trading">
             <div id="trading-chart-transparent"></div>
@@ -1528,7 +1312,9 @@
             </div>
           </div>
         </div>
-        <div class="col-md-12">
+        {{-- end of chart --}}
+
+        {{-- <div class="col-md-12">
           <div class="exchange__widget__order-status exchange__widget">
             <h2 class="exchange__widget-title">Order status</h2>
             <ul class="nav nav-pills" role="tablist">
@@ -2085,8 +1871,49 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> --}}
+
       </div>
     </div>
   </div>
+
+  <script>
+    // Establish WebSocket connection
+    const socket = new WebSocket('ws://localhost:3000/forex_pair'); //websocket domain need change
+
+    socket.onopen = function() {
+      console.log('WebSocket connection established');
+    };
+
+    socket.onerror = function(error) {
+        console.error('WebSocket error:', error);
+    };
+
+    // Listen for messages from the WebSocket server
+    socket.onmessage = function(event) {
+        // Parse the incoming data (which should be JSON)
+        const data = JSON.parse(event.data);
+
+        // Call the function to update the corresponding table row
+        updateTableRow(data.symbol, data.bid, data.ask);
+    };
+
+    // Function to update table rows with the bid/ask values
+    function updateTableRow(symbol, bid, ask) {
+        // Find the row with the data-symbol attribute matching the symbol (e.g., EUR/USD)
+        const row = document.querySelector(`tr[data-symbol='${symbol}']`);
+      
+        if (row) {
+            // Update the bid and ask values in the corresponding table cells
+            row.querySelector('.bid').innerText = bid;
+            row.querySelector('.ask').innerText = ask;
+        }
+    }
+
+    // Handle WebSocket connection errors
+    socket.onerror = function(error) {
+        console.error('WebSocket error:', error);
+    };
+</script>
+
 @endsection
