@@ -1,0 +1,52 @@
+.exchange__widget__profile label {
+  color: $whiteColor;
+  margin-top: 30px;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+.exchange__widget__profile-avatar svg {
+  width: 108px;
+  height: 108px;
+  border-radius: 100px;
+  background: $whiteColor;
+  padding: 4px;
+  background-image: linear-gradient(
+    to right,
+    #eea2a2 0%,
+    #bbc1bf 19%,
+    #57c6e1 42%,
+    #b49fda 79%,
+    #7ac5d8 100%
+  );
+}
+.exchange__widget__profile-avatar span svg {
+  width: 25px;
+  height: 25px;
+  background: $activeColor;
+  border-radius: 50px;
+  padding: 7px;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+.exchange__widget__profile-avatar {
+  position: relative;
+  max-width: 111px;
+  margin: auto;
+  margin-bottom: 10px;
+}
+
+.exchange__widget__profile select {
+  background: transparent;
+  border-color: $darkBorder;
+  height: 52px;
+  color: $ashColor;
+}
+.exchange__widget__profile select option {
+  color: $blackColor;
+}
+.exchange__widget__profile select:focus {
+  box-shadow: none;
+  border-color: $ashColor;
+}

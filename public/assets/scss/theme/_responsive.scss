@@ -1,0 +1,83 @@
+@media only screen and (max-width: 1200px) {
+  #walletVolume .apexcharts-canvas {
+    margin-top: 30px;
+  }
+  .header__price-update {
+    display: none;
+  }
+}
+@media only screen and (max-width: 860px) {
+  .fixed-table-toolbar {
+    position: unset;
+  }
+  .exchange__widget__history .bootstrap-table {
+    margin-top: 10px;
+  }
+  .bootstrap-table .fixed-table-toolbar .bs-bars {
+    position: absolute;
+    top: 10px;
+    left: 150px;
+  }
+
+  .columns.columns-right.btn-group.float-right {
+    position: absolute;
+    top: 10px;
+    left: 260px;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .header__sidebar-icon {
+    display: block;
+    cursor: pointer;
+  }
+  .mobile-nav {
+    overflow: hidden;
+  }
+  .mobile-nav .navigation {
+    opacity: 1;
+    visibility: visible;
+    width: 250px;
+  }
+  .mobile-nav .exchange {
+    padding-left: 250px;
+    position: absolute;
+  }
+  .header__price-update {
+    display: none;
+  }
+  .header__user-balance {
+    display: none;
+  }
+  .exchange {
+    padding-left: 0;
+  }
+  .navigation {
+    width: 0;
+    visibility: hidden;
+    opacity: 0;
+  }
+  .header__user {
+    justify-content: space-between;
+  }
+  .exchange__widget__order {
+    grid-template-columns: 1fr;
+    grid-row-gap: 50px;
+  }
+}
+@media only screen and (max-width: 650px) {
+  .fixed-table-toolbar .float-right {
+    float: unset !important;
+  }
+}
+@media only screen and (max-width: 530px) {
+  .columns.columns-right.btn-group.float-right {
+    position: unset;
+  }
+  .fixed-table-toolbar .search input {
+    margin-bottom: 10px;
+  }
+  .exchange__widget__history {
+    padding-bottom: 40px;
+  }
+}

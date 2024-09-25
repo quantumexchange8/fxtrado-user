@@ -1,0 +1,28 @@
+.exchange-verification-item {
+  border: 1px solid $darkBorder;
+  text-align: center;
+  padding: 30px 30px 50px;
+  border-radius: 5px;
+}
+.custom-file .custom-file-label {
+  background: transparent;
+  border-color: $darkBorder;
+  color: $ashDarkColor;
+}
+.custom-file .custom-file-label::after {
+  background: $activeColor;
+  color: $whiteColor;
+}
+.exchange-verification button {
+  background: $activeColor;
+  border: 1px solid $activeColor;
+  padding: 12px 40px;
+  color: $whiteColor;
+  border-radius: 5px;
+  font-size: 18px;
+  margin-top: 28px;
+}
+.exchange-verification button:hover {
+  background: transparent;
+  color: $activeColor;
+}

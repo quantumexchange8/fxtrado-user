@@ -1,0 +1,21 @@
+{
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "start": "concurrently --names \"SASS,WATCH,SERVE\" -c \"bgBlue.bold,bgMagenta.bold,bgGreen.bold\" \"npm run sass\" \"npm run sass:watch\" \"npm run serve\"",
+        "serve": "lite-server",
+        "sass": "node-sass assets/scss/style.scss --output assets/css/ --indent-width 4 --output-style expanded --indent-type space --source-map true",
+        "sass:watch": "npm run sass -- --watch"
+    },
+    "devDependencies": {
+        "axios": "^1.7.4",
+        "laravel-vite-plugin": "^1.0",
+        "tailwindcss": "^3.4.13",
+        "vite": "^5.0"
+    },
+    "dependencies": {
+        "sass": "^1.79.3"
+    }
+}

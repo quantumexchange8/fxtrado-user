@@ -1,0 +1,55 @@
+.settings-notification li {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 0;
+  border-bottom: 1px solid $darkBorder;
+  align-items: center;
+}
+.settings-notification li span {
+  color: $ashDarkColor;
+}
+.settings-notification li:last-child {
+  border-bottom: 0;
+}
+.notification-info p {
+  color: $whiteColor;
+  margin-bottom: 5px;
+}
+.settings-api-key label {
+  color: $whiteColor;
+}
+
+.settings-api-key input {
+  background: transparent;
+  border-color: $darkBorder;
+  padding: 25px;
+}
+.settings-api-key input:focus {
+  background: transparent;
+  border-color: $ashColor;
+}
+.exchange__settings-api-list table td {
+  font-size: 13px;
+  padding: 10px 18px;
+}
+
+.exchange__settings-api-list table tbody {
+  height: unset;
+}
+
+.exchange__settings-api-list table thead th:first-child,
+.exchange__settings-api-list table tbody td:first-child,
+.exchange__settings-api-list table tr th,
+.exchange__settings-api-list table tr td {
+  width: unset;
+}
+.exchange__settings-api-list table tr {
+  float: unset;
+}
+.exchange__settings-api-list table,
+.exchange__settings-api-list table tr {
+  table-layout: fixed;
+}
+.exchange__settings-api-list table tbody {
+  display: contents;
+}

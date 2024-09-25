@@ -1,0 +1,104 @@
+.exchange__wallet-account {
+  color: $whiteColor;
+}
+.exchange__widget-account-info h3 {
+  font-weight: 400;
+  font-size: 24px;
+}
+.exchange__widget-account-info h2 {
+  font-size: 48px;
+}
+.exchange__widget-account-info {
+  background: $whiteTransColor;
+  border-radius: 5px;
+  padding: 20px 20px 10px;
+  text-align: center;
+  margin-bottom: 25px;
+}
+.exchange__wallet-card-item {
+  background: $whiteTransColor;
+  border-radius: 5px;
+  padding: 20px;
+  position: relative;
+  color: $whiteColor;
+  margin-bottom: 20px;
+  background-image: linear-gradient(to right, #f83600d1 0%, #f9d423d1 100%);
+}
+.exchange__wallet-card-item:nth-child(2) {
+  background-image: linear-gradient(to right, #001fffd1 0%, #46eeffd1 100%);
+}
+.exchange__wallet-card-item:nth-child(3) {
+  background-image: linear-gradient(to right, #20d200d1 0%, #88ffadd1 100%);
+}
+.exchange__wallet-card-item:last-child {
+  margin-bottom: 0;
+}
+.exchange__wallet-card-item span {
+  position: absolute;
+  right: 30px;
+  top: 30px;
+  width: 50px;
+  height: 50px;
+}
+
+.exchange__wallet-card-item h2 {
+  font-size: 16px;
+  font-weight: 400;
+  margin-bottom: 35px;
+}
+
+.exchange__wallet-card-item h3 {
+  font-weight: 500;
+  font-size: 30px;
+}
+
+.exchange__wallet-card-item p {
+  margin-bottom: 40px;
+}
+
+.exchange__wallet-card-item a {
+  margin-right: 15px;
+  color: $whiteColor;
+}
+
+.exchange__wallet-card-item a svg {
+  margin-right: 5px;
+}
+
+.exchange__wallet-card-item a svg rect,
+.exchange__widget-card-add button svg rect {
+  fill: #ffffff47;
+  fill-opacity: 1;
+}
+
+.exchange__wallet-card-item a svg path,
+.exchange__widget-card-add button svg path {
+  fill: $whiteColor;
+}
+#walletVolume .apexcharts-canvas {
+  margin: auto;
+}
+
+.exchange__widget-card-add button {
+  border: 1px solid $activeColor;
+  padding: 10px 20px;
+  background: $activeColor;
+  color: $whiteColor;
+  border-radius: 5px;
+  font-size: 18px;
+  margin-top: 37px;
+  transition: 0.3s;
+}
+.exchange__widget-card-add button:hover {
+  background: transparent;
+  color: $activeColor;
+}
+.exchange__widget-card-add button svg {
+  margin-right: 5px;
+  width: 24px;
+  height: 24px;
+  transition: 0.3s;
+}
+.exchange__widget-card-add button:hover svg path {
+  fill: $activeColor;
+}

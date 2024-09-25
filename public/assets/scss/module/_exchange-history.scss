@@ -1,0 +1,203 @@
+.exchange__widget__history {
+  background: $cardColor;
+  padding: 20px;
+  margin-bottom: 20px;
+  position: relative;
+}
+.exchange__widget__history button#remove,
+.exchange__widget__history button#remove:hover,
+.exchange__widget__history button#remove:focus {
+  background: $redColor;
+  box-shadow: none;
+  outline: none;
+  display: flex;
+}
+.exchange__widget__history .remove i {
+  color: $redColor;
+}
+.exchange__widget__history .dropdown-item:focus,
+.exchange__widget__history .dropdown-item:hover {
+  background: $cardColor;
+}
+.exchange__widget__history .dropdown-divider {
+  border-top: 1px solid $ashDarkColor;
+}
+.exchange__widget__history .dropdown-toggle::after {
+  display: none;
+}
+.exchange__widget__history thead {
+  background: $whiteTransColor;
+}
+.bootstrap-table .fixed-table-container .fixed-table-body {
+  height: 600px;
+  display: block;
+  overflow-y: auto;
+}
+.fixed-table-body::-webkit-scrollbar {
+  width: 4px;
+  border-radius: 6px;
+}
+.fixed-table-body:hover::-webkit-scrollbar {
+  display: block;
+}
+.fixed-table-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+.fixed-table-body::-webkit-scrollbar-thumb {
+  background: $darkBorder;
+}
+.bootstrap-table .fixed-table-container.fixed-height .table thead th {
+  border-bottom: 1px solid $darkBorder;
+}
+.table-bordered td,
+.table-bordered th {
+  border: 1px solid $darkBorder;
+  color: $whiteColor;
+}
+.exchange__widget__history select {
+  background: $whiteTransColor;
+  border-color: $whiteTransColor;
+  padding: 0 15px;
+  color: $whiteColor;
+  text-transform: uppercase;
+  width: unset;
+}
+
+.exchange__widget__history select:focus {
+  box-shadow: none;
+  border: none;
+}
+
+.fixed-table-toolbar {
+  display: inline-block;
+  position: absolute;
+  right: 20px;
+  top: 10px;
+}
+
+.fixed-table-toolbar .bs-bars button {
+  margin-right: 20px;
+}
+
+.fixed-table-toolbar .search input {
+  background: $whiteTransColor;
+  border-color: $whiteTransColor;
+  margin-right: 15px;
+  color: $whiteColor;
+}
+.exchange__widget__history .bootstrap-table {
+  margin-top: 30px;
+}
+.bootstrap-table .fixed-table-container.fixed-height .fixed-table-border {
+  border: none;
+}
+.fixed-table-toolbar .columns button {
+  background: $whiteTransColor;
+  border-color: $whiteTransColor;
+  padding: 10px 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.fixed-table-toolbar .fa {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+}
+.fixed-table-toolbar .columns button:focus,
+.fixed-table-toolbar .columns button:active {
+  outline: none;
+  box-shadow: none !important;
+}
+.bootstrap-table .fixed-table-toolbar .columns label span {
+  margin-left: 10px;
+}
+.bootstrap-table .fixed-table-toolbar .columns label {
+  color: $whiteColor;
+  margin: 0;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+.pagination-detail {
+  color: $whiteColor;
+  margin-bottom: 0 !important;
+}
+
+.pagination-detail span button {
+  display: inline-block;
+  margin-right: 5px;
+  background: $whiteTransColor;
+  border-color: $whiteTransColor;
+}
+ul.pagination li a {
+  background: $whiteTransColor;
+  color: $whiteColor;
+  border-color: $whiteTransColor;
+}
+
+ul.pagination li.page-last-separator a {
+  background: $whiteTransColor !important;
+  border-color: $whiteTransColor !important;
+}
+
+ul.pagination li a:hover {
+  background: $activeColor;
+  border-color: $activeColor;
+  color: $whiteColor;
+}
+
+.pagination-detail span button:hover,
+.pagination-detail span button:focus,
+.pagination-detail span button:active,
+.fixed-table-toolbar .columns button:hover,
+.fixed-table-toolbar .columns button:focus {
+  background: $activeColor !important;
+  border-color: $activeColor !important;
+  box-shadow: none !important;
+}
+.exchange__widget__history table tr td img {
+  width: 20px;
+  margin-right: 5px;
+}
+
+.exchange__widget__history table tr td {
+  text-transform: uppercase;
+}
+.fixed-table-footer {
+  margin-right: 0 !important;
+}
+.fixed-table-toolbar #remove svg path {
+  fill: $whiteColor;
+}
+
+.fixed-table-toolbar #remove svg {
+  margin-right: 5px;
+}
+i.fa.fa-download {
+  background: url('../img/svg-icon/download.svg') no-repeat center center /
+    cover;
+}
+i.fa.fa-th-list {
+  background: url('../img/svg-icon/stack.svg') no-repeat center center / cover;
+}
+i.fa.fa-sync {
+  background: url('../img/svg-icon/loading.svg') no-repeat center center / cover;
+}
+i.fa.fa-plus {
+  background: url('../img/svg-icon/plus-solid.svg') no-repeat center center /
+    cover;
+}
+i.fa.fa-minus {
+  background: url('../img/svg-icon/minus.svg') no-repeat center center / cover;
+}
+i.fa.fa-caret-square-down {
+  background: url('../img/svg-icon/updown.svg') no-repeat center center / cover;
+}
+.fa-download:before,
+.fa-th-list:before,
+.fa-sync:before,
+.fa-plus:before,
+.fa-minus:before,
+.fa-caret-square-down:before {
+  visibility: hidden;
+}

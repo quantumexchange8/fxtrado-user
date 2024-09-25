@@ -1,0 +1,112 @@
+.light #trading-chart-dark {
+  display: none;
+}
+.light #trading-chart-light {
+  visibility: visible;
+  opacity: 1;
+  height: 100%;
+}
+.light {
+  background: #f5f6fa;
+}
+.light .exchange__widget,
+.light .exchange__widget__trading,
+.light .header,
+.light .navigation,
+.light .exchange__widget__history {
+  background: #ffffff;
+  box-shadow: 0px 0px 20px 0 #f1f1f1;
+}
+.light .dropdown-menu {
+  background: #ffffff;
+}
+
+.light .header__price-update ul li,
+.light .exchange__widget .nav-pills,
+.light .header__user-balance,
+.light .header__user-profile,
+.light .exchange__widget table tr:nth-child(even),
+.light .exchange__widget__order-note-item input,
+.light .dropdown-menu a:hover,
+.light .exchange__widget-slider-item,
+.light .exchange__widget-account-info,
+.light .exchange__widget__history thead,
+.light .fixed-table-toolbar .search input,
+.light .fixed-table-toolbar .columns button,
+.light .exchange__widget__history select,
+.light .pagination-detail span button,
+.light ul.pagination li a,
+.light .exchange-email-radio .custom-radio {
+  background: #f5f6fa;
+}
+
+.light .exchange__widget .nav-pills .nav-item a,
+.light .exchange__widget table tr td:first-child,
+.light .exchange__widget-title,
+.light .exchange__widget__order-note h2,
+.light .exchange__widget__order-note-item p,
+.light .exchange__widget__order-note-item input,
+.light .exchange__widget__order-note-item button,
+.light .header__price-update ul li,
+.light .header__user-balance-text h2,
+.light .header__user-profile-text h2,
+.light .navigation__item-label,
+.light .navigation__header-label,
+.light .navigation__footer-label,
+.light .exchange__widget input,
+.light .exchange__widget textarea,
+.light .dropdown-menu a,
+.light .exchange__widget-slider-item-content h2,
+.light .exchange__widget-slider-item-content p,
+.light .exchange__wallet-account,
+.light .table-bordered td,
+.light .table-bordered th,
+.light .exchange__widget__history select,
+.light .fixed-table-toolbar .search input,
+.light .pagination-detail,
+.light .page-size,
+.light ul.pagination li a,
+.light .exchange__widget__profile label,
+.light .exchange__widget__profile select,
+.light .exchange-email-verify,
+.light .exchange__widget label {
+  color: #000000 !important;
+}
+.light .exchange__widget .nav-pills .nav-item a.active,
+.light .navigation__item-link.active .navigation__item-label,
+.light .navigation-footer-link.active .navigation__footer-label,
+.light .navigation__item-link:hover .navigation__item-label,
+.light .navigation-footer-link:hover .navigation__footer-label {
+  color: #178cff !important;
+}
+
+.light .header__user-profile-icon span {
+  border-color: #ffffff;
+}
+.light .exchange__widget table tbody tr:hover {
+  background: #e3e8f5;
+}
+.light .dropdown-menu,
+.light .fixed-table-toolbar .search input,
+.light .fixed-table-toolbar .columns button,
+.light .exchange__widget__history select,
+.light .pagination-detail span button,
+.light ul.pagination li a,
+.light .exchange-email-radio .custom-radio {
+  border-color: #f7f7f7;
+}
+.light .apexcharts-gridline {
+  stroke: #efefef;
+}
+.light i.fa {
+  filter: invert(1);
+}
+.light .page-item.active .page-link {
+  color: #ffffff !important;
+}
+.light #themeChange .moon-icon {
+  display: none;
+}
+.light #themeChange .sun-icon {
+  display: inline-block;
+}

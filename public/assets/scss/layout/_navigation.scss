@@ -1,0 +1,84 @@
+.navigation {
+  position: fixed;
+  left: 0;
+  top: 0;
+  transition: width 0.3s;
+  width: 80px;
+  height: 100vh;
+  z-index: 999;
+  background-color: $cardColor;
+  padding: 30px 14px;
+  overflow: hidden;
+  overflow-y: auto;
+  display: grid;
+}
+.navigation:hover {
+  width: 250px;
+}
+.navigation__item-link,
+.navigation-header-link,
+.navigation-footer-link {
+  display: flex;
+  align-items: center;
+  transition: 0.3s;
+}
+.navigation__item-icon-wrapper,
+.navigation__header-icon-wrapper,
+.navigation__footer-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 52px;
+}
+.navigation__item {
+  margin: 35px 0;
+}
+.navigation__item-icon,
+.navigation__footer-icon {
+  width: 24px;
+  height: 24px;
+}
+.navigation__item-icon path,
+.navigation__footer-icon path {
+  fill: $ashColor;
+  transition: 0.3s;
+}
+.navigation__item-link.active .navigation__item-label,
+.navigation-footer-link.active .navigation__footer-label,
+.navigation__item-link:hover .navigation__item-label,
+.navigation-footer-link:hover .navigation__footer-label {
+  color: $activeColor;
+}
+.navigation__item-link.active .navigation__item-icon path,
+.navigation-footer-link.active .navigation__footer-icon path,
+.navigation__item-link:hover .navigation__item-icon path,
+.navigation-footer-link:hover .navigation__footer-icon path {
+  fill: $activeColor;
+}
+.navigation__item-label,
+.navigation__header-label,
+.navigation__footer-label {
+  min-width: 150px;
+  margin-left: 15px;
+  color: $whiteColor;
+  font-size: 16px;
+  font-weight: 400;
+  transition: 0.3s;
+}
+.navigation__header-label {
+  font-size: 24px;
+  font-weight: 500;
+}
+.navigation__header-icon {
+  width: 44px;
+  height: 44px;
+}
+.navigation__list {
+  display: flex;
+  align-items: center;
+}
+
+.navigation__footer {
+  display: flex;
+  align-items: flex-end;
+}

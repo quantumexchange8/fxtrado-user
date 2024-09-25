@@ -1,0 +1,144 @@
+a {
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+input:focus,
+textarea:focus {
+  outline: none;
+  box-shadow: none !important;
+}
+button:focus {
+  outline: none;
+}
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+img {
+  max-width: 100%;
+  height: auto;
+}
+a:hover {
+  text-decoration: none;
+}
+p {
+  margin: 0;
+}
+.sm-gutters {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.sm-gutters .sm-gutters {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+.sm-gutters > .col,
+.sm-gutters > [class*='col-'] {
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+.form-control::-webkit-input-placeholder {
+  /* Chrome/Opera/Safari */
+  color: $placeholderColor;
+}
+.form-control::-moz-placeholder {
+  /* Firefox 19+ */
+  color: $placeholderColor;
+}
+.form-control:-ms-input-placeholder {
+  /* IE 10+ */
+  color: $placeholderColor;
+}
+.form-control:-moz-placeholder {
+  /* Firefox 18- */
+  color: $placeholderColor;
+}
+
+.custom-control-input:focus ~ .custom-control-label::before {
+  box-shadow: none;
+}
+.green {
+  color: $greenColor !important;
+}
+.red {
+  color: $redColor !important;
+}
+.red svg path {
+  fill: $redColor !important;
+}
+.dropdown-toggle::after {
+  background: url(../img/svg-icon/down-angle.svg) no-repeat;
+  border: none;
+  width: 12px;
+  height: 12px;
+  vertical-align: middle;
+  margin: 0;
+  background-size: 12px;
+}
+.dropdown-menu {
+  background: $whiteTransColor;
+  border-radius: 0;
+  margin: 10px 0;
+  padding: 12px 0;
+}
+
+.dropdown-menu a {
+  color: $whiteColor;
+  padding: 12px 25px;
+}
+.dropdown-menu a svg {
+  margin-right: 15px;
+  width: 20px;
+  height: 20px;
+}
+.dropdown-menu a:hover {
+  background: $cardColor;
+  color: $whiteColor;
+}
+.dropdown-menu a:focus {
+  background: $cardColor;
+  outline: none;
+  color: $whiteColor;
+}
+
+.slick-slide:focus {
+  outline: none;
+}
+.slick-list {
+  margin: 0 -10px;
+}
+.apexcharts-text tspan {
+  fill: $ashDarkColor;
+}
+.apexcharts-legend-series span {
+  color: $ashDarkColor !important;
+  margin-left: 5px;
+  border-radius: 50px !important;
+  margin-bottom: 5px;
+}
+.apexcharts-xaxis line {
+  stroke: $ashDarkColor;
+}
+.apexcharts-gridline {
+  stroke: $whiteTransColor;
+}
+.btn-green,
+.btn-red {
+  background: $greenColor !important;
+  width: 100%;
+  border: 1px solid $greenColor !important;
+  margin-top: 0 !important;
+}
+.btn-red {
+  background: $redColor !important;
+  border-color: $redColor !important;
+}
+.btn-green:hover,
+.btn-red:hover {
+  background: transparent;
+  color: $whiteColor !important;
+}

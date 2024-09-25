@@ -1,0 +1,129 @@
+.header {
+  background: $cardColor;
+  padding: 10px 20px;
+  margin-bottom: 20px;
+}
+
+.header__user-balance-text h2 span {
+  margin-left: 10px;
+}
+.header__user-balance {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: $whiteTransColor;
+  padding: 8px 30px;
+  border-radius: 5px;
+}
+
+.header__user-balance-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.header__user {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  justify-content: flex-end;
+}
+
+.header__user-balance-text h2 {
+  font-size: 14px;
+  font-weight: 400;
+  color: $whiteColor;
+}
+
+.header__user-balance-text span svg {
+  width: 16px;
+  height: 16px;
+  margin: 0 5px;
+}
+
+.header__user-balance-text span {
+  font-size: 14px;
+}
+
+.header__user-profile {
+  display: flex;
+  align-items: center;
+  background: $whiteTransColor;
+  padding: 6px 25px 6px 10px;
+  border-radius: 5px;
+  gap: 25px;
+  cursor: pointer;
+}
+
+.header__user-profile-icon svg {
+  width: 40px;
+  height: 40px;
+}
+
+.header__user-profile-text h2 {
+  font-size: 16px;
+  color: $whiteColor;
+  font-weight: 500;
+}
+.header__user-profile-icon {
+  position: relative;
+}
+
+.header__user-profile-icon span {
+  background: $redColor;
+  border-radius: 50%;
+  position: absolute;
+  right: -10px;
+  top: -3px;
+  width: 20px;
+  height: 20px;
+  color: $whiteColor;
+  font-weight: 400;
+  line-height: 17px;
+  font-size: 11px;
+  text-align: center;
+  border: 2px solid $bgColor;
+}
+
+.header__user-profile-text span {
+  color: $greenColor;
+  font-size: 14px;
+  font-weight: 400;
+}
+.header__user-profile-text span svg {
+  width: 16px;
+  height: 16px;
+  margin-right: 5px;
+}
+.dropdown-menu a svg path,
+.dropdown-menu a svg circle {
+  fill: $ashColor;
+}
+.header__price-update ul li {
+  font-size: 14px;
+  font-weight: 400;
+  color: $whiteColor;
+  display: inline-block;
+  background: $whiteTransColor;
+  padding: 8px 30px;
+  border-radius: 5px;
+  margin-right: 17px;
+}
+.header__price-update ul li:last-child {
+  margin-right: 0;
+}
+.header__price-update ul li span {
+  display: block;
+  color: $ashDarkColor;
+  font-size: 12px;
+  margin-top: 3px;
+}
+.header__sidebar-icon {
+  display: none;
+}
+.header__sidebar-icon svg {
+  width: 22px;
+  height: 22px;
+}
+#themeChange .sun-icon {
+  display: none;
+}

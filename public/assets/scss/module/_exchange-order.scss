@@ -1,0 +1,77 @@
+.exchange__widget__order-note h2 {
+  font-size: 16px;
+  color: $whiteColor;
+  font-weight: 500;
+  margin-bottom: 40px;
+}
+
+.exchange__widget__order-note h2 svg {
+  margin-right: 10px;
+  width: 26px;
+  height: 26px;
+}
+
+.exchange__widget__order-note-item {
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr;
+  grid-column-gap: 20px;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.exchange__widget__order {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 50px;
+  margin: 41px 0 0;
+}
+.exchange__widget__order-note-item input,
+.exchange__widget__order-note-item button {
+  background: $bgColor;
+  border: none;
+  border-radius: 5px;
+  color: $whiteColor;
+  padding: 14px 25px;
+  height: unset;
+}
+.exchange__widget__order-note-item button {
+  background: transparent;
+  padding: 0;
+  text-transform: uppercase;
+}
+.exchange__widget__order-note-item button:after {
+  margin-left: 12px;
+  background-size: 10px;
+  width: 10px;
+  height: 10px;
+}
+.exchange__widget__order-note-item input:focus {
+  background: $bgColor;
+  color: $whiteColor;
+}
+.exchange__widget__order-note-item button:hover {
+  color: $whiteColor;
+}
+
+.exchange__widget__order-note-item button:focus {
+  box-shadow: none;
+}
+.exchange__widget__order-note-item p {
+  color: $whiteColor;
+}
+
+.exchange__widget__order-note-item .dropdown-menu {
+  min-width: unset;
+  height: 250px;
+  overflow: auto;
+  text-transform: uppercase;
+}
+.exchange__widget__order-status.exchange__widget table thead th:first-child,
+.exchange__widget__order-status.exchange__widget table tbody td:first-child,
+.exchange__widget__purchase .exchange__widget table thead th:first-child,
+.exchange__widget__purchase .exchange__widget table tbody td:first-child {
+  width: 30%;
+}
+.exchange__widget__order-buy-coin button {
+  margin-top: 0;
+}

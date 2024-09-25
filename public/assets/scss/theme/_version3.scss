@@ -1,0 +1,97 @@
+.version3 {
+  background: url('../img/version3-bg.jpg') no-repeat center center / cover;
+}
+.version3 .exchange__widget,
+.version3 .exchange__widget__trading,
+.version3 .header,
+.version3 .navigation,
+.version3 .exchange__widget__history {
+  box-shadow: unset;
+  background: #000000a6;
+  border: 1px solid #00000061;
+}
+@supports (backdrop-filter: none) {
+  .version3 .exchange__widget,
+  .version3 .exchange__widget__trading,
+  .version3 .header,
+  .version3 .navigation,
+  .version3 .exchange__widget__history {
+    background: #000000a6;
+    // backdrop-filter: blur(10px);
+  }
+}
+.version3 .header__price-update ul li,
+.version3 .exchange__widget .nav-pills,
+.version3 .header__user-balance,
+.version3 .header__user-profile,
+.version3 .exchange__widget table tr:nth-child(even),
+.version3 .exchange__widget__order-note-item input,
+.version3 .dropdown-menu a:hover,
+.version3 .exchange__widget-slider-item,
+.version3 .exchange__widget-account-info,
+.version3 .exchange__widget__history thead,
+.version3 .fixed-table-toolbar .search input,
+.version3 .fixed-table-toolbar .columns button,
+.version3 .exchange__widget__history select,
+.version3 .pagination-detail span button,
+.version3 ul.pagination li a,
+.version3 .exchange-email-radio .custom-radio {
+  background: #ffffff0f;
+}
+.version3 .dropdown-menu {
+  background: #00000054;
+}
+.version3 .exchange__widget .nav-pills .nav-item a,
+.version3 .exchange__widget table tr td:first-child,
+.version3 .exchange__widget-title,
+.version3 .exchange__widget__order-note h2,
+.version3 .exchange__widget__order-note-item p,
+.version3 .exchange__widget__order-note-item input,
+.version3 .exchange__widget__order-note-item button,
+.version3 .header__price-update ul li,
+.version3 .header__user-balance-text h2,
+.version3 .header__user-profile-text h2,
+.version3 .navigation__item-label,
+.version3 .navigation__header-label,
+.version3 .navigation__footer-label,
+.version3 .exchange__widget input,
+.version3 .exchange__widget textarea,
+.version3 .dropdown-menu a,
+.version3 .exchange__widget-slider-item-content h2,
+.version3 .exchange__widget-slider-item-content p,
+.version3 .exchange__wallet-account,
+.version3 .table-bordered td,
+.version3 .table-bordered th,
+.version3 .fixed-table-toolbar .search input,
+.version3 .pagination-detail,
+.version3 .page-size,
+.version3 ul.pagination li a,
+.version3 .exchange__widget__profile label,
+.version3 .exchange__widget__profile select,
+.version3 .exchange-email-verify,
+.version3 .exchange__widget label,
+.version3 .exchange__widget td,
+.version3 .exchange__widget th,
+.version3 .header__price-update ul li span {
+  color: #ffffff !important;
+}
+.version3 .exchange__widget table tbody tr:hover {
+  background: #ffffff1f;
+}
+.version3 .header__user-profile-icon span,
+.version3 .fixed-table-toolbar .search input,
+.version3 .exchange__widget__history select,
+.version3 .fixed-table-toolbar .columns button,
+.version3 .pagination-detail span button,
+.version3 .page-item .page-link {
+  border-color: #ffffff0f;
+}
+.version3 .apexcharts-gridline {
+  stroke: #ffffff0f;
+}
+.version3 .navigation__item-link.active .navigation__item-label,
+.version3 .navigation-footer-link.active .navigation__footer-label,
+.version3 .navigation__item-link:hover .navigation__item-label,
+.version3 .navigation-footer-link:hover .navigation__footer-label {
+  color: #178cff !important;
+}
