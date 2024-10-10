@@ -34,7 +34,14 @@
             </div>
           </div>
           <div class="exchange__widget">
-            <h2 class="exchange__widget-title">Latest Activity</h2>
+            <div class="">
+              <div class="text-white text-sm w-10">
+                Latest Activity
+              </div>
+              <div class="text-white">
+                
+              </div>
+            </div>
             <table class="table">
               <thead>
                 <tr>

@@ -82,8 +82,50 @@ class WalletController extends Controller
         $data = $request->all();
         Log::debug($data);
 
-        // $user = User::find($data->client_id)
+        $result = [
+            "token" => $data['vCode'],
+            "from_wallet" => $data['from_wallet'],
+            "to_wallet" => $data['to_wallet'],
+            "txid" => $data['txID'],
+            "transaction_number" => $data['transaction_number'],
+            "amount" => $data['transfer_amount'],
+            "status" => $data["status"],
+            "remarks" => 'System Approval',
+        ];
 
-        return view('dashboard');
+        $user = Auth::user();
+        $transaction = Transaction::where('transaction_number', $result['transaction_number'])->first();
+
+        $payoutSetting = config('payment-gateway');
+        $domain = $_SERVER['HTTP_HOST'];
+
+        if ($domain === 'fxtrado-user.com') {
+            $selectedPayout = $payoutSetting['live'];
+        } else {
+            $selectedPayout = $payoutSetting['staging'];
+        }
+
+        $dataToHash = md5($transaction->transaction_number . $selectedPayout['appId'] . $selectedPayout['merchantId']);
+        $status = $result['status'] == 'success' ? 'successful' : 'failed';
+
+        if ($result['token'] === $dataToHash) {
+            $transaction->update([
+                'from_wallet' => $result['from_wallet'],
+                'to_wallet' => $result['to_wallet'],
+                'txid' => $result['txid'],
+                'amount' => $result['amount'],
+                'status' => $status,
+                'remarks' => $result['remarks'],
+                'approved_at' => now()
+            ]);
+
+            if ($transaction->status == 'successful') {
+                if ($transaction->transaction_type === 'Deposit') {
+                    return response()->json(['success' => true, 'message' => 'Deposit Success']);
+                }
+            }
+        }
+
+        return response()->json(['success' => false, 'message' => 'Deposit Failed']);
     }
 }

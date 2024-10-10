@@ -20,7 +20,7 @@
                   </thead>
                   <tbody class="exchange__widget__table">
                     @foreach ($allPairs as $allPair)
-                      <tr data-symbol="{{ $allPair->currency_pair }}" onclick="selectSymbol('{{ $allPair->symbol_pair }}')">
+                      <tr data-symbol="{{ $allPair->symbol_pair }}" onclick="selectSymbol('{{ $allPair->symbol_pair }}')">
                         <td style="min-width: 115px"><img src="assets/img/coin/btc.svg" class="svgInject" alt="svg"> {{ $allPair->base }}{{ $allPair->quote }}</td>
                         <td class="bid" style="color: #dc2626 !important">0.0000</td> <!-- Bid placeholder -->
                         <td class="ask" style="color: #16a34a !important">0.0000</td> <!-- Ask placeholder -->
@@ -1279,11 +1279,10 @@
   <script>
     let socket;
     let reconnectInterval = 5000; // Retry after 5 seconds
-    window.appEnv = "{{ env('APP_ENV') }}";
 
     // Function to establish WebSocket connection
     function connectWebSocket() {
-        const wsUrl = window.appEnv === 'production' ? 'wss://fxtrado-backend.currenttech.pro/forex_pair' : 'ws://localhost:3000/forex_pair';
+        const wsUrl = window.appEnv === 'production' ? 'wss://yourdomain.com/forex_pair' : 'ws://localhost:3000/forex_pair';
         socket = new WebSocket(wsUrl); // Update this with your correct WebSocket URL
         
         socket.onopen = function() {
@@ -1297,9 +1296,13 @@
             // Call the function to update the corresponding table row
             updateTableRow(data.symbol, data.bid, data.ask);
 
-            const selectedSymbol = document.getElementById('selected-symbol').innerText;
-    
+            const selectedSymbolElement = document.getElementById('selected-symbol');
+            const selectedSymbol = selectedSymbolElement.innerText.trim();
+
+            console.log('Current selected symbol:', selectedSymbol);
+            
             if (data.symbol === selectedSymbol) {
+              
               // Update the ask price in the selected-pair-container div
               document.getElementById('ask-price').innerText = data.ask;
               document.getElementById('bid-price').innerText = data.bid;
@@ -1331,13 +1334,15 @@
           // Check if bid and ask cells are found
           if (bidCell && askCell) {
 
+              bidCell.innerText = bid;
+              askCell.innerText = ask;
+
               // Get previous prices for this symbol
               const prevBid = previousPrices[symbol]?.bid || 0;
               const prevAsk = previousPrices[symbol]?.ask || 0;
 
               // Update the bid and ask values
-              bidCell.innerText = bid;
-              askCell.innerText = ask;
+              
 
               // Determine color change for bid
               if (bid > prevBid) {
@@ -1380,6 +1385,8 @@
       const forexChart = document.getElementById('symbol-chart');
       const forexOrder = document.getElementById('symbol-order');
       const symbolElement = document.getElementById('selected-symbol');
+      symbolElement.innerText = currencyPair;
+      
       symbolElement.style.display = 'none';
       selSym.innerText = currencyPair;
 
