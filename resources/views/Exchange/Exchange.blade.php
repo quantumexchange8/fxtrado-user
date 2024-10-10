@@ -1372,7 +1372,7 @@
 
         // Post the order to the API
         try {
-          const response = await fetch('http://localhost:3000/api/openOrders', {
+          const response = await fetch('https://fxtrado-backend.currenttech.pro/api/openOrders', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -1413,7 +1413,7 @@
 
         // Post the order to the API
         try {
-          const response = await fetch('https://fxtrado-backend/api/openOrders', {
+          const response = await fetch('https://fxtrado-backend.currenttech.pro/api/openOrders', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
