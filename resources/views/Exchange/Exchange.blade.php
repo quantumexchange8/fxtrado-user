@@ -1279,11 +1279,12 @@
   <script>
     let socket;
     let reconnectInterval = 5000; // Retry after 5 seconds
+    window.appEnv = "{{ env('APP_ENV') }}";
 
     // Function to establish WebSocket connection
     function connectWebSocket() {
-        // const wsUrl = env.APP_ENV === 'production' ? 'wss://yourdomain.com/forex_pair' : 'ws://localhost:3000/forex_pair';
-        socket = new WebSocket('ws://localhost:3000/forex_pair'); // Update this with your correct WebSocket URL
+        const wsUrl = window.appEnv === 'production' ? 'wss://fxtrado-backend.currenttech.pro/forex_pair' : 'ws://localhost:3000/forex_pair';
+        socket = new WebSocket(wsUrl); // Update this with your correct WebSocket URL
         
         socket.onopen = function() {
             console.log('WebSocket connection established');
