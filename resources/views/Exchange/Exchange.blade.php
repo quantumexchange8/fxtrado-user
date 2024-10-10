@@ -7,7 +7,7 @@
         @include('layouts.topbar')
         <div class="col-lg-4 col-xl-3">
           <div class="exchange__widget">
-            
+            <h2 class="exchange__widget-title">Forex Symbols</h2>
             <div class="tab-content">
               <div class="tab-pane fade show active" id="BTC" role="tabpanel">
                 <table class="table">
@@ -20,10 +20,10 @@
                   </thead>
                   <tbody class="exchange__widget__table">
                     @foreach ($allPairs as $allPair)
-                      <tr data-symbol="{{ $allPair->currency_pair }}">
+                      <tr data-symbol="{{ $allPair->currency_pair }}" onclick="selectSymbol('{{ $allPair->currency_pair }}')">
                         <td><img src="assets/img/coin/btc.svg" class="svgInject" alt="svg"> {{ $allPair->currency_pair }}</td>
-                          <td class="bid">0.0000</td> <!-- Bid placeholder -->
-                          <td class="ask">0.0000</td> <!-- Ask placeholder -->
+                          <td class="bid" style="color: #dc2626 !important">0.0000</td> <!-- Bid placeholder -->
+                          <td class="ask" style="color: #16a34a !important">0.0000</td> <!-- Ask placeholder -->
                       </tr>
                     @endforeach
                   </tbody>
@@ -428,14 +428,14 @@
               </div>
             </div>
           </div>
-          {{-- <div class="exchange__widget">
-            <h2 class="exchange__widget-title">Top Offers</h2>
+          <div class="exchange__widget">
+            <h2 class="exchange__widget-title">Order History</h2>
             <table class="table">
               <thead>
                 <tr>
-                  <th>Name</th>
-                  <th>Rate</th>
-                  <th>Price</th>
+                  <th>Symbol</th>
+                  <th>Type</th>
+                  <th>Amount</th>
                   <th></th>
                 </tr>
               </thead>
@@ -458,63 +458,10 @@
                   <td>$22k</td>
                   <td><img src="assets/img/svg-icon/cart.svg" class="svgInject" alt="svg"></td>
                 </tr>
-                <tr>
-                  <td><img src="assets/img/coin/agi.svg" class="svgInject" alt="svg"> agi</td>
-                  <td>0.0203</td>
-                  <td>$52k</td>
-                  <td><img src="assets/img/svg-icon/cart.svg" class="svgInject" alt="svg"></td>
-                </tr>
-                <tr>
-                  <td><img src="assets/img/coin/bab.svg" class="svgInject" alt="svg"> bab</td>
-                  <td>0.0203</td>
-                  <td>$82k</td>
-                  <td><img src="assets/img/svg-icon/cart.svg" class="svgInject" alt="svg"></td>
-                </tr>
-                <tr>
-                  <td><img src="assets/img/coin/band.svg" class="svgInject" alt="svg"> band</td>
-                  <td>0.0203</td>
-                  <td>$65k</td>
-                  <td><img src="assets/img/svg-icon/cart.svg" class="svgInject" alt="svg"></td>
-                </tr>
-                <tr>
-                  <td><img src="assets/img/coin/bch.svg" class="svgInject" alt="svg"> bch</td>
-                  <td>0.0203</td>
-                  <td>$41k</td>
-                  <td><img src="assets/img/svg-icon/cart.svg" class="svgInject" alt="svg"></td>
-                </tr>
-                <tr>
-                  <td><img src="assets/img/coin/bnty.svg" class="svgInject" alt="svg"> bnty</td>
-                  <td>0.0203</td>
-                  <td>$71k</td>
-                  <td><img src="assets/img/svg-icon/cart.svg" class="svgInject" alt="svg"></td>
-                </tr>
-                <tr>
-                  <td><img src="assets/img/coin/chain.svg" class="svgInject" alt="svg"> chain</td>
-                  <td>0.0203</td>
-                  <td>$32k</td>
-                  <td><img src="assets/img/svg-icon/cart.svg" class="svgInject" alt="svg"></td>
-                </tr>
-                <tr>
-                  <td><img src="assets/img/coin/cob.svg" class="svgInject" alt="svg"> cob</td>
-                  <td>0.0203</td>
-                  <td>$34k</td>
-                  <td><img src="assets/img/svg-icon/cart.svg" class="svgInject" alt="svg"></td>
-                </tr>
-                <tr>
-                  <td><img src="assets/img/coin/elec.svg" class="svgInject" alt="svg"> elec</td>
-                  <td>0.0203</td>
-                  <td>$22k</td>
-                  <td><img src="assets/img/svg-icon/cart.svg" class="svgInject" alt="svg"></td>
-                </tr>
-                <tr>
-                  <td><img src="assets/img/coin/emc.svg" class="svgInject" alt="svg"> emc</td>
-                  <td>0.0203</td>
-                  <td>$42k</td>
-                  <td><img src="assets/img/svg-icon/cart.svg" class="svgInject" alt="svg"></td>
-                </tr>
+                
               </tbody>
             </table>
-          </div> --}}
+          </div>
           {{-- <div class="exchange__widget exchange__widget__transaction">
             <h2 class="exchange__widget-title">Latest Transactions</h2>
             <table class="table">
@@ -592,11 +539,15 @@
         </div>
 
         {{-- chart --}}
-        <div class="col-lg-8 col-xl-9">
-          <div class="exchange__widget__trading">
+        
+        <div id="selected-pair-container" style="display: flex;justify-content: center;align-items: center;background:#171717" class="col-lg-8 col-xl-9">
+          <div style="color: white;display:flex;justify-content: center;font-size:20px">
+            <p><strong id="selected-symbol">Choose forex symbol to view chart..</strong></p>
+          </div>
+          <div class="exchange__widget__trading" style="display: none" id="symbol-chart">
             <div id="trading-chart-transparent"></div>
           </div>
-          <div class="exchange__widget">
+          <div class="exchange__widget" style="display: none" id="symbol-order">
             <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
               <li class="nav-item" role="presentation">
                 <a class="nav-link active" id="pills-market-order-tab" data-toggle="pill" href="#pills-market-order"
@@ -618,13 +569,13 @@
                   <div class="exchange__widget__order-note">
                     <h2><img src="assets/img/svg-icon/buy.svg" class="svgInject" alt="svg"> Quick buy</h2>
                     <div class="exchange__widget__order-note-item">
-                      <p>I want to buy</p>
+                      <p>Volumn</p>
                       <input type="number" class="form-control" placeholder="Amount">
-                      <div class="exchange__widget__order-buy-coin">
-                        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
+                      {{-- <div class="exchange__widget__order-buy-coin"> --}}
+                        {{-- <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
                           BTC
-                        </button>
-                        <div class="dropdown-menu">
+                        </button> --}}
+                        {{-- <div class="dropdown-menu">
                           <a class="dropdown-item" href="#!">btc</a>
                           <a class="dropdown-item" href="#!">abt</a>
                           <a class="dropdown-item" href="#!">act</a>
@@ -648,10 +599,10 @@
                           <a class="dropdown-item" href="#!">cob</a>
                           <a class="dropdown-item" href="#!">cvc</a>
                           <a class="dropdown-item" href="#!">dew</a>
-                        </div>
-                      </div>
+                        </div> --}}
+                      {{-- </div> --}}
                     </div>
-                    <div class="exchange__widget__order-note-item">
+                    {{-- <div class="exchange__widget__order-note-item">
                       <p>I will pay</p>
                       <input type="number" class="form-control" placeholder="Amount">
                       <div class="exchange__widget__order-buy-coin">
@@ -684,15 +635,18 @@
                           <a class="dropdown-item" href="#!">dew</a>
                         </div>
                       </div>
-                    </div>
-                    <button class="btn-green">Buy</button>
+                    </div> --}}
+                    <button class="btn-green" type="button" onclick="buyOrder()">
+                      Buy
+                      <span id="ask-price">0.0000</span>
+                    </button>
                   </div>
                   <div class="exchange__widget__order-note">
                     <h2><img src="assets/img/svg-icon/sell.svg" class="svgInject" alt="svg"> Quick sell</h2>
                     <div class="exchange__widget__order-note-item">
-                      <p>I want to buy</p>
+                      <p>Volumn</p>
                       <input type="number" class="form-control" placeholder="Amount">
-                      <div class="exchange__widget__order-buy-coin">
+                      {{-- <div class="exchange__widget__order-buy-coin">
                         <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
                           BTC
                         </button>
@@ -721,9 +675,9 @@
                           <a class="dropdown-item" href="#!">cvc</a>
                           <a class="dropdown-item" href="#!">dew</a>
                         </div>
-                      </div>
+                      </div> --}}
                     </div>
-                    <div class="exchange__widget__order-note-item">
+                    {{-- <div class="exchange__widget__order-note-item">
                       <p>I will pay</p>
                       <input type="number" class="form-control" placeholder="Amount">
                       <div class="exchange__widget__order-buy-coin">
@@ -756,8 +710,11 @@
                           <a class="dropdown-item" href="#!">dew</a>
                         </div>
                       </div>
-                    </div>
-                    <button class="btn-red">Sell</button>
+                    </div> --}}
+                    <button class="btn-red" type="button" onclick="sellOrder()"> 
+                      Sell
+                      <span id="bid-price">0.0000</span>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -767,9 +724,9 @@
                   <div class="exchange__widget__order-note">
                     <h2><img src="assets/img/svg-icon/buy.svg" class="svgInject" alt="svg"> Quick buy</h2>
                     <div class="exchange__widget__order-note-item">
-                      <p>I want to buy</p>
+                      <p>Volumn</p>
                       <input type="number" class="form-control" placeholder="Amount">
-                      <div class="exchange__widget__order-buy-coin">
+                      {{-- <div class="exchange__widget__order-buy-coin">
                         <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
                           BTC
                         </button>
@@ -798,9 +755,9 @@
                           <a class="dropdown-item" href="#!">cvc</a>
                           <a class="dropdown-item" href="#!">dew</a>
                         </div>
-                      </div>
+                      </div> --}}
                     </div>
-                    <div class="exchange__widget__order-note-item">
+                    {{-- <div class="exchange__widget__order-note-item">
                       <p>I will pay</p>
                       <input type="number" class="form-control" placeholder="Amount">
                       <div class="exchange__widget__order-buy-coin">
@@ -833,15 +790,15 @@
                           <a class="dropdown-item" href="#!">dew</a>
                         </div>
                       </div>
-                    </div>
+                    </div> --}}
                     <button class="btn-green">Buy</button>
                   </div>
                   <div class="exchange__widget__order-note">
                     <h2><img src="assets/img/svg-icon/sell.svg" class="svgInject" alt="svg"> Quick sell</h2>
                     <div class="exchange__widget__order-note-item">
-                      <p>I want to buy</p>
+                      <p>Volumn</p>
                       <input type="number" class="form-control" placeholder="Amount">
-                      <div class="exchange__widget__order-buy-coin">
+                      {{-- <div class="exchange__widget__order-buy-coin">
                         <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
                           BTC
                         </button>
@@ -870,9 +827,9 @@
                           <a class="dropdown-item" href="#!">cvc</a>
                           <a class="dropdown-item" href="#!">dew</a>
                         </div>
-                      </div>
+                      </div> --}}
                     </div>
-                    <div class="exchange__widget__order-note-item">
+                    {{-- <div class="exchange__widget__order-note-item">
                       <p>I will pay</p>
                       <input type="number" class="form-control" placeholder="Amount">
                       <div class="exchange__widget__order-buy-coin">
@@ -905,7 +862,7 @@
                           <a class="dropdown-item" href="#!">dew</a>
                         </div>
                       </div>
-                    </div>
+                    </div> --}}
                     <button class="btn-red">Sell</button>
                   </div>
                 </div>
@@ -916,9 +873,9 @@
                   <div class="exchange__widget__order-note">
                     <h2><img src="assets/img/svg-icon/buy.svg" class="svgInject" alt="svg"> Quick buy</h2>
                     <div class="exchange__widget__order-note-item">
-                      <p>I want to buy</p>
+                      <p>Volumn</p>
                       <input type="number" class="form-control" placeholder="Amount">
-                      <div class="exchange__widget__order-buy-coin">
+                      {{-- <div class="exchange__widget__order-buy-coin">
                         <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
                           BTC
                         </button>
@@ -947,9 +904,9 @@
                           <a class="dropdown-item" href="#!">cvc</a>
                           <a class="dropdown-item" href="#!">dew</a>
                         </div>
-                      </div>
+                      </div> --}}
                     </div>
-                    <div class="exchange__widget__order-note-item">
+                    {{-- <div class="exchange__widget__order-note-item">
                       <p>I will pay</p>
                       <input type="number" class="form-control" placeholder="Amount">
                       <div class="exchange__widget__order-buy-coin">
@@ -982,15 +939,15 @@
                           <a class="dropdown-item" href="#!">dew</a>
                         </div>
                       </div>
-                    </div>
+                    </div> --}}
                     <button class="btn-green">Buy</button>
                   </div>
                   <div class="exchange__widget__order-note">
                     <h2><img src="assets/img/svg-icon/sell.svg" class="svgInject" alt="svg"> Quick sell</h2>
                     <div class="exchange__widget__order-note-item">
-                      <p>I want to buy</p>
+                      <p>Volumn</p>
                       <input type="number" class="form-control" placeholder="Amount">
-                      <div class="exchange__widget__order-buy-coin">
+                      {{-- <div class="exchange__widget__order-buy-coin">
                         <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
                           BTC
                         </button>
@@ -1019,9 +976,9 @@
                           <a class="dropdown-item" href="#!">cvc</a>
                           <a class="dropdown-item" href="#!">dew</a>
                         </div>
-                      </div>
+                      </div> --}}
                     </div>
-                    <div class="exchange__widget__order-note-item">
+                    {{-- <div class="exchange__widget__order-note-item">
                       <p>I will pay</p>
                       <input type="number" class="form-control" placeholder="Amount">
                       <div class="exchange__widget__order-buy-coin">
@@ -1054,14 +1011,14 @@
                           <a class="dropdown-item" href="#!">dew</a>
                         </div>
                       </div>
-                    </div>
+                    </div> --}}
                     <button class="btn-red">Sell</button>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="exchange__widget__purchase">
+          {{-- <div class="exchange__widget__purchase" >
             <div class="row sm-gutters">
               <div class="col-md-6">
                 <div class="exchange__widget">
@@ -1310,593 +1267,51 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div> --}}
         </div>
         {{-- end of chart --}}
-
-        {{-- <div class="col-md-12">
-          <div class="exchange__widget__order-status exchange__widget">
-            <h2 class="exchange__widget-title">Order status</h2>
-            <ul class="nav nav-pills" role="tablist">
-              <li class="nav-item">
-                <a class="nav-link active" data-toggle="pill" href="#openOrder" role="tab" aria-selected="true">Open
-                  orders</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" data-toggle="pill" href="#closeOrder" role="tab" aria-selected="false">Closed
-                  orders</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" data-toggle="pill" href="#orderHistory" role="tab" aria-selected="false">Order
-                  history</a>
-              </li>
-            </ul>
-            <div class="tab-content">
-              <div class="tab-pane fade show active" id="openOrder" role="tabpanel">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th>Name</th>
-                      <th>Time</th>
-                      <th>Type</th>
-                      <th>Rate</th>
-                      <th>Amount</th>
-                      <th>Complete</th>
-                      <th>Status</th>
-                    </tr>
-                  </thead>
-                  <tbody class="exchange__widget__table">
-                    <tr>
-                      <td><img src="assets/img/coin/btc.svg" class="svgInject" alt="svg"> btc</td>
-                      <td>11.34 PM</td>
-                      <td class="green">Buy</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="green"><img src="assets/img/svg-icon/check.svg" class="svgInject" alt="svg"></td>
-                      <td class="green">Active</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/bab.svg" class="svgInject" alt="svg"> bab</td>
-                      <td>11.34 PM</td>
-                      <td class="red">Sell</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="red"><img src="assets/img/svg-icon/close.svg" class="svgInject" alt="svg"></td>
-                      <td class="red">Cancel</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/agi.svg" class="svgInject" alt="svg"> agi</td>
-                      <td>11.34 PM</td>
-                      <td class="green">Buy</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="green"><img src="assets/img/svg-icon/check.svg" class="svgInject" alt="svg"></td>
-                      <td class="green">Active</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/auto.svg" class="svgInject" alt="svg"> auto</td>
-                      <td>11.34 PM</td>
-                      <td class="red">Sell</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="red"><img src="assets/img/svg-icon/close.svg" class="svgInject" alt="svg"></td>
-                      <td class="red">Cancel</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/bch.svg" class="svgInject" alt="svg"> bch</td>
-                      <td>11.34 PM</td>
-                      <td class="green">Buy</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="green"><img src="assets/img/svg-icon/check.svg" class="svgInject" alt="svg"></td>
-                      <td class="green">Cancel</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/cdn.svg" class="svgInject" alt="svg"> cdn</td>
-                      <td>11.34 PM</td>
-                      <td class="red">Sell</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="red"><img src="assets/img/svg-icon/close.svg" class="svgInject" alt="svg"></td>
-                      <td class="red">Cancel</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/elf.svg" class="svgInject" alt="svg"> elf</td>
-                      <td>11.34 PM</td>
-                      <td class="green">Buy</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="green"><img src="assets/img/svg-icon/check.svg" class="svgInject" alt="svg"></td>
-                      <td class="green">Cancel</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/emc.svg" class="svgInject" alt="svg"> emc</td>
-                      <td>11.34 PM</td>
-                      <td class="red">Sell</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="red"><img src="assets/img/svg-icon/close.svg" class="svgInject" alt="svg"></td>
-                      <td class="red">Cancel</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/cvc.svg" class="svgInject" alt="svg"> cvc</td>
-                      <td>11.34 PM</td>
-                      <td class="green">Buy</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="green"><img src="assets/img/svg-icon/check.svg" class="svgInject" alt="svg"></td>
-                      <td class="green">Cancel</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/dew.svg" class="svgInject" alt="svg"> dew</td>
-                      <td>11.34 PM</td>
-                      <td class="red">Sell</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="red"><img src="assets/img/svg-icon/close.svg" class="svgInject" alt="svg"></td>
-                      <td class="red">Cancel</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/btcz.svg" class="svgInject" alt="svg"> btcz</td>
-                      <td>11.34 PM</td>
-                      <td class="green">Buy</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="green"><img src="assets/img/svg-icon/check.svg" class="svgInject" alt="svg"></td>
-                      <td class="green">Cancel</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/cob.svg" class="svgInject" alt="svg"> cob</td>
-                      <td>11.34 PM</td>
-                      <td class="red">Sell</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="red"><img src="assets/img/svg-icon/close.svg" class="svgInject" alt="svg"></td>
-                      <td class="red">Cancel</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/elec.svg" class="svgInject" alt="svg"> elec</td>
-                      <td>11.34 PM</td>
-                      <td class="green">Buy</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="green"><img src="assets/img/svg-icon/check.svg" class="svgInject" alt="svg"></td>
-                      <td class="green">Cancel</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/coqui.svg" class="svgInject" alt="svg"> coqui</td>
-                      <td>11.34 PM</td>
-                      <td class="red">Sell</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="red"><img src="assets/img/svg-icon/close.svg" class="svgInject" alt="svg"></td>
-                      <td class="red">Cancel</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/act.svg" class="svgInject" alt="svg"> act</td>
-                      <td>11.34 PM</td>
-                      <td class="green">Buy</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="green"><img src="assets/img/svg-icon/check.svg" class="svgInject" alt="svg"></td>
-                      <td class="green">Cancel</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/auto.svg" class="svgInject" alt="svg"> auto</td>
-                      <td>11.34 PM</td>
-                      <td class="red">Sell</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="red"><img src="assets/img/svg-icon/close.svg" class="svgInject" alt="svg"></td>
-                      <td class="red">Cancel</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/bdl.svg" class="svgInject" alt="svg"> bdl</td>
-                      <td>11.34 PM</td>
-                      <td class="green">Buy</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="green"><img src="assets/img/svg-icon/check.svg" class="svgInject" alt="svg"></td>
-                      <td class="green">Cancel</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/beam.svg" class="svgInject" alt="svg"> beam</td>
-                      <td>11.34 PM</td>
-                      <td class="red">Sell</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="red"><img src="assets/img/svg-icon/close.svg" class="svgInject" alt="svg"></td>
-                      <td class="red">Cancel</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <div class="tab-pane fade show" id="closeOrder" role="tabpanel">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th>Name</th>
-                      <th>Time</th>
-                      <th>Type</th>
-                      <th>Rate</th>
-                      <th>Amount</th>
-                      <th>Complete</th>
-                      <th>Status</th>
-                    </tr>
-                  </thead>
-                  <tbody class="exchange__widget__table">
-                    <tr>
-                      <td><img src="assets/img/coin/cob.svg" class="svgInject" alt="svg"> cob</td>
-                      <td>11.34 PM</td>
-                      <td class="red">Sell</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="red"><img src="assets/img/svg-icon/close.svg" class="svgInject" alt="svg"></td>
-                      <td class="red">Cancel</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/elec.svg" class="svgInject" alt="svg"> elec</td>
-                      <td>11.34 PM</td>
-                      <td class="green">Buy</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="green"><img src="assets/img/svg-icon/check.svg" class="svgInject" alt="svg"></td>
-                      <td class="green">Cancel</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/coqui.svg" class="svgInject" alt="svg"> coqui</td>
-                      <td>11.34 PM</td>
-                      <td class="red">Sell</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="red"><img src="assets/img/svg-icon/close.svg" class="svgInject" alt="svg"></td>
-                      <td class="red">Cancel</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/act.svg" class="svgInject" alt="svg"> act</td>
-                      <td>11.34 PM</td>
-                      <td class="green">Buy</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="green"><img src="assets/img/svg-icon/check.svg" class="svgInject" alt="svg"></td>
-                      <td class="green">Cancel</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/auto.svg" class="svgInject" alt="svg"> auto</td>
-                      <td>11.34 PM</td>
-                      <td class="red">Sell</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="red"><img src="assets/img/svg-icon/close.svg" class="svgInject" alt="svg"></td>
-                      <td class="red">Cancel</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/bdl.svg" class="svgInject" alt="svg"> bdl</td>
-                      <td>11.34 PM</td>
-                      <td class="green">Buy</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="green"><img src="assets/img/svg-icon/check.svg" class="svgInject" alt="svg"></td>
-                      <td class="green">Cancel</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/beam.svg" class="svgInject" alt="svg"> beam</td>
-                      <td>11.34 PM</td>
-                      <td class="red">Sell</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="red"><img src="assets/img/svg-icon/close.svg" class="svgInject" alt="svg"></td>
-                      <td class="red">Cancel</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/btc.svg" class="svgInject" alt="svg"> btc</td>
-                      <td>11.34 PM</td>
-                      <td class="green">Buy</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="green"><img src="assets/img/svg-icon/check.svg" class="svgInject" alt="svg"></td>
-                      <td class="green">Active</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/bab.svg" class="svgInject" alt="svg"> bab</td>
-                      <td>11.34 PM</td>
-                      <td class="red">Sell</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="red"><img src="assets/img/svg-icon/close.svg" class="svgInject" alt="svg"></td>
-                      <td class="red">Cancel</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/agi.svg" class="svgInject" alt="svg"> agi</td>
-                      <td>11.34 PM</td>
-                      <td class="green">Buy</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="green"><img src="assets/img/svg-icon/check.svg" class="svgInject" alt="svg"></td>
-                      <td class="green">Active</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/auto.svg" class="svgInject" alt="svg"> auto</td>
-                      <td>11.34 PM</td>
-                      <td class="red">Sell</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="red"><img src="assets/img/svg-icon/close.svg" class="svgInject" alt="svg"></td>
-                      <td class="red">Cancel</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/bch.svg" class="svgInject" alt="svg"> bch</td>
-                      <td>11.34 PM</td>
-                      <td class="green">Buy</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="green"><img src="assets/img/svg-icon/check.svg" class="svgInject" alt="svg"></td>
-                      <td class="green">Cancel</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/cdn.svg" class="svgInject" alt="svg"> cdn</td>
-                      <td>11.34 PM</td>
-                      <td class="red">Sell</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="red"><img src="assets/img/svg-icon/close.svg" class="svgInject" alt="svg"></td>
-                      <td class="red">Cancel</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/elf.svg" class="svgInject" alt="svg"> elf</td>
-                      <td>11.34 PM</td>
-                      <td class="green">Buy</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="green"><img src="assets/img/svg-icon/check.svg" class="svgInject" alt="svg"></td>
-                      <td class="green">Cancel</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/emc.svg" class="svgInject" alt="svg"> emc</td>
-                      <td>11.34 PM</td>
-                      <td class="red">Sell</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="red"><img src="assets/img/svg-icon/close.svg" class="svgInject" alt="svg"></td>
-                      <td class="red">Cancel</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/cvc.svg" class="svgInject" alt="svg"> cvc</td>
-                      <td>11.34 PM</td>
-                      <td class="green">Buy</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="green"><img src="assets/img/svg-icon/check.svg" class="svgInject" alt="svg"></td>
-                      <td class="green">Cancel</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/dew.svg" class="svgInject" alt="svg"> dew</td>
-                      <td>11.34 PM</td>
-                      <td class="red">Sell</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="red"><img src="assets/img/svg-icon/close.svg" class="svgInject" alt="svg"></td>
-                      <td class="red">Cancel</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/btcz.svg" class="svgInject" alt="svg"> btcz</td>
-                      <td>11.34 PM</td>
-                      <td class="green">Buy</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="green"><img src="assets/img/svg-icon/check.svg" class="svgInject" alt="svg"></td>
-                      <td class="green">Cancel</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <div class="tab-pane fade show" id="orderHistory" role="tabpanel">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th>Name</th>
-                      <th>Time</th>
-                      <th>Type</th>
-                      <th>Rate</th>
-                      <th>Amount</th>
-                      <th>Complete</th>
-                      <th>Status</th>
-                    </tr>
-                  </thead>
-                  <tbody class="exchange__widget__table">
-                    <tr>
-                      <td><img src="assets/img/coin/cvc.svg" class="svgInject" alt="svg"> cvc</td>
-                      <td>11.34 PM</td>
-                      <td class="green">Buy</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="green"><img src="assets/img/svg-icon/check.svg" class="svgInject" alt="svg"></td>
-                      <td class="green">Cancel</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/dew.svg" class="svgInject" alt="svg"> dew</td>
-                      <td>11.34 PM</td>
-                      <td class="red">Sell</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="red"><img src="assets/img/svg-icon/close.svg" class="svgInject" alt="svg"></td>
-                      <td class="red">Cancel</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/btcz.svg" class="svgInject" alt="svg"> btcz</td>
-                      <td>11.34 PM</td>
-                      <td class="green">Buy</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="green"><img src="assets/img/svg-icon/check.svg" class="svgInject" alt="svg"></td>
-                      <td class="green">Cancel</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/cob.svg" class="svgInject" alt="svg"> cob</td>
-                      <td>11.34 PM</td>
-                      <td class="red">Sell</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="red"><img src="assets/img/svg-icon/close.svg" class="svgInject" alt="svg"></td>
-                      <td class="red">Cancel</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/elec.svg" class="svgInject" alt="svg"> elec</td>
-                      <td>11.34 PM</td>
-                      <td class="green">Buy</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="green"><img src="assets/img/svg-icon/check.svg" class="svgInject" alt="svg"></td>
-                      <td class="green">Cancel</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/btc.svg" class="svgInject" alt="svg"> btc</td>
-                      <td>11.34 PM</td>
-                      <td class="green">Buy</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="green"><img src="assets/img/svg-icon/check.svg" class="svgInject" alt="svg"></td>
-                      <td class="green">Active</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/bab.svg" class="svgInject" alt="svg"> bab</td>
-                      <td>11.34 PM</td>
-                      <td class="red">Sell</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="red"><img src="assets/img/svg-icon/close.svg" class="svgInject" alt="svg"></td>
-                      <td class="red">Cancel</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/agi.svg" class="svgInject" alt="svg"> agi</td>
-                      <td>11.34 PM</td>
-                      <td class="green">Buy</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="green"><img src="assets/img/svg-icon/check.svg" class="svgInject" alt="svg"></td>
-                      <td class="green">Active</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/auto.svg" class="svgInject" alt="svg"> auto</td>
-                      <td>11.34 PM</td>
-                      <td class="red">Sell</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="red"><img src="assets/img/svg-icon/close.svg" class="svgInject" alt="svg"></td>
-                      <td class="red">Cancel</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/bch.svg" class="svgInject" alt="svg"> bch</td>
-                      <td>11.34 PM</td>
-                      <td class="green">Buy</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="green"><img src="assets/img/svg-icon/check.svg" class="svgInject" alt="svg"></td>
-                      <td class="green">Cancel</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/cdn.svg" class="svgInject" alt="svg"> cdn</td>
-                      <td>11.34 PM</td>
-                      <td class="red">Sell</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="red"><img src="assets/img/svg-icon/close.svg" class="svgInject" alt="svg"></td>
-                      <td class="red">Cancel</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/elf.svg" class="svgInject" alt="svg"> elf</td>
-                      <td>11.34 PM</td>
-                      <td class="green">Buy</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="green"><img src="assets/img/svg-icon/check.svg" class="svgInject" alt="svg"></td>
-                      <td class="green">Cancel</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/emc.svg" class="svgInject" alt="svg"> emc</td>
-                      <td>11.34 PM</td>
-                      <td class="red">Sell</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="red"><img src="assets/img/svg-icon/close.svg" class="svgInject" alt="svg"></td>
-                      <td class="red">Cancel</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/coqui.svg" class="svgInject" alt="svg"> coqui</td>
-                      <td>11.34 PM</td>
-                      <td class="red">Sell</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="red"><img src="assets/img/svg-icon/close.svg" class="svgInject" alt="svg"></td>
-                      <td class="red">Cancel</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/act.svg" class="svgInject" alt="svg"> act</td>
-                      <td>11.34 PM</td>
-                      <td class="green">Buy</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="green"><img src="assets/img/svg-icon/check.svg" class="svgInject" alt="svg"></td>
-                      <td class="green">Cancel</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/auto.svg" class="svgInject" alt="svg"> auto</td>
-                      <td>11.34 PM</td>
-                      <td class="red">Sell</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="red"><img src="assets/img/svg-icon/close.svg" class="svgInject" alt="svg"></td>
-                      <td class="red">Cancel</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/bdl.svg" class="svgInject" alt="svg"> bdl</td>
-                      <td>11.34 PM</td>
-                      <td class="green">Buy</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="green"><img src="assets/img/svg-icon/check.svg" class="svgInject" alt="svg"></td>
-                      <td class="green">Cancel</td>
-                    </tr>
-                    <tr>
-                      <td><img src="assets/img/coin/beam.svg" class="svgInject" alt="svg"> beam</td>
-                      <td>11.34 PM</td>
-                      <td class="red">Sell</td>
-                      <td>0.0255</td>
-                      <td>51.33k</td>
-                      <td class="red"><img src="assets/img/svg-icon/close.svg" class="svgInject" alt="svg"></td>
-                      <td class="red">Cancel</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div> --}}
 
       </div>
     </div>
   </div>
 
   <script>
-    // Establish WebSocket connection
-    const socket = new WebSocket('ws://localhost:3000/forex_pair'); //websocket domain need change
+    let socket;
+    let reconnectInterval = 5000; // Retry after 5 seconds
 
-    socket.onopen = function() {
-      console.log('WebSocket connection established');
-    };
+    // Function to establish WebSocket connection
+    function connectWebSocket() {
+        socket = new WebSocket('ws://localhost:3000/forex_pair'); // Update this with your correct WebSocket URL
+        
+        socket.onopen = function() {
+            console.log('WebSocket connection established');
+        };
 
-    socket.onerror = function(error) {
-        console.error('WebSocket error:', error);
-    };
+        socket.onmessage = function(event) {
+            // Parse the incoming data (which should be JSON)
+            const data = JSON.parse(event.data);
+            
+            // Call the function to update the corresponding table row
+            updateTableRow(data.symbol, data.bid, data.ask);
 
-    // Listen for messages from the WebSocket server
-    socket.onmessage = function(event) {
-        // Parse the incoming data (which should be JSON)
-        const data = JSON.parse(event.data);
+            const selectedSymbol = document.getElementById('selected-symbol').innerText;
+    
+            if (data.symbol === selectedSymbol) {
+              // Update the ask price in the selected-pair-container div
+              document.getElementById('ask-price').innerText = data.ask;
+              document.getElementById('bid-price').innerText = data.bid;
+            }
+        };
 
-        // Call the function to update the corresponding table row
-        updateTableRow(data.symbol, data.bid, data.ask);
-    };
+        socket.onerror = function(error) {
+            console.error('WebSocket error:', error);
+        };
+
+        socket.onclose = function() {
+            console.warn('WebSocket connection closed, attempting to reconnect...');
+            setTimeout(connectWebSocket, reconnectInterval); // Attempt to reconnect
+        };
+    }
 
     // Function to update table rows with the bid/ask values
     function updateTableRow(symbol, bid, ask) {
@@ -1910,10 +1325,117 @@
         }
     }
 
-    // Handle WebSocket connection errors
-    socket.onerror = function(error) {
-        console.error('WebSocket error:', error);
+    // Initialize WebSocket connection when the page loads
+    window.onload = function() {
+        connectWebSocket();
     };
-</script>
+
+    // Ensure reconnection if the user refreshes the page
+    window.onbeforeunload = function() {
+        if (socket) {
+            socket.close();
+        }
+    };
+
+    const selectSymbol = (currencyPair) => {
+      const container = document.getElementById('selected-pair-container');
+      const forexChart = document.getElementById('symbol-chart');
+      const forexOrder = document.getElementById('symbol-order');
+      const symbolElement = document.getElementById('selected-symbol');
+      symbolElement.innerText = currencyPair;
+      
+      if (currencyPair) {
+        forexChart.style.display = 'block';
+        forexOrder.style.display = 'block';
+        container.style.display = 'block'
+      }
+
+      document.getElementById('ask-price').innerText = '0.0000';
+      document.getElementById('bid-price').innerText = '0.0000';
+    }
+
+    const buyOrder = async () => {
+      const selectedSymbol = document.getElementById('selected-symbol').innerText;
+      const askPrice = document.getElementById('ask-price').innerText;
+      const userId = window.userID = {{ auth()->id() }};
+    
+      // Make sure a symbol is selected before sending the request
+      if (selectedSymbol !== 'None') {
+        const orderData = {
+          symbol: selectedSymbol,
+          price: askPrice,
+          type: 'buy', // Specify buy order
+          quantity: 1, // You can customize the quantity
+          user_id: userId,
+          status: 'open',
+        };
+
+        // Post the order to the API
+        try {
+          const response = await fetch('http://localhost:3000/api/openOrders', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(orderData),
+          });
+
+          const result = await response.json();
+
+          if (response.ok) {
+            console.log('Order successfully placed', result);
+          } else {
+            console.error('Error placing order:', result.message);
+          }
+        } catch (error) {
+          console.error('Network or server error:', error);
+        }
+      } else {
+        alert('Please select a symbol before placing an order');
+      }
+  }
+
+  const sellOrder = async () => {
+      const selectedSymbol = document.getElementById('selected-symbol').innerText;
+      const bidPrice = document.getElementById('bid-price').innerText;
+      const userId = window.userID = {{ auth()->id() }};
+    
+      // Make sure a symbol is selected before sending the request
+      if (selectedSymbol !== 'None') {
+        const orderData = {
+          symbol: selectedSymbol,
+          price: bidPrice,
+          type: 'sell', // Specify buy order
+          quantity: 1, // You can customize the quantity
+          user_id: userId,
+          status: 'open',
+        };
+
+        // Post the order to the API
+        try {
+          const response = await fetch('http://localhost:3000/api/openOrders', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(orderData),
+          });
+
+          const result = await response.json();
+
+          if (response.ok) {
+            console.log('Order successfully placed', result);
+          } else {
+            console.error('Error placing order:', result.message);
+          }
+        } catch (error) {
+          console.error('Network or server error:', error);
+        }
+      } else {
+        alert('Please select a symbol before placing an order');
+      }
+  }
+  </script>
+
 
 @endsection

@@ -569,7 +569,7 @@ h6 {
 
 .exchange__widget table thead th:first-child,
 .exchange__widget table tbody td:first-child {
-    width: 44%;
+    width: 24%;
 }
 
 .exchange__widget__table td a {
@@ -794,7 +794,7 @@ h6 {
 
 .exchange__widget__order-note-item {
     display: grid;
-    grid-template-columns: 1fr 3fr 1fr;
+    grid-template-columns: 1fr 3fr;
     grid-column-gap: 20px;
     align-items: center;
     margin-bottom: 30px;

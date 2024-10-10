@@ -3,7 +3,7 @@
       <a href="index.html" class="navigation-header-link">
         <span class="navigation__header-icon-wrapper"><img src="assets/img/logo.svg"
             class="svgInject navigation__header-icon" alt="logo"></span>
-        <span class="navigation__header-label">Coinly</span>
+        <span class="navigation__header-label">FxTrado</span>
       </a>
     </div>
     <div class="navigation__list">

@@ -16,7 +16,13 @@ class WalletController extends Controller
     public function wallet()
     {
 
-        return view('Wallets/Wallet');
+        $user = Auth::user()->id;
+
+        $transactions = Transaction::where('user_id', $user)->get();
+
+        return view('Wallets/Wallet', [
+            'transactions' => $transactions
+        ]);
     }
 
     public function deposit(Request $request)

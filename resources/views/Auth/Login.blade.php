@@ -36,7 +36,7 @@
         document.getElementById('loginForm').addEventListener('submit', function() {
             // Disable the submit button to prevent multiple submissions
             document.getElementById('submitBtn').disabled = true;
-            document.getElementById('submitBtn').innerText = 'Processing...'; // Optional: change button text to show it's processing
+            document.getElementById('submitBtn').innerText = 'Logging...'; // Optional: change button text to show it's processing
         });
     </script>
 @endsection
