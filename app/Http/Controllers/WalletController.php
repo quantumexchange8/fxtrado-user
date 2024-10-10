@@ -25,6 +25,12 @@ class WalletController extends Controller
         ]);
     }
 
+    public function walletTransaction()
+    {
+
+        return view('Wallets/Transaction');
+    }
+
     public function deposit(Request $request)
     {
         $user = Auth::user();

@@ -14,10 +14,10 @@
                 <img src="assets/img/svg-icon/wallet.svg" class="svgInject" alt="svg">
             </div>
             <div class="header__user-balance-text">
+                <span style="font-size: 12px;color:white">
+                    Wallet No: {{ Auth::user()->wallet->wallet_no ?? '' }}
+                </span>
                 <h2>Balance: <span>$ {{ Auth::user()->wallet->balance ?? 'No wallet found' }}</span></h2>
-                {{-- <span class="green">Growth: <img src="assets/img/svg-icon/up-arrow.svg" class="svgInject"
-                    alt="svg"> 29.9%
-                </span> --}}
             </div>
             </div>
             <div class="header__user-profile dropdown-toggle" style="background-color: #171717" id="dropdownMenuButton" data-toggle="dropdown"
@@ -36,14 +36,12 @@
             </div>
             </div>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="settings.html"><img src="assets/img/svg-icon/settings-line.svg"
+            <a class="dropdown-item" href="#"><img src="assets/img/svg-icon/settings-line.svg"
                 class="svgInject" alt="svg"> Settings</a>
-            <a class="dropdown-item" href="verification.html"><img src="assets/img/svg-icon/user.svg"
-                class="svgInject" alt="svg"> Verification</a>
-            <a class="dropdown-item" href="security.html"><img src="assets/img/svg-icon/lock.svg"
+            <a class="dropdown-item" href="#"><img src="assets/img/svg-icon/user.svg"
+            class="svgInject" alt="svg"> Verification</a>
+            <a class="dropdown-item" href="#"><img src="assets/img/svg-icon/lock.svg"
                 class="svgInject" alt="svg"> Security</a>
-            <a class="dropdown-item" href="api.html"><img src="assets/img/svg-icon/code.svg" class="svgInject"
-                alt="svg"> API</a>
             <a class="dropdown-item" id="themeChange" href="#"><img src="assets/img/svg-icon/sun.svg"
                 class="svgInject sun-icon" alt="svg"><img src="assets/img/svg-icon/moon.svg"
                 class="svgInject moon-icon" alt="svg"> Theme</a>

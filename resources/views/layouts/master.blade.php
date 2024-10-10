@@ -7,6 +7,7 @@
   <title>FxTrado</title>
   <link rel="shortcut icon" href="assets/img/favicon.png" type="image/x-icon">
   <link rel="stylesheet" href="assets/css/style.css">
+  @vite('resources/css/app.css')
 </head>
 
 

@@ -28,17 +28,17 @@
                 class="svgInject navigation__item-icon" alt="svg"></span>
             <span class="navigation__item-label">Analysis</span>
           </a></li> --}}
+        <li class="navigation__item"><a href="#" class="navigation__item-link">
+          <span class="navigation__item-icon-wrapper"><img src="assets/img/svg-icon/history.svg"
+              class="svgInject navigation__item-icon" alt="svg"></span>
+          <span class="navigation__item-label">Order History</span>
+        </a></li>
         <li class="navigation__item"><a href="wallet" class="navigation__item-link">
             <span class="navigation__item-icon-wrapper"><img src="assets/img/svg-icon/wallet.svg"
                 class="svgInject navigation__item-icon" alt="svg"></span>
             <span class="navigation__item-label">Wallets</span>
           </a></li>
-        <li class="navigation__item"><a href="history.html" class="navigation__item-link">
-            <span class="navigation__item-icon-wrapper"><img src="assets/img/svg-icon/history.svg"
-                class="svgInject navigation__item-icon" alt="svg"></span>
-            <span class="navigation__item-label">History</span>
-          </a></li>
-        <li class="navigation__item"><a href="profile.html" class="navigation__item-link">
+        <li class="navigation__item"><a href="#" class="navigation__item-link">
             <span class="navigation__item-icon-wrapper"><img src="assets/img/svg-icon/user.svg"
                 class="svgInject navigation__item-icon" alt="svg"></span>
             <span class="navigation__item-label">Profile</span>
@@ -46,7 +46,7 @@
       </ul>
     </div>
     <div class="navigation__footer">
-      <a href="settings.html" class="navigation-footer-link">
+      <a href="#" class="navigation-footer-link">
         <span class="navigation__footer-icon-wrapper"><img src="assets/img/svg-icon/settings.svg"
             class="svgInject navigation__footer-icon" alt="svg"></span>
         <span class="navigation__footer-label">Settings</span>

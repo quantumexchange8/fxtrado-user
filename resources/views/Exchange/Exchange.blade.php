@@ -9,11 +9,11 @@
           <div class="exchange__widget">
             <h2 class="exchange__widget-title">Forex Symbols</h2>
             <div class="tab-content">
-              <div class="tab-pane fade show active" id="BTC" role="tabpanel">
+              <div class="tab-pane fade show active" id="BTC" role="tabpanel" style="overflow-x:auto;">
                 <table class="table">
                   <thead>
                     <tr>
-                      <th>Name</th>
+                      <th style="min-width: 115px">Name</th>
                       <th>Bid</th>
                       <th>Ask</th>
                     </tr>
@@ -21,9 +21,9 @@
                   <tbody class="exchange__widget__table">
                     @foreach ($allPairs as $allPair)
                       <tr data-symbol="{{ $allPair->currency_pair }}" onclick="selectSymbol('{{ $allPair->currency_pair }}')">
-                        <td><img src="assets/img/coin/btc.svg" class="svgInject" alt="svg"> {{ $allPair->currency_pair }}</td>
-                          <td class="bid" style="color: #dc2626 !important">0.0000</td> <!-- Bid placeholder -->
-                          <td class="ask" style="color: #16a34a !important">0.0000</td> <!-- Ask placeholder -->
+                        <td style="min-width: 115px"><img src="assets/img/coin/btc.svg" class="svgInject" alt="svg"> {{ $allPair->base }}/{{ $allPair->quote }}</td>
+                        <td class="bid" style="color: #dc2626 !important">0.0000</td> <!-- Bid placeholder -->
+                        <td class="ask" style="color: #16a34a !important">0.0000</td> <!-- Ask placeholder -->
                       </tr>
                     @endforeach
                   </tbody>
@@ -1281,7 +1281,7 @@
 
     // Function to establish WebSocket connection
     function connectWebSocket() {
-        socket = new WebSocket('ws://localhost:3000/forex_pair'); // Update this with your correct WebSocket URL
+        socket = new WebSocket('ws://fxtrado-backend.currenttech.pro/forex_pair'); // Update this with your correct WebSocket URL
         
         socket.onopen = function() {
             console.log('WebSocket connection established');
@@ -1372,7 +1372,7 @@
 
         // Post the order to the API
         try {
-          const response = await fetch('http://localhost:3000/api/openOrders', {
+          const response = await fetch('https://fxtrado-backend/api/openOrders', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -1413,7 +1413,7 @@
 
         // Post the order to the API
         try {
-          const response = await fetch('http://localhost:3000/api/openOrders', {
+          const response = await fetch('https://fxtrado-backend/api/openOrders', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
