@@ -1281,7 +1281,7 @@
 
     // Function to establish WebSocket connection
     function connectWebSocket() {
-        socket = new WebSocket('ws://fxtrado-backend.currenttech.pro/forex_pair'); // Update this with your correct WebSocket URL
+        socket = new WebSocket('wss://fxtrado-backend.currenttech.pro/forex_pair'); // Update this with your correct WebSocket URL
         
         socket.onopen = function() {
             console.log('WebSocket connection established');
@@ -1372,7 +1372,7 @@
 
         // Post the order to the API
         try {
-          const response = await fetch('https://fxtrado-backend/api/openOrders', {
+          const response = await fetch('http://localhost:3000/api/openOrders', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
