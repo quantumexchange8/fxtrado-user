@@ -1656,7 +1656,7 @@ i.fa.fa-caret-square-down {
 .version3 .exchange__widget td,
 .version3 .exchange__widget th,
 .version3 .header__price-update ul li span {
-    color: #ffffff !important;
+    color: #ffffff;
 }
 
 .version3 .exchange__widget table tbody tr:hover {
@@ -1783,7 +1783,7 @@ i.fa.fa-caret-square-down {
 .version4 .exchange__widget td,
 .version4 .exchange__widget th,
 .version4 .header__price-update ul li span {
-    color: #ffffff !important;
+    color: #ffffff;
 }
 
 .version4 .exchange__widget table tbody tr:hover {
@@ -1879,7 +1879,7 @@ i.fa.fa-caret-square-down {
 .version5 .exchange__widget td,
 .version5 .exchange__widget th,
 .version5 .header__price-update ul li span {
-    color: #ffffff !important;
+    color: #ffffff ;
 }
 
 .version5 .exchange__widget table tbody tr:hover {

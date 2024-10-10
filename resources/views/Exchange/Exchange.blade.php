@@ -20,8 +20,8 @@
                   </thead>
                   <tbody class="exchange__widget__table">
                     @foreach ($allPairs as $allPair)
-                      <tr data-symbol="{{ $allPair->currency_pair }}" onclick="selectSymbol('{{ $allPair->currency_pair }}')">
-                        <td style="min-width: 115px"><img src="assets/img/coin/btc.svg" class="svgInject" alt="svg"> {{ $allPair->base }}/{{ $allPair->quote }}</td>
+                      <tr data-symbol="{{ $allPair->currency_pair }}" onclick="selectSymbol('{{ $allPair->symbol_pair }}')">
+                        <td style="min-width: 115px"><img src="assets/img/coin/btc.svg" class="svgInject" alt="svg"> {{ $allPair->base }}{{ $allPair->quote }}</td>
                         <td class="bid" style="color: #dc2626 !important">0.0000</td> <!-- Bid placeholder -->
                         <td class="ask" style="color: #16a34a !important">0.0000</td> <!-- Ask placeholder -->
                       </tr>
@@ -548,6 +548,7 @@
             <div id="trading-chart-transparent"></div>
           </div>
           <div class="exchange__widget" style="display: none" id="symbol-order">
+            <div id="selSym" style="font-size: 18px;font-weight: bold" class="text-lg text-white text-center font-bold mb-2 flex justify-center">sym</div>
             <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
               <li class="nav-item" role="presentation">
                 <a class="nav-link active" id="pills-market-order-tab" data-toggle="pill" href="#pills-market-order"
@@ -567,7 +568,7 @@
                 aria-labelledby="pills-market-order-tab">
                 <div class="exchange__widget__order">
                   <div class="exchange__widget__order-note">
-                    <h2><img src="assets/img/svg-icon/buy.svg" class="svgInject" alt="svg"> Quick buy</h2>
+                    <h2><img src="assets/img/svg-icon/buy.svg" class="svgInject" alt="svg"> Quick buy </h2> 
                     <div class="exchange__widget__order-note-item">
                       <p>Volumn</p>
                       <input type="number" class="form-control" placeholder="Amount">
@@ -722,7 +723,7 @@
                 aria-labelledby="pills-limite-order-tab">
                 <div class="exchange__widget__order">
                   <div class="exchange__widget__order-note">
-                    <h2><img src="assets/img/svg-icon/buy.svg" class="svgInject" alt="svg"> Quick buy</h2>
+                    <h2><img src="assets/img/svg-icon/buy.svg" class="svgInject" alt="svg"> Quick buy </h2>
                     <div class="exchange__widget__order-note-item">
                       <p>Volumn</p>
                       <input type="number" class="form-control" placeholder="Amount">
@@ -1281,7 +1282,8 @@
 
     // Function to establish WebSocket connection
     function connectWebSocket() {
-        socket = new WebSocket('wss://fxtrado-backend.currenttech.pro/forex_pair'); // Update this with your correct WebSocket URL
+        // const wsUrl = env.APP_ENV === 'production' ? 'wss://yourdomain.com/forex_pair' : 'ws://localhost:3000/forex_pair';
+        socket = new WebSocket('ws://localhost:3000/forex_pair'); // Update this with your correct WebSocket URL
         
         socket.onopen = function() {
             console.log('WebSocket connection established');
@@ -1313,16 +1315,51 @@
         };
     }
 
+    const previousPrices = {};
+
     // Function to update table rows with the bid/ask values
     function updateTableRow(symbol, bid, ask) {
         // Find the row with the data-symbol attribute matching the symbol (e.g., EUR/USD)
         const row = document.querySelector(`tr[data-symbol='${symbol}']`);
       
         if (row) {
-            // Update the bid and ask values in the corresponding table cells
-            row.querySelector('.bid').innerText = bid;
-            row.querySelector('.ask').innerText = ask;
-        }
+          
+          const bidCell = row.querySelector('.bid');
+          const askCell = row.querySelector('.ask');
+          
+          // Check if bid and ask cells are found
+          if (bidCell && askCell) {
+
+              // Get previous prices for this symbol
+              const prevBid = previousPrices[symbol]?.bid || 0;
+              const prevAsk = previousPrices[symbol]?.ask || 0;
+
+              // Update the bid and ask values
+              bidCell.innerText = bid;
+              askCell.innerText = ask;
+
+              // Determine color change for bid
+              if (bid > prevBid) {
+                  bidCell.style.color = '#16a34a';  // Green for price increase
+              } else if (bid < prevBid) {
+                  bidCell.style.color = '#dc2626';  // Red for price decrease
+              }
+
+              // Determine color change for ask
+              if (ask > prevAsk) {
+                  askCell.style.color = '#16a34a';  // Green for price increase
+              } else if (ask < prevAsk) {
+                  askCell.style.color = '#dc2626';  // Red for price decrease
+              }
+
+              // Store current prices as previous for next update
+              previousPrices[symbol] = { bid, ask };
+          } else {
+              
+          }
+      } else {
+          console.error(`Row not found for symbol: ${symbol}`);
+      }
     }
 
     // Initialize WebSocket connection when the page loads
@@ -1342,8 +1379,9 @@
       const forexChart = document.getElementById('symbol-chart');
       const forexOrder = document.getElementById('symbol-order');
       const symbolElement = document.getElementById('selected-symbol');
-      symbolElement.innerText = currencyPair;
-      
+      symbolElement.style.display = 'none';
+      selSym.innerText = currencyPair;
+
       if (currencyPair) {
         forexChart.style.display = 'block';
         forexOrder.style.display = 'block';
