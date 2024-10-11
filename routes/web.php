@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ForexController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\WalletController;
 use Illuminate\Support\Facades\Route;
@@ -25,6 +26,9 @@ Route::middleware('auth')->group(function () {
 
     // Exchange
     Route::get('/forex_pair', [ForexController::class, 'forexPair'])->name('forex_pair');
+
+    // Orders
+    Route::get('/orders', [OrderController::class, 'orders'])->name('orders');
 });
 
 require __DIR__.'/auth.php';

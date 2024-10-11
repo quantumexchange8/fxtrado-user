@@ -171,6 +171,11 @@ p {
     border-color: #ff3f34 !important;
 }
 
+.btn-blue {
+    background: #2885ff !important;
+    border-color: #2885ff !important;
+}
+
 .btn-green:hover,
 .btn-red:hover {
     background: transparent;

@@ -570,8 +570,8 @@
                   <div class="exchange__widget__order-note">
                     <h2><img src="assets/img/svg-icon/buy.svg" class="svgInject" alt="svg"> Quick buy </h2> 
                     <div class="exchange__widget__order-note-item">
-                      <p>Volumn</p>
-                      <input type="number" class="form-control" placeholder="Amount">
+                      <p>Lot Size</p>
+                      <input id="order-amount" type="number" min="0.01" step="0.01" class="form-control" placeholder="Amount">
                       {{-- <div class="exchange__widget__order-buy-coin"> --}}
                         {{-- <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
                           BTC
@@ -603,40 +603,6 @@
                         </div> --}}
                       {{-- </div> --}}
                     </div>
-                    {{-- <div class="exchange__widget__order-note-item">
-                      <p>I will pay</p>
-                      <input type="number" class="form-control" placeholder="Amount">
-                      <div class="exchange__widget__order-buy-coin">
-                        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
-                          BTC
-                        </button>
-                        <div class="dropdown-menu">
-                          <a class="dropdown-item" href="#!">btc</a>
-                          <a class="dropdown-item" href="#!">abt</a>
-                          <a class="dropdown-item" href="#!">act</a>
-                          <a class="dropdown-item" href="#!">actn</a>
-                          <a class="dropdown-item" href="#!">add</a>
-                          <a class="dropdown-item" href="#!">agi</a>
-                          <a class="dropdown-item" href="#!">amp</a>
-                          <a class="dropdown-item" href="#!">auto</a>
-                          <a class="dropdown-item" href="#!">bab</a>
-                          <a class="dropdown-item" href="#!">band</a>
-                          <a class="dropdown-item" href="#!">bch</a>
-                          <a class="dropdown-item" href="#!">bdl</a>
-                          <a class="dropdown-item" href="#!">beam</a>
-                          <a class="dropdown-item" href="#!">bnty</a>
-                          <a class="dropdown-item" href="#!">btcd</a>
-                          <a class="dropdown-item" href="#!">btch</a>
-                          <a class="dropdown-item" href="#!">btcz</a>
-                          <a class="dropdown-item" href="#!">cdn</a>
-                          <a class="dropdown-item" href="#!">chain</a>
-                          <a class="dropdown-item" href="#!">clam</a>
-                          <a class="dropdown-item" href="#!">cob</a>
-                          <a class="dropdown-item" href="#!">cvc</a>
-                          <a class="dropdown-item" href="#!">dew</a>
-                        </div>
-                      </div>
-                    </div> --}}
                     <button class="btn-green" type="button" onclick="buyOrder()">
                       Buy
                       <span id="ask-price">0.0000</span>
@@ -644,9 +610,8 @@
                   </div>
                   <div class="exchange__widget__order-note">
                     <h2><img src="assets/img/svg-icon/sell.svg" class="svgInject" alt="svg"> Quick sell</h2>
-                    <div class="exchange__widget__order-note-item">
-                      <p>Volumn</p>
-                      <input type="number" class="form-control" placeholder="Amount">
+                    <div class="exchange__widget__order-note-item" style="height: 52px">
+                      {{-- <input type="number" min="0.01" step="0.01" class="form-control" placeholder="Amount"> --}}
                       {{-- <div class="exchange__widget__order-buy-coin">
                         <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
                           BTC
@@ -1286,7 +1251,8 @@
         const wsUrl = window.appEnv === 'production' ? 'wss://fxtrado-backend.currenttech.pro/forex_pair' : 'ws://localhost:3000/forex_pair';
         
         socket = new WebSocket(wsUrl); // Update this with your correct WebSocket URL
-        console.log('env: ', window.appEnv, 'url ', wsUrl)
+
+        console.log('env: ', window.appEnv, 'url ', wsUrl) // for testing purpose
 
         socket.onopen = function() {
             console.log('WebSocket connection established');
@@ -1399,6 +1365,8 @@
       const selectedSymbol = document.getElementById('selected-symbol').innerText;
       const askPrice = document.getElementById('ask-price').innerText;
       const userId = window.userID = {{ auth()->id() }};
+      const lot = document.getElementById('order-amount').value;
+
       const api = window.appEnv === 'production' ? 'https://fxtrado-backend.currenttech.pro/api/openOrders' : 'http://localhost:3000/api/openOrders';
       // Make sure a symbol is selected before sending the request
       if (selectedSymbol !== 'None') {
@@ -1409,6 +1377,7 @@
           quantity: 1, // You can customize the quantity
           user_id: userId,
           status: 'open',
+          volume: lot ? lot : '0.01',
         };
 
         // Post the order to the API
@@ -1440,7 +1409,8 @@
       const selectedSymbol = document.getElementById('selected-symbol').innerText;
       const bidPrice = document.getElementById('bid-price').innerText;
       const userId = window.userID = {{ auth()->id() }};
-    
+      const lot = document.getElementById('order-amount').value;
+
       // Make sure a symbol is selected before sending the request
       if (selectedSymbol !== 'None') {
         const orderData = {
@@ -1450,6 +1420,7 @@
           quantity: 1, // You can customize the quantity
           user_id: userId,
           status: 'open',
+          volume: lot ?? '0.01',
         };
 
         // Post the order to the API
