@@ -1282,7 +1282,7 @@
 
     // Function to establish WebSocket connection
     function connectWebSocket() {
-        const wsUrl = window.appEnv === 'production' ? 'wss://yourdomain.com/forex_pair' : 'ws://localhost:3000/forex_pair';
+        const wsUrl = window.appEnv === 'production' ? 'wss://fxtrado-backend.currenttech.pro/forex_pair' : 'ws://localhost:3000/forex_pair';
         socket = new WebSocket(wsUrl); // Update this with your correct WebSocket URL
         
         socket.onopen = function() {
