@@ -1279,6 +1279,7 @@
   <script>
     let socket;
     let reconnectInterval = 5000; // Retry after 5 seconds
+    window.appEnv = "{{ env('APP_ENV') }}";
 
     // Function to establish WebSocket connection
     function connectWebSocket() {
