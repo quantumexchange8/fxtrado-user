@@ -1284,8 +1284,10 @@
     // Function to establish WebSocket connection
     function connectWebSocket() {
         const wsUrl = window.appEnv === 'production' ? 'wss://fxtrado-backend.currenttech.pro/forex_pair' : 'ws://localhost:3000/forex_pair';
-        socket = new WebSocket(wsUrl); // Update this with your correct WebSocket URL
         
+        socket = new WebSocket(wsUrl); // Update this with your correct WebSocket URL
+        console.log('env: ', window.appEnv, 'url ', wsUrl)
+
         socket.onopen = function() {
             console.log('WebSocket connection established');
         };
@@ -1299,8 +1301,6 @@
 
             const selectedSymbolElement = document.getElementById('selected-symbol');
             const selectedSymbol = selectedSymbolElement.innerText.trim();
-
-            console.log('Current selected symbol:', selectedSymbol);
             
             if (data.symbol === selectedSymbol) {
               
@@ -1346,23 +1346,17 @@
               
 
               // Determine color change for bid
-              if (bid > prevBid) {
+              if (bid > prevBid || ask > prevAsk) {
                   bidCell.style.color = '#16a34a';  // Green for price increase
-              } else if (bid < prevBid) {
-                  bidCell.style.color = '#dc2626';  // Red for price decrease
-              }
-
-              // Determine color change for ask
-              if (ask > prevAsk) {
                   askCell.style.color = '#16a34a';  // Green for price increase
-              } else if (ask < prevAsk) {
+
+              } else if (bid < prevBid || bid < prevBid) {
+                  bidCell.style.color = '#dc2626';  // Red for price decrease
                   askCell.style.color = '#dc2626';  // Red for price decrease
               }
 
               // Store current prices as previous for next update
               previousPrices[symbol] = { bid, ask };
-          } else {
-              
           }
       } else {
           console.error(`Row not found for symbol: ${symbol}`);
@@ -1405,7 +1399,7 @@
       const selectedSymbol = document.getElementById('selected-symbol').innerText;
       const askPrice = document.getElementById('ask-price').innerText;
       const userId = window.userID = {{ auth()->id() }};
-    
+      const api = window.appEnv === 'production' ? 'https://fxtrado-backend.currenttech.pro/api/openOrders' : 'http://localhost:3000/api/openOrders';
       // Make sure a symbol is selected before sending the request
       if (selectedSymbol !== 'None') {
         const orderData = {
@@ -1419,7 +1413,7 @@
 
         // Post the order to the API
         try {
-          const response = await fetch('https://fxtrado-backend.currenttech.pro/api/openOrders', {
+          const response = await fetch(`${api}`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
