@@ -70,10 +70,32 @@ class WalletController extends Controller
         return redirect()->away($redirectUrl);
     }
 
-    public function deposit_return()
+    public function deposit_return(Request $request)
     {
+        $data = $request->all();
+        Log::debug($data);
 
-        return view('dashboard');
+        if ($data['response_status'] == 'success') {
+
+            $result = [
+                "amount" => $data['transfer_amount'],
+                "transaction_number" => $data['transaction_number'],
+                "txid" => $data['txID'],
+            ];
+
+            $transaction = Transaction::query()
+                ->where('transaction_number', $result['transaction_number'])
+                ->first();
+
+            $result['date'] = $transaction->approved_at;
+
+            return redirect()->route('dashboard')->with('notification', [
+                'details' => $transaction,
+                'type' => 'deposit',
+            ]);
+        } else {
+            return to_route('dashboard');
+        }
     }
 
     public function deposit_callback(Request $request)
