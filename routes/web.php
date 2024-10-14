@@ -12,6 +12,8 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
+Route::post('deposit_callback', [WalletController::class, 'deposit_callback'])->name('deposit_callback');
+
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -21,8 +23,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/deposit', [WalletController::class, 'deposit'])->name('wallet.deposit');
     Route::post('/withdrawal', [WalletController::class, 'withdrawal'])->name('wallet.withdrawal');
 
-    Route::get('/deposit_return', [WalletController::class, 'deposit_return'])->name('deposit_return');
-    Route::post('/deposit_callback', [WalletController::class, 'deposit_callback'])->name('deposit_callback');
+    Route::get('deposit_return', [WalletController::class, 'deposit_return'])->name('deposit_return');
 
     // Exchange
     Route::get('/forex_pair', [ForexController::class, 'forexPair'])->name('forex_pair');
