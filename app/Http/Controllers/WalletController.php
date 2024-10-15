@@ -104,6 +104,7 @@ class WalletController extends Controller
     {
 
         $data = $request->all();
+        Log::debug($data);
 
         $result = [
             "token" => $data['vCode'],
