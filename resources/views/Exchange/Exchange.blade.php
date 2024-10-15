@@ -1354,7 +1354,7 @@
       if (currencyPair) {
         forexChart.style.display = 'block';
         forexOrder.style.display = 'block';
-        container.style.display = 'block'
+        container.style.display = 'block';
       }
 
       document.getElementById('ask-price').innerText = '0.0000';

@@ -177,7 +177,8 @@ p {
 }
 
 .btn-green:hover,
-.btn-red:hover {
+.btn-red:hover,
+.btn-blue:hover {
     background: transparent;
     color: #ffffff !important;
 }

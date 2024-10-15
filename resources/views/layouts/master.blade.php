@@ -34,7 +34,10 @@
   <script src="assets/js/animated-gradient.js"></script>
   <script src="assets/js/custom.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/js/all.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"></script>
 
+  
 </body>
 
 </html>

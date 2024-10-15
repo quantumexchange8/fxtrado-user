@@ -47,9 +47,12 @@ class WalletController extends Controller
 
         $payoutSetting = config('payment-gateway');
         $domain = $_SERVER['HTTP_HOST'];
-        $paymentGateway = config('payment-gateway');
 
-        $selectedPayout = $payoutSetting['staging'];
+        if ($domain === 'fxtrado-user.com') {
+            $selectedPayout = $payoutSetting['live'];
+        } else {
+            $selectedPayout = $payoutSetting['staging'];
+        }
 
         $vCode = md5($selectedPayout['appId'] . $transaction_id . $selectedPayout['merchantId'] . $selectedPayout['ttKey']);
 
@@ -73,7 +76,6 @@ class WalletController extends Controller
     public function deposit_return(Request $request)
     {
         $data = $request->all();
-        Log::debug($data);
 
         if ($data['response_status'] == 'success') {
 
@@ -102,7 +104,6 @@ class WalletController extends Controller
     {
 
         $data = $request->all();
-        Log::debug($data);
 
         $result = [
             "token" => $data['vCode'],

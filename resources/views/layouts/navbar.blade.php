@@ -28,7 +28,7 @@
                 class="svgInject navigation__item-icon" alt="svg"></span>
             <span class="navigation__item-label">Analysis</span>
           </a></li> --}}
-        <li class="navigation__item"><a href="#" class="navigation__item-link">
+        <li class="navigation__item"><a href="orders" class="navigation__item-link">
           <span class="navigation__item-icon-wrapper"><img src="assets/img/svg-icon/history.svg"
               class="svgInject navigation__item-icon" alt="svg"></span>
           <span class="navigation__item-label">Order History</span>
