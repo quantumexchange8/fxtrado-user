@@ -2,7 +2,7 @@
 
 return [
     'staging' => [
-        'paymentUrl' => 'https://local1.currenttech.pro',
+        'paymentUrl' => 'https://local7.currenttech.pro',
         'appId' => 'fxtrado',
         'merchantId' => '16',
         'ttKey' => 'eMVpNySWd9bLYXUD1lsf9aoZ9o0uBO9ixUjpPZLtSnchpM1CES',
