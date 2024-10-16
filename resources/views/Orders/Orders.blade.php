@@ -128,8 +128,6 @@
             socket.onmessage = function(event) {
                 const data = JSON.parse(event.data);
                 const orderData = data;
-
-                console.log(orderData)
                 
                 const filterUser = orderData.filter(user => user.user_id === userId)
 
