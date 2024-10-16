@@ -11,8 +11,8 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        $middleware->web(append: [
-            \App\Http\Middleware\VerifyCsrfToken::class,
+        $middleware->validateCsrfTokens(except: [
+            'deposit_return',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
