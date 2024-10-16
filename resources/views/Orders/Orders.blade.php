@@ -35,25 +35,14 @@
                             </tr>
                           </thead>
                           <tbody class="exchange__widget__table">
-                            <tr>
-                              <td><img src="assets/img/coin/btc.svg" class="svgInject" alt="svg"> btc</td>
-                              <td>0.0203</td>
-                              <td>$50k</td>
-                              <td><img src="assets/img/svg-icon/cart.svg" class="svgInject" alt="svg"></td>
-                            </tr>
-                            <tr>
-                              <td><img src="assets/img/coin/act.svg" class="svgInject" alt="svg"> act</td>
-                              <td>0.0203</td>
-                              <td>$24k</td>
-                              <td><img src="assets/img/svg-icon/cart.svg" class="svgInject" alt="svg"></td>
-                            </tr>
-                            <tr>
-                              <td><img src="assets/img/coin/actn.svg" class="svgInject" alt="svg"> actn</td>
-                              <td>0.0203</td>
-                              <td>$22k</td>
-                              <td><img src="assets/img/svg-icon/cart.svg" class="svgInject" alt="svg"></td>
-                            </tr>
-                            
+                            @foreach ($orders as $order)
+                              <tr>
+                                <td>{{ $order->symbol }}</td>
+                                <td>{{ $order->order_id }}</td>
+                                <td>{{ $order->type }}</td>
+                                <td>${{ $order->profit }}</td>
+                              </tr>
+                            @endforeach
                           </tbody>
                         </table>
                     </div>
@@ -346,8 +335,39 @@
 
               if (response.ok) {
                 console.log('Order Closed', result);
+
+                Toastify({
+                  text: "Order successfully placed",
+                  duration: 3000,
+                  destination: "https://github.com/apvarun/toastify-js",
+                  newWindow: true,
+                  close: true,
+                  gravity: "top", // `top` or `bottom`
+                  position: "right", // `left`, `center` or `right`
+                  stopOnFocus: true, // Prevents dismissing of toast on hover
+                  style: {
+                    background: "linear-gradient(to right, #86efac, #15803d)",
+                  },
+                  onClick: function(){} // Callback after click
+                }).showToast();
               } else {
                 console.error('Error closing order:', result.message);
+
+                Toastify({
+                  text: "Error placing order",
+                  duration: 3000,
+                  destination: "https://github.com/apvarun/toastify-js",
+                  newWindow: true,
+                  close: true,
+                  gravity: "top", // `top` or `bottom`
+                  position: "right", // `left`, `center` or `right`
+                  stopOnFocus: true, // Prevents dismissing of toast on hover
+                  style: {
+                    background: "linear-gradient(to right, #f87171, #b91c1c)",
+                  },
+                  onClick: function(){} // Callback after click
+                }).showToast();
+                
               }
             } catch (error) {
               console.error('Network or server error:', error);

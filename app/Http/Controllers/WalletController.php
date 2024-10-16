@@ -120,6 +120,7 @@ class WalletController extends Controller
 
         $user = Auth::user();
         $transaction = Transaction::where('transaction_number', $result['transaction_number'])->first();
+        $wallet = Wallet::where('user_id', $transaction->user_id)->first();
 
         $payoutSetting = config('payment-gateway');
         $domain = $_SERVER['HTTP_HOST'];
@@ -143,6 +144,11 @@ class WalletController extends Controller
                 'remarks' => $result['remarks'],
                 'approved_at' => now()
             ]);
+
+            if ($status === 'success') {
+                $wallet->balance += $result['amount'];
+                $wallet->save();
+            }
 
             if ($transaction->status == 'successful') {
                 if ($transaction->transaction_type === 'Deposit') {

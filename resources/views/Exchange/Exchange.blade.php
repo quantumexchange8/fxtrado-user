@@ -1394,7 +1394,37 @@
 
           if (response.ok) {
             console.log('Order successfully placed', result);
+
+            Toastify({
+              text: "Order successfully placed",
+              duration: 3000,
+              destination: "https://github.com/apvarun/toastify-js",
+              newWindow: true,
+              close: true,
+              gravity: "top", // `top` or `bottom`
+              position: "right", // `left`, `center` or `right`
+              stopOnFocus: true, // Prevents dismissing of toast on hover
+              style: {
+                background: "linear-gradient(to right, #86efac, #15803d)",
+              },
+              onClick: function(){} // Callback after click
+            }).showToast();
+
           } else {
+            Toastify({
+              text: "Error placing order",
+              duration: 3000,
+              destination: "https://github.com/apvarun/toastify-js",
+              newWindow: true,
+              close: true,
+              gravity: "top", // `top` or `bottom`
+              position: "right", // `left`, `center` or `right`
+              stopOnFocus: true, // Prevents dismissing of toast on hover
+              style: {
+                background: "linear-gradient(to right, #f87171, #b91c1c)",
+              },
+              onClick: function(){} // Callback after click
+            }).showToast();
             console.error('Error placing order:', result.message);
           }
         } catch (error) {
@@ -1437,8 +1467,39 @@
 
           if (response.ok) {
             console.log('Order successfully placed', result);
+
+            Toastify({
+              text: "Order successfully placed",
+              duration: 3000,
+              destination: "https://github.com/apvarun/toastify-js",
+              newWindow: true,
+              close: true,
+              gravity: "top", // `top` or `bottom`
+              position: "right", // `left`, `center` or `right`
+              stopOnFocus: true, // Prevents dismissing of toast on hover
+              style: {
+                background: "linear-gradient(to right, #86efac, #15803d)",
+              },
+              onClick: function(){} // Callback after click
+            }).showToast();
+
           } else {
             console.error('Error placing order:', result.message);
+
+            Toastify({
+              text: "Error placing order",
+              duration: 3000,
+              destination: "https://github.com/apvarun/toastify-js",
+              newWindow: true,
+              close: true,
+              gravity: "top", // `top` or `bottom`
+              position: "right", // `left`, `center` or `right`
+              stopOnFocus: true, // Prevents dismissing of toast on hover
+              style: {
+                background: "linear-gradient(to right, #f87171, #b91c1c)",
+              },
+              onClick: function(){} // Callback after click
+            }).showToast();
           }
         } catch (error) {
           console.error('Network or server error:', error);

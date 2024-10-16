@@ -88,6 +88,10 @@ p {
     color: #ff3f34 !important;
 }
 
+.blue {
+    color: #3b82f6 !important;
+}
+
 .red svg path {
     fill: #ff3f34 !important;
 }
@@ -575,7 +579,7 @@ h6 {
 
 .exchange__widget table thead th:first-child,
 .exchange__widget table tbody td:first-child {
-    width: 24%;
+    width: 18%;
 }
 
 .exchange__widget__table td a {

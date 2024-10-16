@@ -1,5 +1,15 @@
 @extends('layouts.master')
 @section('contents')
+
+<style>
+  .ellipse {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 200px;
+  }
+</style>
+
 <div class="exchange__wrapper">
     <div class="container-fluid">
       <div class="row sm-gutters">
@@ -45,11 +55,11 @@
             <table class="table">
               <thead>
                 <tr>
-                  <th>Date</th>
+                  <th style="max-width: 200px">Date</th>
                   <th>Transaction Number</th>
                   <th>Amount</th>
-                  <th>From Wallet</th>
-                  <th>To Wallet</th>
+                  {{-- <th>From Wallet</th>
+                  <th>To Wallet</th> --}}
                   <th>TxID</th>
                   <th>Status</th>
                 </tr>
@@ -57,13 +67,26 @@
               <tbody class="exchange__widget__table">
                 @foreach ($transactions as $transaction)
                   <tr>
-                    <td>{{ $transaction->created_at }}</td>
+                    <td style="max-width: 200px">{{ $transaction->created_at }}</td>
                     <td>{{ $transaction->transaction_number }}</td>
                     <td>{{ $transaction->amount ? $transaction->amount : '0.00' }}</td>
-                    <td>{{ $transaction->from_wallet ?  $transaction->from_wallet : '-'}}</td>
-                    <td>{{ $transaction->to_wallet ?  $transaction->to_wallet : '-'}}</td>
-                    <td>{{ $transaction->txid ?  $transaction->txid : '-'}}</td>
-                    <td class="red">{{ $transaction->status}}</td>
+                    {{-- <td class="text-ellipsis overflow-hidden">{{ $transaction->from_wallet ?  $transaction->from_wallet : '-'}}</td>
+                    <td>{{ $transaction->to_wallet ?  $transaction->to_wallet : '-'}}</td> --}}
+                    <td class="ellipse">{{ $transaction->txid ?  $transaction->txid : '-'}}</td>
+                    
+                    @if ($transaction->status === 'successful')
+                      <td class="green">
+                        {{ $transaction->status}}
+                      </td>
+                    @elseif($transaction->status === 'Processing')
+                      <td class="blue">
+                        {{ $transaction->status}}
+                      </td>
+                    @else
+                      <td class="red">
+                        {{ $transaction->status}}
+                      </td>
+                    @endif
                   </tr>
                 @endforeach
               </tbody>

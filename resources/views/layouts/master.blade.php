@@ -7,6 +7,8 @@
   <title>FxTrado</title>
   <link rel="shortcut icon" href="assets/img/favicon.png" type="image/x-icon">
   <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
   @vite('resources/css/app.css')
 </head>
 
@@ -36,7 +38,7 @@
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/js/all.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"></script>
-
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
   
 </body>
 
