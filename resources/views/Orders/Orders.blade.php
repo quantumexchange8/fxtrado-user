@@ -127,7 +127,9 @@
 
             socket.onmessage = function(event) {
                 const data = JSON.parse(event.data);
-                const orderData = data.orders;
+                const orderData = data;
+
+                console.log(orderData)
                 
                 const filterUser = orderData.filter(user => user.user_id === userId)
 
@@ -337,7 +339,7 @@
                 console.log('Order Closed', result);
 
                 Toastify({
-                  text: "Order successfully placed",
+                  text: "Order successfully close",
                   duration: 3000,
                   destination: "https://github.com/apvarun/toastify-js",
                   newWindow: true,

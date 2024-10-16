@@ -1243,7 +1243,7 @@
 
   <script>
     let socket;
-    let reconnectInterval = 5000; // Retry after 5 seconds
+    let reconnectInterval = 1000; // Retry after 5 seconds
     window.appEnv = "{{ env('APP_ENV') }}";
 
     // Function to establish WebSocket connection
@@ -1365,7 +1365,12 @@
       const selectedSymbol = document.getElementById('selected-symbol').innerText;
       const askPrice = document.getElementById('ask-price').innerText;
       const userId = window.userID = {{ auth()->id() }};
-      const lot = document.getElementById('order-amount').value;
+      let lot = document.getElementById('order-amount').value;
+
+      // Default to 0.01 if the input is empty or less than the minimum value
+      if (!lot || parseFloat(lot) < 0.01) {
+          lot = 0.01;
+      }
 
       const api = window.appEnv === 'production' ? 'https://fxtrado-backend.currenttech.pro/api/openOrders' : 'http://localhost:3000/api/openOrders';
       // Make sure a symbol is selected before sending the request
@@ -1439,8 +1444,11 @@
       const selectedSymbol = document.getElementById('selected-symbol').innerText;
       const bidPrice = document.getElementById('bid-price').innerText;
       const userId = window.userID = {{ auth()->id() }};
-      const lot = document.getElementById('order-amount').value;
-
+      let lot = document.getElementById('order-amount').value;
+      
+      if (!lot || parseFloat(lot) < 0.01) {
+        lot = 0.01;
+      }
       // Make sure a symbol is selected before sending the request
       if (selectedSymbol !== 'None') {
         const orderData = {
