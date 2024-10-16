@@ -12,7 +12,7 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-Route::post('deposit_callback', [WalletController::class, 'deposit_callback'])->name('deposit_callback');
+Route::post('deposit_callback', [WalletController::class, 'depositCallback'])->name('depositCallback');
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');

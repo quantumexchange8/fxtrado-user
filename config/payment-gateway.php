@@ -9,7 +9,7 @@ return [
         'language' => 'en',
     ],
     'live' => [
-        'paymentUrl' => 'https://ttpayment-gateway.currenttech.pro',
+        'paymentUrl' => 'https://securepay.ttpays.io',
         'appId' => 'ttpay',
         'merchantId' => '1'
     ],

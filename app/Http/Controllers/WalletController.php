@@ -76,6 +76,7 @@ class WalletController extends Controller
     public function deposit_return(Request $request)
     {
         $data = $request->all();
+        Log::debug('data from return', $data);
 
         if ($data['response_status'] == 'success') {
 
@@ -100,11 +101,11 @@ class WalletController extends Controller
         }
     }
 
-    public function deposit_callback(Request $request)
+    public function depositCallback(Request $request)
     {
 
         $data = $request->all();
-        Log::debug($data);
+        Log::debug('data from callback', $data);
 
         $result = [
             "token" => $data['vCode'],
