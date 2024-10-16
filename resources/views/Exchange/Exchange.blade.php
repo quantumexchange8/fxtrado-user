@@ -611,72 +611,9 @@
                   <div class="exchange__widget__order-note">
                     <h2><img src="assets/img/svg-icon/sell.svg" class="svgInject" alt="svg"> Quick sell</h2>
                     <div class="exchange__widget__order-note-item" style="height: 52px">
-                      {{-- <input type="number" min="0.01" step="0.01" class="form-control" placeholder="Amount"> --}}
-                      {{-- <div class="exchange__widget__order-buy-coin">
-                        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
-                          BTC
-                        </button>
-                        <div class="dropdown-menu">
-                          <a class="dropdown-item" href="#!">btc</a>
-                          <a class="dropdown-item" href="#!">abt</a>
-                          <a class="dropdown-item" href="#!">act</a>
-                          <a class="dropdown-item" href="#!">actn</a>
-                          <a class="dropdown-item" href="#!">add</a>
-                          <a class="dropdown-item" href="#!">agi</a>
-                          <a class="dropdown-item" href="#!">amp</a>
-                          <a class="dropdown-item" href="#!">auto</a>
-                          <a class="dropdown-item" href="#!">bab</a>
-                          <a class="dropdown-item" href="#!">band</a>
-                          <a class="dropdown-item" href="#!">bch</a>
-                          <a class="dropdown-item" href="#!">bdl</a>
-                          <a class="dropdown-item" href="#!">beam</a>
-                          <a class="dropdown-item" href="#!">bnty</a>
-                          <a class="dropdown-item" href="#!">btcd</a>
-                          <a class="dropdown-item" href="#!">btch</a>
-                          <a class="dropdown-item" href="#!">btcz</a>
-                          <a class="dropdown-item" href="#!">cdn</a>
-                          <a class="dropdown-item" href="#!">chain</a>
-                          <a class="dropdown-item" href="#!">clam</a>
-                          <a class="dropdown-item" href="#!">cob</a>
-                          <a class="dropdown-item" href="#!">cvc</a>
-                          <a class="dropdown-item" href="#!">dew</a>
-                        </div>
-                      </div> --}}
+                      
                     </div>
-                    {{-- <div class="exchange__widget__order-note-item">
-                      <p>I will pay</p>
-                      <input type="number" class="form-control" placeholder="Amount">
-                      <div class="exchange__widget__order-buy-coin">
-                        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
-                          BTC
-                        </button>
-                        <div class="dropdown-menu">
-                          <a class="dropdown-item" href="#!">btc</a>
-                          <a class="dropdown-item" href="#!">abt</a>
-                          <a class="dropdown-item" href="#!">act</a>
-                          <a class="dropdown-item" href="#!">actn</a>
-                          <a class="dropdown-item" href="#!">add</a>
-                          <a class="dropdown-item" href="#!">agi</a>
-                          <a class="dropdown-item" href="#!">amp</a>
-                          <a class="dropdown-item" href="#!">auto</a>
-                          <a class="dropdown-item" href="#!">bab</a>
-                          <a class="dropdown-item" href="#!">band</a>
-                          <a class="dropdown-item" href="#!">bch</a>
-                          <a class="dropdown-item" href="#!">bdl</a>
-                          <a class="dropdown-item" href="#!">beam</a>
-                          <a class="dropdown-item" href="#!">bnty</a>
-                          <a class="dropdown-item" href="#!">btcd</a>
-                          <a class="dropdown-item" href="#!">btch</a>
-                          <a class="dropdown-item" href="#!">btcz</a>
-                          <a class="dropdown-item" href="#!">cdn</a>
-                          <a class="dropdown-item" href="#!">chain</a>
-                          <a class="dropdown-item" href="#!">clam</a>
-                          <a class="dropdown-item" href="#!">cob</a>
-                          <a class="dropdown-item" href="#!">cvc</a>
-                          <a class="dropdown-item" href="#!">dew</a>
-                        </div>
-                      </div>
-                    </div> --}}
+                    
                     <button class="btn-red" type="button" onclick="sellOrder()"> 
                       Sell
                       <span id="bid-price">0.0000</span>
@@ -692,71 +629,9 @@
                     <div class="exchange__widget__order-note-item">
                       <p>Volumn</p>
                       <input type="number" class="form-control" placeholder="Amount">
-                      {{-- <div class="exchange__widget__order-buy-coin">
-                        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
-                          BTC
-                        </button>
-                        <div class="dropdown-menu">
-                          <a class="dropdown-item" href="#!">btc</a>
-                          <a class="dropdown-item" href="#!">abt</a>
-                          <a class="dropdown-item" href="#!">act</a>
-                          <a class="dropdown-item" href="#!">actn</a>
-                          <a class="dropdown-item" href="#!">add</a>
-                          <a class="dropdown-item" href="#!">agi</a>
-                          <a class="dropdown-item" href="#!">amp</a>
-                          <a class="dropdown-item" href="#!">auto</a>
-                          <a class="dropdown-item" href="#!">bab</a>
-                          <a class="dropdown-item" href="#!">band</a>
-                          <a class="dropdown-item" href="#!">bch</a>
-                          <a class="dropdown-item" href="#!">bdl</a>
-                          <a class="dropdown-item" href="#!">beam</a>
-                          <a class="dropdown-item" href="#!">bnty</a>
-                          <a class="dropdown-item" href="#!">btcd</a>
-                          <a class="dropdown-item" href="#!">btch</a>
-                          <a class="dropdown-item" href="#!">btcz</a>
-                          <a class="dropdown-item" href="#!">cdn</a>
-                          <a class="dropdown-item" href="#!">chain</a>
-                          <a class="dropdown-item" href="#!">clam</a>
-                          <a class="dropdown-item" href="#!">cob</a>
-                          <a class="dropdown-item" href="#!">cvc</a>
-                          <a class="dropdown-item" href="#!">dew</a>
-                        </div>
-                      </div> --}}
+                      
                     </div>
-                    {{-- <div class="exchange__widget__order-note-item">
-                      <p>I will pay</p>
-                      <input type="number" class="form-control" placeholder="Amount">
-                      <div class="exchange__widget__order-buy-coin">
-                        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
-                          BTC
-                        </button>
-                        <div class="dropdown-menu">
-                          <a class="dropdown-item" href="#!">btc</a>
-                          <a class="dropdown-item" href="#!">abt</a>
-                          <a class="dropdown-item" href="#!">act</a>
-                          <a class="dropdown-item" href="#!">actn</a>
-                          <a class="dropdown-item" href="#!">add</a>
-                          <a class="dropdown-item" href="#!">agi</a>
-                          <a class="dropdown-item" href="#!">amp</a>
-                          <a class="dropdown-item" href="#!">auto</a>
-                          <a class="dropdown-item" href="#!">bab</a>
-                          <a class="dropdown-item" href="#!">band</a>
-                          <a class="dropdown-item" href="#!">bch</a>
-                          <a class="dropdown-item" href="#!">bdl</a>
-                          <a class="dropdown-item" href="#!">beam</a>
-                          <a class="dropdown-item" href="#!">bnty</a>
-                          <a class="dropdown-item" href="#!">btcd</a>
-                          <a class="dropdown-item" href="#!">btch</a>
-                          <a class="dropdown-item" href="#!">btcz</a>
-                          <a class="dropdown-item" href="#!">cdn</a>
-                          <a class="dropdown-item" href="#!">chain</a>
-                          <a class="dropdown-item" href="#!">clam</a>
-                          <a class="dropdown-item" href="#!">cob</a>
-                          <a class="dropdown-item" href="#!">cvc</a>
-                          <a class="dropdown-item" href="#!">dew</a>
-                        </div>
-                      </div>
-                    </div> --}}
+                    
                     <button class="btn-green">Buy</button>
                   </div>
                   <div class="exchange__widget__order-note">
@@ -764,71 +639,9 @@
                     <div class="exchange__widget__order-note-item">
                       <p>Volumn</p>
                       <input type="number" class="form-control" placeholder="Amount">
-                      {{-- <div class="exchange__widget__order-buy-coin">
-                        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
-                          BTC
-                        </button>
-                        <div class="dropdown-menu">
-                          <a class="dropdown-item" href="#!">btc</a>
-                          <a class="dropdown-item" href="#!">abt</a>
-                          <a class="dropdown-item" href="#!">act</a>
-                          <a class="dropdown-item" href="#!">actn</a>
-                          <a class="dropdown-item" href="#!">add</a>
-                          <a class="dropdown-item" href="#!">agi</a>
-                          <a class="dropdown-item" href="#!">amp</a>
-                          <a class="dropdown-item" href="#!">auto</a>
-                          <a class="dropdown-item" href="#!">bab</a>
-                          <a class="dropdown-item" href="#!">band</a>
-                          <a class="dropdown-item" href="#!">bch</a>
-                          <a class="dropdown-item" href="#!">bdl</a>
-                          <a class="dropdown-item" href="#!">beam</a>
-                          <a class="dropdown-item" href="#!">bnty</a>
-                          <a class="dropdown-item" href="#!">btcd</a>
-                          <a class="dropdown-item" href="#!">btch</a>
-                          <a class="dropdown-item" href="#!">btcz</a>
-                          <a class="dropdown-item" href="#!">cdn</a>
-                          <a class="dropdown-item" href="#!">chain</a>
-                          <a class="dropdown-item" href="#!">clam</a>
-                          <a class="dropdown-item" href="#!">cob</a>
-                          <a class="dropdown-item" href="#!">cvc</a>
-                          <a class="dropdown-item" href="#!">dew</a>
-                        </div>
-                      </div> --}}
+                      
                     </div>
-                    {{-- <div class="exchange__widget__order-note-item">
-                      <p>I will pay</p>
-                      <input type="number" class="form-control" placeholder="Amount">
-                      <div class="exchange__widget__order-buy-coin">
-                        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
-                          BTC
-                        </button>
-                        <div class="dropdown-menu">
-                          <a class="dropdown-item" href="#!">btc</a>
-                          <a class="dropdown-item" href="#!">abt</a>
-                          <a class="dropdown-item" href="#!">act</a>
-                          <a class="dropdown-item" href="#!">actn</a>
-                          <a class="dropdown-item" href="#!">add</a>
-                          <a class="dropdown-item" href="#!">agi</a>
-                          <a class="dropdown-item" href="#!">amp</a>
-                          <a class="dropdown-item" href="#!">auto</a>
-                          <a class="dropdown-item" href="#!">bab</a>
-                          <a class="dropdown-item" href="#!">band</a>
-                          <a class="dropdown-item" href="#!">bch</a>
-                          <a class="dropdown-item" href="#!">bdl</a>
-                          <a class="dropdown-item" href="#!">beam</a>
-                          <a class="dropdown-item" href="#!">bnty</a>
-                          <a class="dropdown-item" href="#!">btcd</a>
-                          <a class="dropdown-item" href="#!">btch</a>
-                          <a class="dropdown-item" href="#!">btcz</a>
-                          <a class="dropdown-item" href="#!">cdn</a>
-                          <a class="dropdown-item" href="#!">chain</a>
-                          <a class="dropdown-item" href="#!">clam</a>
-                          <a class="dropdown-item" href="#!">cob</a>
-                          <a class="dropdown-item" href="#!">cvc</a>
-                          <a class="dropdown-item" href="#!">dew</a>
-                        </div>
-                      </div>
-                    </div> --}}
+                    
                     <button class="btn-red">Sell</button>
                   </div>
                 </div>
@@ -841,71 +654,9 @@
                     <div class="exchange__widget__order-note-item">
                       <p>Volumn</p>
                       <input type="number" class="form-control" placeholder="Amount">
-                      {{-- <div class="exchange__widget__order-buy-coin">
-                        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
-                          BTC
-                        </button>
-                        <div class="dropdown-menu">
-                          <a class="dropdown-item" href="#!">btc</a>
-                          <a class="dropdown-item" href="#!">abt</a>
-                          <a class="dropdown-item" href="#!">act</a>
-                          <a class="dropdown-item" href="#!">actn</a>
-                          <a class="dropdown-item" href="#!">add</a>
-                          <a class="dropdown-item" href="#!">agi</a>
-                          <a class="dropdown-item" href="#!">amp</a>
-                          <a class="dropdown-item" href="#!">auto</a>
-                          <a class="dropdown-item" href="#!">bab</a>
-                          <a class="dropdown-item" href="#!">band</a>
-                          <a class="dropdown-item" href="#!">bch</a>
-                          <a class="dropdown-item" href="#!">bdl</a>
-                          <a class="dropdown-item" href="#!">beam</a>
-                          <a class="dropdown-item" href="#!">bnty</a>
-                          <a class="dropdown-item" href="#!">btcd</a>
-                          <a class="dropdown-item" href="#!">btch</a>
-                          <a class="dropdown-item" href="#!">btcz</a>
-                          <a class="dropdown-item" href="#!">cdn</a>
-                          <a class="dropdown-item" href="#!">chain</a>
-                          <a class="dropdown-item" href="#!">clam</a>
-                          <a class="dropdown-item" href="#!">cob</a>
-                          <a class="dropdown-item" href="#!">cvc</a>
-                          <a class="dropdown-item" href="#!">dew</a>
-                        </div>
-                      </div> --}}
+                      
                     </div>
-                    {{-- <div class="exchange__widget__order-note-item">
-                      <p>I will pay</p>
-                      <input type="number" class="form-control" placeholder="Amount">
-                      <div class="exchange__widget__order-buy-coin">
-                        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
-                          BTC
-                        </button>
-                        <div class="dropdown-menu">
-                          <a class="dropdown-item" href="#!">btc</a>
-                          <a class="dropdown-item" href="#!">abt</a>
-                          <a class="dropdown-item" href="#!">act</a>
-                          <a class="dropdown-item" href="#!">actn</a>
-                          <a class="dropdown-item" href="#!">add</a>
-                          <a class="dropdown-item" href="#!">agi</a>
-                          <a class="dropdown-item" href="#!">amp</a>
-                          <a class="dropdown-item" href="#!">auto</a>
-                          <a class="dropdown-item" href="#!">bab</a>
-                          <a class="dropdown-item" href="#!">band</a>
-                          <a class="dropdown-item" href="#!">bch</a>
-                          <a class="dropdown-item" href="#!">bdl</a>
-                          <a class="dropdown-item" href="#!">beam</a>
-                          <a class="dropdown-item" href="#!">bnty</a>
-                          <a class="dropdown-item" href="#!">btcd</a>
-                          <a class="dropdown-item" href="#!">btch</a>
-                          <a class="dropdown-item" href="#!">btcz</a>
-                          <a class="dropdown-item" href="#!">cdn</a>
-                          <a class="dropdown-item" href="#!">chain</a>
-                          <a class="dropdown-item" href="#!">clam</a>
-                          <a class="dropdown-item" href="#!">cob</a>
-                          <a class="dropdown-item" href="#!">cvc</a>
-                          <a class="dropdown-item" href="#!">dew</a>
-                        </div>
-                      </div>
-                    </div> --}}
+                    
                     <button class="btn-green">Buy</button>
                   </div>
                   <div class="exchange__widget__order-note">
@@ -913,327 +664,16 @@
                     <div class="exchange__widget__order-note-item">
                       <p>Volumn</p>
                       <input type="number" class="form-control" placeholder="Amount">
-                      {{-- <div class="exchange__widget__order-buy-coin">
-                        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
-                          BTC
-                        </button>
-                        <div class="dropdown-menu">
-                          <a class="dropdown-item" href="#!">btc</a>
-                          <a class="dropdown-item" href="#!">abt</a>
-                          <a class="dropdown-item" href="#!">act</a>
-                          <a class="dropdown-item" href="#!">actn</a>
-                          <a class="dropdown-item" href="#!">add</a>
-                          <a class="dropdown-item" href="#!">agi</a>
-                          <a class="dropdown-item" href="#!">amp</a>
-                          <a class="dropdown-item" href="#!">auto</a>
-                          <a class="dropdown-item" href="#!">bab</a>
-                          <a class="dropdown-item" href="#!">band</a>
-                          <a class="dropdown-item" href="#!">bch</a>
-                          <a class="dropdown-item" href="#!">bdl</a>
-                          <a class="dropdown-item" href="#!">beam</a>
-                          <a class="dropdown-item" href="#!">bnty</a>
-                          <a class="dropdown-item" href="#!">btcd</a>
-                          <a class="dropdown-item" href="#!">btch</a>
-                          <a class="dropdown-item" href="#!">btcz</a>
-                          <a class="dropdown-item" href="#!">cdn</a>
-                          <a class="dropdown-item" href="#!">chain</a>
-                          <a class="dropdown-item" href="#!">clam</a>
-                          <a class="dropdown-item" href="#!">cob</a>
-                          <a class="dropdown-item" href="#!">cvc</a>
-                          <a class="dropdown-item" href="#!">dew</a>
-                        </div>
-                      </div> --}}
+                      
                     </div>
-                    {{-- <div class="exchange__widget__order-note-item">
-                      <p>I will pay</p>
-                      <input type="number" class="form-control" placeholder="Amount">
-                      <div class="exchange__widget__order-buy-coin">
-                        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
-                          BTC
-                        </button>
-                        <div class="dropdown-menu">
-                          <a class="dropdown-item" href="#!">btc</a>
-                          <a class="dropdown-item" href="#!">abt</a>
-                          <a class="dropdown-item" href="#!">act</a>
-                          <a class="dropdown-item" href="#!">actn</a>
-                          <a class="dropdown-item" href="#!">add</a>
-                          <a class="dropdown-item" href="#!">agi</a>
-                          <a class="dropdown-item" href="#!">amp</a>
-                          <a class="dropdown-item" href="#!">auto</a>
-                          <a class="dropdown-item" href="#!">bab</a>
-                          <a class="dropdown-item" href="#!">band</a>
-                          <a class="dropdown-item" href="#!">bch</a>
-                          <a class="dropdown-item" href="#!">bdl</a>
-                          <a class="dropdown-item" href="#!">beam</a>
-                          <a class="dropdown-item" href="#!">bnty</a>
-                          <a class="dropdown-item" href="#!">btcd</a>
-                          <a class="dropdown-item" href="#!">btch</a>
-                          <a class="dropdown-item" href="#!">btcz</a>
-                          <a class="dropdown-item" href="#!">cdn</a>
-                          <a class="dropdown-item" href="#!">chain</a>
-                          <a class="dropdown-item" href="#!">clam</a>
-                          <a class="dropdown-item" href="#!">cob</a>
-                          <a class="dropdown-item" href="#!">cvc</a>
-                          <a class="dropdown-item" href="#!">dew</a>
-                        </div>
-                      </div>
-                    </div> --}}
+                    
                     <button class="btn-red">Sell</button>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          {{-- <div class="exchange__widget__purchase" >
-            <div class="row sm-gutters">
-              <div class="col-md-6">
-                <div class="exchange__widget">
-                  <h2 class="exchange__widget-title">Buy orders</h2>
-                  <table class="table">
-                    <thead>
-                      <tr>
-                        <th>Name</th>
-                        <th>Rate</th>
-                        <th>Amount</th>
-                        <th>Price</th>
-                        <th>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody class="exchange__widget__table">
-                      <tr>
-                        <td><img src="assets/img/coin/btc.svg" class="svgInject" alt="svg"> btc</td>
-                        <td class="green">0.0203</td>
-                        <td>1.2342</td>
-                        <td>$150k</td>
-                        <td><img src="assets/img/svg-icon/cart.svg" class="svgInject" alt="svg"></td>
-                      </tr>
-                      <tr>
-                        <td><img src="assets/img/coin/abt.svg" class="svgInject" alt="svg"> abt</td>
-                        <td class="green">0.0203</td>
-                        <td>1.2342</td>
-                        <td>$150k</td>
-                        <td><img src="assets/img/svg-icon/cart.svg" class="svgInject" alt="svg"></td>
-                      </tr>
-                      <tr>
-                        <td><img src="assets/img/coin/agi.svg" class="svgInject" alt="svg"> agi</td>
-                        <td class="green">0.0203</td>
-                        <td>1.2342</td>
-                        <td>$150k</td>
-                        <td><img src="assets/img/svg-icon/cart.svg" class="svgInject" alt="svg"></td>
-                      </tr>
-                      <tr>
-                        <td><img src="assets/img/coin/amp.svg" class="svgInject" alt="svg"> amp</td>
-                        <td class="green">0.0203</td>
-                        <td>1.2342</td>
-                        <td>$150k</td>
-                        <td><img src="assets/img/svg-icon/cart.svg" class="svgInject" alt="svg"></td>
-                      </tr>
-                      <tr>
-                        <td><img src="assets/img/coin/bdl.svg" class="svgInject" alt="svg"> bdl</td>
-                        <td class="green">0.0203</td>
-                        <td>1.2342</td>
-                        <td>$150k</td>
-                        <td><img src="assets/img/svg-icon/cart.svg" class="svgInject" alt="svg"></td>
-                      </tr>
-                      <tr>
-                        <td><img src="assets/img/coin/bnty.svg" class="svgInject" alt="svg"> bnty</td>
-                        <td class="green">0.0203</td>
-                        <td>1.2342</td>
-                        <td>$150k</td>
-                        <td><img src="assets/img/svg-icon/cart.svg" class="svgInject" alt="svg"></td>
-                      </tr>
-                      <tr>
-                        <td><img src="assets/img/coin/bch.svg" class="svgInject" alt="svg"> bch</td>
-                        <td class="green">0.0203</td>
-                        <td>1.2342</td>
-                        <td>$150k</td>
-                        <td><img src="assets/img/svg-icon/cart.svg" class="svgInject" alt="svg"></td>
-                      </tr>
-                      <tr>
-                        <td><img src="assets/img/coin/clam.svg" class="svgInject" alt="svg"> clam</td>
-                        <td class="green">0.0203</td>
-                        <td>1.2342</td>
-                        <td>$150k</td>
-                        <td><img src="assets/img/svg-icon/cart.svg" class="svgInject" alt="svg"></td>
-                      </tr>
-                      <tr>
-                        <td><img src="assets/img/coin/cdn.svg" class="svgInject" alt="svg"> cdn</td>
-                        <td class="green">0.0203</td>
-                        <td>1.2342</td>
-                        <td>$150k</td>
-                        <td><img src="assets/img/svg-icon/cart.svg" class="svgInject" alt="svg"></td>
-                      </tr>
-                      <tr>
-                        <td><img src="assets/img/coin/btcz.svg" class="svgInject" alt="svg"> btcz</td>
-                        <td class="green">0.0203</td>
-                        <td>1.2342</td>
-                        <td>$150k</td>
-                        <td><img src="assets/img/svg-icon/cart.svg" class="svgInject" alt="svg"></td>
-                      </tr>
-                      <tr>
-                        <td><img src="assets/img/coin/cvc.svg" class="svgInject" alt="svg"> cvc</td>
-                        <td class="green">0.0203</td>
-                        <td>1.2342</td>
-                        <td>$150k</td>
-                        <td><img src="assets/img/svg-icon/cart.svg" class="svgInject" alt="svg"></td>
-                      </tr>
-                      <tr>
-                        <td><img src="assets/img/coin/dew.svg" class="svgInject" alt="svg"> dew</td>
-                        <td class="green">0.0203</td>
-                        <td>1.2342</td>
-                        <td>$150k</td>
-                        <td><img src="assets/img/svg-icon/cart.svg" class="svgInject" alt="svg"></td>
-                      </tr>
-                      <tr>
-                        <td><img src="assets/img/coin/cob.svg" class="svgInject" alt="svg"> cob</td>
-                        <td class="green">0.0203</td>
-                        <td>1.2342</td>
-                        <td>$150k</td>
-                        <td><img src="assets/img/svg-icon/cart.svg" class="svgInject" alt="svg"></td>
-                      </tr>
-                      <tr>
-                        <td><img src="assets/img/coin/emc.svg" class="svgInject" alt="svg"> emc</td>
-                        <td class="green">0.0203</td>
-                        <td>1.2342</td>
-                        <td>$150k</td>
-                        <td><img src="assets/img/svg-icon/cart.svg" class="svgInject" alt="svg"></td>
-                      </tr>
-                      <tr>
-                        <td><img src="assets/img/coin/dew.svg" class="svgInject" alt="svg"> dew</td>
-                        <td class="green">0.0203</td>
-                        <td>1.2342</td>
-                        <td>$150k</td>
-                        <td><img src="assets/img/svg-icon/cart.svg" class="svgInject" alt="svg"></td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="exchange__widget">
-                  <h2 class="exchange__widget-title">Sell orders</h2>
-                  <table class="table">
-                    <thead>
-                      <tr>
-                        <th>Name</th>
-                        <th>Rate</th>
-                        <th>Amount</th>
-                        <th>Price</th>
-                        <th>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody class="exchange__widget__table">
-                      <tr>
-                        <td><img src="assets/img/coin/amp.svg" class="svgInject" alt="svg"> amp</td>
-                        <td class="red">0.0203</td>
-                        <td>1.2342</td>
-                        <td>$150k</td>
-                        <td><img src="assets/img/svg-icon/cart.svg" class="svgInject" alt="svg"></td>
-                      </tr>
-                      <tr>
-                        <td><img src="assets/img/coin/bdl.svg" class="svgInject" alt="svg"> bdl</td>
-                        <td class="red">0.0203</td>
-                        <td>1.2342</td>
-                        <td>$150k</td>
-                        <td><img src="assets/img/svg-icon/cart.svg" class="svgInject" alt="svg"></td>
-                      </tr>
-                      <tr>
-                        <td><img src="assets/img/coin/bnty.svg" class="svgInject" alt="svg"> bnty</td>
-                        <td class="red">0.0203</td>
-                        <td>1.2342</td>
-                        <td>$150k</td>
-                        <td><img src="assets/img/svg-icon/cart.svg" class="svgInject" alt="svg"></td>
-                      </tr>
-                      <tr>
-                        <td><img src="assets/img/coin/bch.svg" class="svgInject" alt="svg"> bch</td>
-                        <td class="red">0.0203</td>
-                        <td>1.2342</td>
-                        <td>$150k</td>
-                        <td><img src="assets/img/svg-icon/cart.svg" class="svgInject" alt="svg"></td>
-                      </tr>
-                      <tr>
-                        <td><img src="assets/img/coin/clam.svg" class="svgInject" alt="svg"> clam</td>
-                        <td class="red">0.0203</td>
-                        <td>1.2342</td>
-                        <td>$150k</td>
-                        <td><img src="assets/img/svg-icon/cart.svg" class="svgInject" alt="svg"></td>
-                      </tr>
-                      <tr>
-                        <td><img src="assets/img/coin/cdn.svg" class="svgInject" alt="svg"> cdn</td>
-                        <td class="red">0.0203</td>
-                        <td>1.2342</td>
-                        <td>$150k</td>
-                        <td><img src="assets/img/svg-icon/cart.svg" class="svgInject" alt="svg"></td>
-                      </tr>
-                      <tr>
-                        <td><img src="assets/img/coin/btcz.svg" class="svgInject" alt="svg"> btcz</td>
-                        <td class="red">0.0203</td>
-                        <td>1.2342</td>
-                        <td>$150k</td>
-                        <td><img src="assets/img/svg-icon/cart.svg" class="svgInject" alt="svg"></td>
-                      </tr>
-                      <tr>
-                        <td><img src="assets/img/coin/cvc.svg" class="svgInject" alt="svg"> cvc</td>
-                        <td class="red">0.0203</td>
-                        <td>1.2342</td>
-                        <td>$150k</td>
-                        <td><img src="assets/img/svg-icon/cart.svg" class="svgInject" alt="svg"></td>
-                      </tr>
-                      <tr>
-                        <td><img src="assets/img/coin/dew.svg" class="svgInject" alt="svg"> dew</td>
-                        <td class="red">0.0203</td>
-                        <td>1.2342</td>
-                        <td>$150k</td>
-                        <td><img src="assets/img/svg-icon/cart.svg" class="svgInject" alt="svg"></td>
-                      </tr>
-                      <tr>
-                        <td><img src="assets/img/coin/cob.svg" class="svgInject" alt="svg"> cob</td>
-                        <td class="red">0.0203</td>
-                        <td>1.2342</td>
-                        <td>$150k</td>
-                        <td><img src="assets/img/svg-icon/cart.svg" class="svgInject" alt="svg"></td>
-                      </tr>
-                      <tr>
-                        <td><img src="assets/img/coin/emc.svg" class="svgInject" alt="svg"> emc</td>
-                        <td class="red">0.0203</td>
-                        <td>1.2342</td>
-                        <td>$150k</td>
-                        <td><img src="assets/img/svg-icon/cart.svg" class="svgInject" alt="svg"></td>
-                      </tr>
-                      <tr>
-                        <td><img src="assets/img/coin/dew.svg" class="svgInject" alt="svg"> dew</td>
-                        <td class="red">0.0203</td>
-                        <td>1.2342</td>
-                        <td>$150k</td>
-                        <td><img src="assets/img/svg-icon/cart.svg" class="svgInject" alt="svg"></td>
-                      </tr>
-                      <tr>
-                        <td><img src="assets/img/coin/btc.svg" class="svgInject" alt="svg"> btc</td>
-                        <td class="red">0.0203</td>
-                        <td>1.2342</td>
-                        <td>$150k</td>
-                        <td><img src="assets/img/svg-icon/cart.svg" class="svgInject" alt="svg"></td>
-                      </tr>
-                      <tr>
-                        <td><img src="assets/img/coin/abt.svg" class="svgInject" alt="svg"> abt</td>
-                        <td class="red">0.0203</td>
-                        <td>1.2342</td>
-                        <td>$150k</td>
-                        <td><img src="assets/img/svg-icon/cart.svg" class="svgInject" alt="svg"></td>
-                      </tr>
-                      <tr>
-                        <td><img src="assets/img/coin/agi.svg" class="svgInject" alt="svg"> agi</td>
-                        <td class="red">0.0203</td>
-                        <td>1.2342</td>
-                        <td>$150k</td>
-                        <td><img src="assets/img/svg-icon/cart.svg" class="svgInject" alt="svg"></td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div> --}}
+          
         </div>
         {{-- end of chart --}}
 
@@ -1449,6 +889,9 @@
       if (!lot || parseFloat(lot) < 0.01) {
         lot = 0.01;
       }
+
+      const api = window.appEnv === 'production' ? 'https://fxtrado-backend.currenttech.pro/api/openOrders' : 'http://localhost:3000/api/openOrders';
+
       // Make sure a symbol is selected before sending the request
       if (selectedSymbol !== 'None') {
         const orderData = {
@@ -1463,7 +906,7 @@
 
         // Post the order to the API
         try {
-          const response = await fetch('https://fxtrado-backend.currenttech.pro/api/openOrders', {
+          const response = await fetch(`${api}`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

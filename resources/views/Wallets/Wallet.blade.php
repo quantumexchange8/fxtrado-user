@@ -93,46 +93,6 @@
             </table>
           </div>
         </div>
-        {{-- <div class="col-md-5">
-          <div class="exchange__widget">
-            <h2 class="exchange__widget-title">Wallets</h2>
-            <div class="exchange__wallet-card">
-              <div class="exchange__wallet-card-item">
-                <span>
-                  <img src="assets/img/coin/btc.svg" class="svgInject" alt="svg">
-                </span>
-                <h2>BTC balance</h2>
-                <h3>4.373 BTC</h3>
-                <p>$94,331.45</p>
-                <a href="#"><img src="assets/img/svg-icon/up-arrow.svg" class="svgInject" alt="svg"> Send BTC</a>
-                <a href="#"><img src="assets/img/svg-icon/down-arrow.svg" class="svgInject" alt="svg"> Request BTC</a>
-              </div>
-              <div class="exchange__wallet-card-item">
-                <span>
-                  <img src="assets/img/coin/eth.svg" class="svgInject" alt="svg">
-                </span>
-                <h2>ETH balance</h2>
-                <h3>22.324 ETH</h3>
-                <p>$44,331.45</p>
-                <a href="#"><img src="assets/img/svg-icon/up-arrow.svg" class="svgInject" alt="svg"> Send ETH</a>
-                <a href="#"><img src="assets/img/svg-icon/down-arrow.svg" class="svgInject" alt="svg"> Request ETH</a>
-              </div>
-              <div class="exchange__wallet-card-item">
-                <span>
-                  <img src="assets/img/coin/cvc.svg" class="svgInject" alt="svg">
-                </span>
-                <h2>CVC balance</h2>
-                <h3>4.373 CVC</h3>
-                <p>$94,331.45</p>
-                <a href="#"><img src="assets/img/svg-icon/up-arrow.svg" class="svgInject" alt="svg"> Send CVC</a>
-                <a href="#"><img src="assets/img/svg-icon/down-arrow.svg" class="svgInject" alt="svg"> Request CVC</a>
-              </div>
-            </div>
-            <div class="exchange__widget-card-add">
-              <button><img src="assets/img/svg-icon/plus.svg" class="svgInject" alt="svg"> Add new wallet</button>
-            </div>
-          </div>
-        </div> --}}
       </div>
     </div>
   </div>
