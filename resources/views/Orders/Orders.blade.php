@@ -322,55 +322,96 @@
             };
 
             try {
-              const response = await fetch(api, {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                  'Connection': 'keep-alive',
-                },
-                body: JSON.stringify(orderData),
+
+              const response = await axios.post('/closeOrder', {
+                symbol: selectedSymbol,
+                price: askPrice,
+                orderId: orderId,
+                userId: userId,
+                type: type,
+                marketPrice: marketPrice,
+                openPrice: openPrice,
               });
 
-              const result = await response.json();
+              Toastify({
+                text: "Order successfully close",
+                duration: 3000,
+                destination: "https://github.com/apvarun/toastify-js",
+                newWindow: true,
+                close: true,
+                gravity: "top", // `top` or `bottom`
+                position: "right", // `left`, `center` or `right`
+                stopOnFocus: true, // Prevents dismissing of toast on hover
+                style: {
+                  background: "linear-gradient(to right, #86efac, #15803d)",
+                },
+                onClick: function(){} // Callback after click
+              }).showToast();
 
-              if (response.ok) {
-                console.log('Order Closed', result);
+              // const response = await fetch(api, {
+              //   method: 'POST',
+              //   headers: {
+              //     'Content-Type': 'application/json',
+              //     'Connection': 'keep-alive',
+              //   },
+              //   body: JSON.stringify(orderData),
+              // });
 
-                Toastify({
-                  text: "Order successfully close",
-                  duration: 3000,
-                  destination: "https://github.com/apvarun/toastify-js",
-                  newWindow: true,
-                  close: true,
-                  gravity: "top", // `top` or `bottom`
-                  position: "right", // `left`, `center` or `right`
-                  stopOnFocus: true, // Prevents dismissing of toast on hover
-                  style: {
-                    background: "linear-gradient(to right, #86efac, #15803d)",
-                  },
-                  onClick: function(){} // Callback after click
-                }).showToast();
-              } else {
-                console.error('Error closing order:', result.message);
+              // const result = await response.json();
 
-                Toastify({
-                  text: "Error placing order",
-                  duration: 3000,
-                  destination: "https://github.com/apvarun/toastify-js",
-                  newWindow: true,
-                  close: true,
-                  gravity: "top", // `top` or `bottom`
-                  position: "right", // `left`, `center` or `right`
-                  stopOnFocus: true, // Prevents dismissing of toast on hover
-                  style: {
-                    background: "linear-gradient(to right, #f87171, #b91c1c)",
-                  },
-                  onClick: function(){} // Callback after click
-                }).showToast();
+              // if (response.ok) {
+              //   console.log('Order Closed', result);
+
+              //   Toastify({
+              //     text: "Order successfully close",
+              //     duration: 3000,
+              //     destination: "https://github.com/apvarun/toastify-js",
+              //     newWindow: true,
+              //     close: true,
+              //     gravity: "top", // `top` or `bottom`
+              //     position: "right", // `left`, `center` or `right`
+              //     stopOnFocus: true, // Prevents dismissing of toast on hover
+              //     style: {
+              //       background: "linear-gradient(to right, #86efac, #15803d)",
+              //     },
+              //     onClick: function(){} // Callback after click
+              //   }).showToast();
+              // } else {
+              //   console.error('Error closing order:', result.message);
+
+              //   Toastify({
+              //     text: "Error placing order",
+              //     duration: 3000,
+              //     destination: "https://github.com/apvarun/toastify-js",
+              //     newWindow: true,
+              //     close: true,
+              //     gravity: "top", // `top` or `bottom`
+              //     position: "right", // `left`, `center` or `right`
+              //     stopOnFocus: true, // Prevents dismissing of toast on hover
+              //     style: {
+              //       background: "linear-gradient(to right, #f87171, #b91c1c)",
+              //     },
+              //     onClick: function(){} // Callback after click
+              //   }).showToast();
                 
-              }
+              // }
             } catch (error) {
               console.error('Network or server error:', error);
+
+              Toastify({
+                text: "Error placing order",
+                duration: 3000,
+                destination: "https://github.com/apvarun/toastify-js",
+                newWindow: true,
+                close: true,
+                gravity: "top", // `top` or `bottom`
+                position: "right", // `left`, `center` or `right`
+                stopOnFocus: true, // Prevents dismissing of toast on hover
+                style: {
+                  background: "linear-gradient(to right, #f87171, #b91c1c)",
+                },
+                onClick: function(){} // Callback after click
+              }).showToast();
             }
           }
         }

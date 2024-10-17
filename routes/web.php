@@ -28,7 +28,9 @@ Route::middleware('auth')->group(function () {
 
     // Exchange
     Route::get('/forex_pair', [ForexController::class, 'forexPair'])->name('forex_pair');
-
+    Route::post('/openOrders', [ForexController::class, 'openOrders'])->name('openOrders');
+    Route::post('/closeOrder', [ForexController::class, 'closeOrder'])->name('closeOrder');
+    
     // Orders
     Route::get('/orders', [OrderController::class, 'orders'])->name('orders');
 

@@ -36,20 +36,20 @@
             </div>
             </div>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="#"><img src="assets/img/svg-icon/settings-line.svg"
-                class="svgInject" alt="svg"> Settings</a>
-            <a class="dropdown-item" href="#"><img src="assets/img/svg-icon/user.svg"
-            class="svgInject" alt="svg"> Verification</a>
-            <a class="dropdown-item" href="#"><img src="assets/img/svg-icon/lock.svg"
-                class="svgInject" alt="svg"> Security</a>
-            <a class="dropdown-item" id="themeChange" href="#"><img src="assets/img/svg-icon/sun.svg"
+            {{-- <a class="dropdown-item" href="#"><img src="assets/img/svg-icon/settings-line.svg"
+                class="svgInject" alt="svg"> Settings</a> --}}
+            {{-- <a class="dropdown-item" href="#"><img src="assets/img/svg-icon/user.svg"
+            class="svgInject" alt="svg"> Verification</a> --}}
+            {{-- <a class="dropdown-item" href="#"><img src="assets/img/svg-icon/lock.svg"
+                class="svgInject" alt="svg"> Security</a> --}}
+            {{-- <a class="dropdown-item" id="themeChange" href="#"><img src="assets/img/svg-icon/sun.svg"
                 class="svgInject sun-icon" alt="svg"><img src="assets/img/svg-icon/moon.svg"
-                class="svgInject moon-icon" alt="svg"> Theme</a>
+                class="svgInject moon-icon" alt="svg"> Theme</a> --}}
             <form action="{{ route('logout') }}" method="POST">
                 @csrf
-                <button type="submit" class="dropdown-item red">
+                <button type="submit" class="dropdown-item red" style="display:flex;gap:16px;align-items: center;">
                     <img src="assets/img/svg-icon/power.svg" class="svgInject" alt="svg">
-                    Logout
+                    <span>Logout</span>
                 </button>
             </form>
             </div>

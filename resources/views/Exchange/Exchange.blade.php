@@ -13,7 +13,7 @@
                 <table class="table">
                   <thead>
                     <tr>
-                      <th style="min-width: 115px">Name</th>
+                      <th style="min-width: 125px">Name</th>
                       <th>Bid</th>
                       <th>Ask</th>
                     </tr>
@@ -429,7 +429,12 @@
             </div>
           </div>
           <div class="exchange__widget">
-            <h2 class="exchange__widget-title">Order History</h2>
+            <div class="exchange__widget-title" style="display: flex;justify-content:space-between">
+              <span>Order History</span>
+              <a href="{{ route('orders') }}">
+                <i class="fa-solid fa-circle-arrow-right" style="color: white"></i>
+              </a>
+            </div>
             <table class="table">
               <thead>
                 <tr>
@@ -548,20 +553,20 @@
             <div id="trading-chart-transparent"></div>
           </div>
           <div class="exchange__widget" style="display: none" id="symbol-order">
-            <div id="selSym" style="font-size: 18px;font-weight: bold" class="text-lg text-white text-center font-bold mb-2 flex justify-center">sym</div>
+            <div id="selSym" style="font-size: 20px;font-weight: bold;background:#1d4ed8" class="text-2xl text-white text-center font-bold mb-2 flex justify-center">sym</div>
             <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-              <li class="nav-item" role="presentation">
+              {{-- <li class="nav-item" role="presentation">
                 <a class="nav-link active" id="pills-market-order-tab" data-toggle="pill" href="#pills-market-order"
                   role="tab" aria-controls="pills-market-order" aria-selected="true">Market order</a>
-              </li>
-              <li class="nav-item" role="presentation">
+              </li> --}}
+              {{-- <li class="nav-item" role="presentation">
                 <a class="nav-link" id="pills-limite-order-tab" data-toggle="pill" href="#pills-limite-order"
                   role="tab" aria-controls="pills-limite-order" aria-selected="false">Limit order</a>
-              </li>
-              <li class="nav-item" role="presentation">
+              </li> --}}
+              {{-- <li class="nav-item" role="presentation">
                 <a class="nav-link" id="pills-stop-market-tab" data-toggle="pill" href="#pills-stop-market" role="tab"
                   aria-controls="pills-stop-market" aria-selected="false">Stop market</a>
-              </li>
+              </li> --}}
             </ul>
             <div class="tab-content" id="pills-tabContent">
               <div class="tab-pane fade show active" id="pills-market-order" role="tabpanel"
@@ -688,6 +693,10 @@
 
     // Function to establish WebSocket connection
     function connectWebSocket() {
+        if (socket && socket.readyState !== WebSocket.CLOSED) {
+            console.warn("WebSocket connection already open or connecting. Not creating a new one.");
+            return;
+        }
         const wsUrl = window.appEnv === 'production' ? 'wss://fxtrado-backend.currenttech.pro/forex_pair' : 'ws://localhost:3000/forex_pair';
         
         socket = new WebSocket(wsUrl); // Update this with your correct WebSocket URL
@@ -774,12 +783,13 @@
         connectWebSocket();
     };
 
-    // Ensure reconnection if the user refreshes the page
-    window.onbeforeunload = function() {
-        if (socket) {
-            socket.close();
-        }
-    };
+    window.addEventListener('beforeunload', () => {
+      if (socket) {
+        socket.close();
+      }
+    });
+    // Reconnect on page load
+    window.onload = connectWebSocket;
 
     const selectSymbol = (currencyPair) => {
       const container = document.getElementById('selected-pair-container');
@@ -825,22 +835,20 @@
           volume: lot ? lot : '0.01',
         };
 
-        // Post the order to the API
+        // Post to laravel backend
         try {
-          const response = await fetch(`${api}`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(orderData),
+
+          const response = await axios.post('/openOrders', {
+            symbol: selectedSymbol,
+            price: askPrice,
+            type: 'buy', // Specify buy order
+            quantity: 1, // You can customize the quantity
+            user_id: userId,
+            status: 'open',
+            volume: lot ? lot : '0.01',
           });
 
-          const result = await response.json();
-
-          if (response.ok) {
-            console.log('Order successfully placed', result);
-
-            Toastify({
+          Toastify({
               text: "Order successfully placed",
               duration: 3000,
               destination: "https://github.com/apvarun/toastify-js",
@@ -855,8 +863,10 @@
               onClick: function(){} // Callback after click
             }).showToast();
 
-          } else {
-            Toastify({
+        }  catch (error) {
+          console.error('server error:', error);
+
+          Toastify({
               text: "Error placing order",
               duration: 3000,
               destination: "https://github.com/apvarun/toastify-js",
@@ -870,56 +880,99 @@
               },
               onClick: function(){} // Callback after click
             }).showToast();
-            console.error('Error placing order:', result.message);
+            
           }
-        } catch (error) {
-          console.error('Network or server error:', error);
-        }
+        
+
+        // Post the order to the API
+        // try {
+        //   const response = await fetch(`${api}`, {
+        //     method: 'POST',
+        //     body: JSON.stringify(orderData),
+        //   });
+
+        //   const result = await response.json();
+
+        //   if (response.ok) {
+        //     console.log('Order successfully placed', result);
+
+        //     Toastify({
+        //       text: "Order successfully placed",
+        //       duration: 3000,
+        //       destination: "https://github.com/apvarun/toastify-js",
+        //       newWindow: true,
+        //       close: true,
+        //       gravity: "top", // `top` or `bottom`
+        //       position: "right", // `left`, `center` or `right`
+        //       stopOnFocus: true, // Prevents dismissing of toast on hover
+        //       style: {
+        //         background: "linear-gradient(to right, #86efac, #15803d)",
+        //       },
+        //       onClick: function(){} // Callback after click
+        //     }).showToast();
+
+        //   } else {
+        //     Toastify({
+        //       text: "Error placing order",
+        //       duration: 3000,
+        //       destination: "https://github.com/apvarun/toastify-js",
+        //       newWindow: true,
+        //       close: true,
+        //       gravity: "top", // `top` or `bottom`
+        //       position: "right", // `left`, `center` or `right`
+        //       stopOnFocus: true, // Prevents dismissing of toast on hover
+        //       style: {
+        //         background: "linear-gradient(to right, #f87171, #b91c1c)",
+        //       },
+        //       onClick: function(){} // Callback after click
+        //     }).showToast();
+        //     console.error('Error placing order:', result.message);
+        //   }
+        // } catch (error) {
+        //   console.error('Network or server error:', error);
+        // }
       } else {
         alert('Please select a symbol before placing an order');
       }
-  }
+    }
 
-  const sellOrder = async () => {
-      const selectedSymbol = document.getElementById('selected-symbol').innerText;
-      const bidPrice = document.getElementById('bid-price').innerText;
-      const userId = window.userID = {{ auth()->id() }};
-      let lot = document.getElementById('order-amount').value;
-      
-      if (!lot || parseFloat(lot) < 0.01) {
-        lot = 0.01;
-      }
+    const sellOrder = async () => {
+        const selectedSymbol = document.getElementById('selected-symbol').innerText;
+        const bidPrice = document.getElementById('bid-price').innerText;
+        const userId = window.userID = {{ auth()->id() }};
+        let lot = document.getElementById('order-amount').value;
+        
+        if (!lot || parseFloat(lot) < 0.01) {
+          lot = 0.01;
+        }
 
-      const api = window.appEnv === 'production' ? 'https://fxtrado-backend.currenttech.pro/api/openOrders' : 'http://localhost:3000/api/openOrders';
+        const api = window.appEnv === 'production' ? 'https://fxtrado-backend.currenttech.pro/api/openOrders' : 'http://localhost:3000/api/openOrders';
 
-      // Make sure a symbol is selected before sending the request
-      if (selectedSymbol !== 'None') {
-        const orderData = {
-          symbol: selectedSymbol,
-          price: bidPrice,
-          type: 'sell', // Specify buy order
-          quantity: 1, // You can customize the quantity
-          user_id: userId,
-          status: 'open',
-          volume: lot ?? '0.01',
-        };
+        // Make sure a symbol is selected before sending the request
+        if (selectedSymbol !== 'None') {
+          const orderData = {
+            symbol: selectedSymbol,
+            price: bidPrice,
+            type: 'sell', // Specify buy order
+            quantity: 1, // You can customize the quantity
+            user_id: userId,
+            status: 'open',
+            volume: lot ?? '0.01',
+          };
 
-        // Post the order to the API
-        try {
-          const response = await fetch(`${api}`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(orderData),
+          try {
+
+          const response = await axios.post('/openOrders', {
+            symbol: selectedSymbol,
+            price: bidPrice,
+            type: 'sell', // Specify buy order
+            quantity: 1, // You can customize the quantity
+            user_id: userId,
+            status: 'open',
+            volume: lot ? lot : '0.01',
           });
 
-          const result = await response.json();
-
-          if (response.ok) {
-            console.log('Order successfully placed', result);
-
-            Toastify({
+          Toastify({
               text: "Order successfully placed",
               duration: 3000,
               destination: "https://github.com/apvarun/toastify-js",
@@ -934,31 +987,81 @@
               onClick: function(){} // Callback after click
             }).showToast();
 
-          } else {
-            console.error('Error placing order:', result.message);
+          }  catch (error) {
+            console.error('server error:', error);
 
             Toastify({
-              text: "Error placing order",
-              duration: 3000,
-              destination: "https://github.com/apvarun/toastify-js",
-              newWindow: true,
-              close: true,
-              gravity: "top", // `top` or `bottom`
-              position: "right", // `left`, `center` or `right`
-              stopOnFocus: true, // Prevents dismissing of toast on hover
-              style: {
-                background: "linear-gradient(to right, #f87171, #b91c1c)",
-              },
-              onClick: function(){} // Callback after click
-            }).showToast();
+                text: "Error placing order",
+                duration: 3000,
+                destination: "https://github.com/apvarun/toastify-js",
+                newWindow: true,
+                close: true,
+                gravity: "top", // `top` or `bottom`
+                position: "right", // `left`, `center` or `right`
+                stopOnFocus: true, // Prevents dismissing of toast on hover
+                style: {
+                  background: "linear-gradient(to right, #f87171, #b91c1c)",
+                },
+                onClick: function(){} // Callback after click
+              }).showToast();
+
           }
-        } catch (error) {
-          console.error('Network or server error:', error);
+
+          // Post the order to the API
+          // try {
+          //   const response = await fetch(`${api}`, {
+          //     method: 'POST',
+          //     headers: {
+          //       'Content-Type': 'application/json',
+          //     },
+          //     body: JSON.stringify(orderData),
+          //   });
+
+          //   const result = await response.json();
+
+          //   if (response.ok) {
+          //     console.log('Order successfully placed', result);
+
+          //     Toastify({
+          //       text: "Order successfully placed",
+          //       duration: 3000,
+          //       destination: "https://github.com/apvarun/toastify-js",
+          //       newWindow: true,
+          //       close: true,
+          //       gravity: "top", // `top` or `bottom`
+          //       position: "right", // `left`, `center` or `right`
+          //       stopOnFocus: true, // Prevents dismissing of toast on hover
+          //       style: {
+          //         background: "linear-gradient(to right, #86efac, #15803d)",
+          //       },
+          //       onClick: function(){} // Callback after click
+          //     }).showToast();
+
+          //   } else {
+          //     console.error('Error placing order:', result.message);
+
+          //     Toastify({
+          //       text: "Error placing order",
+          //       duration: 3000,
+          //       destination: "https://github.com/apvarun/toastify-js",
+          //       newWindow: true,
+          //       close: true,
+          //       gravity: "top", // `top` or `bottom`
+          //       position: "right", // `left`, `center` or `right`
+          //       stopOnFocus: true, // Prevents dismissing of toast on hover
+          //       style: {
+          //         background: "linear-gradient(to right, #f87171, #b91c1c)",
+          //       },
+          //       onClick: function(){} // Callback after click
+          //     }).showToast();
+          //   }
+          // } catch (error) {
+          //   console.error('Network or server error:', error);
+          // }
+        } else {
+          alert('Please select a symbol before placing an order');
         }
-      } else {
-        alert('Please select a symbol before placing an order');
-      }
-  }
+    }
   </script>
 
 
