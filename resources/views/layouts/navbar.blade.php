@@ -8,14 +8,14 @@
     </div>
     <div class="navigation__list">
       <ul>
-        <li class="navigation__item">
+        {{-- <li class="navigation__item">
           <a href="{{ route('dashboard') }}" class="navigation__item-link {{ request()->is('dashboard') ? 'active' : '' }}">
             <span class="navigation__item-icon-wrapper"><img src="assets/img/svg-icon/dash.svg"
                 class="svgInject navigation__item-icon" alt="svg">
             </span>
             <span class="navigation__item-label">Dashboard</span>
           </a>
-        </li>
+        </li> --}}
         <li class="navigation__item">
           <a href="{{ route('forex_pair') }}" class="navigation__item-link {{ request()->is('forex_pair') ? 'active' : '' }}">
             <span class="navigation__item-icon-wrapper"><img src="assets/img/svg-icon/dash.svg"

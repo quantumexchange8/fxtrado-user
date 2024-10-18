@@ -32,7 +32,6 @@
 
     <script>
 
-        console.log
         document.getElementById('loginForm').addEventListener('submit', function() {
             // Disable the submit button to prevent multiple submissions
             document.getElementById('submitBtn').disabled = true;

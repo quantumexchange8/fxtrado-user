@@ -92,12 +92,12 @@ class WalletController extends Controller
 
             $result['date'] = $transaction->approved_at;
 
-            return redirect()->route('dashboard')->with('notification', [
+            return redirect()->route('forex_pair')->with('notification', [
                 'details' => $transaction,
                 'type' => 'deposit',
             ]);
         } else {
-            return to_route('dashboard');
+            return to_route('forex_pair');
         }
     }
 
@@ -145,7 +145,7 @@ class WalletController extends Controller
                 'approved_at' => now()
             ]);
 
-            if ($status === 'success') {
+            if ($status === 'successful') {
                 $wallet->balance += $result['amount'];
                 $wallet->save();
             }

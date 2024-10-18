@@ -16,7 +16,7 @@ Route::get('/', function () {
 Route::post('deposit_callback', [WalletController::class, 'depositCallback'])->name('depositCallback');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    // Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Wallet
     Route::get('/wallet', [WalletController::class, 'wallet'])->name('wallet');

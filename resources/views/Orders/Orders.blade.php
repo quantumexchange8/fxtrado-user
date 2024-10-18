@@ -9,7 +9,7 @@
                 <div class="col-lg-4 col-xl-4">
                     <div class="exchange__widget">
                       <h2 class="exchange__widget-title" style="margin-bottom: 10px">Order</h2>
-                      <div style="color:white;font-weight:700">Floating Profit: <span id="floatingProfit"></span> </div>
+                      {{-- <div style="color:white;font-weight:700">Floating Profit: <span id="floatingProfit"></span> </div> --}}
                       <table class="table">
                         <thead>
                           <tr>
@@ -25,7 +25,7 @@
                     </div>
                     <div class="exchange__widget">
                         <h2 class="exchange__widget-title">Order History</h2>
-                        <table class="table">
+                        <table class="table" style="overflow-x:auto;">
                           <thead>
                             <tr>
                               <th>Symbol</th>
@@ -35,12 +35,20 @@
                             </tr>
                           </thead>
                           <tbody class="exchange__widget__table">
-                            @foreach ($orders as $order)
-                              <tr>
+                            @foreach ($orders as $order) 
+                              <tr onclick="selectOrders({{ json_encode($order) }})">
                                 <td>{{ $order->symbol }}</td>
                                 <td>{{ $order->order_id }}</td>
-                                <td>{{ $order->type }}</td>
-                                <td>${{ $order->profit }}</td>
+                                @if ($order->type === 'buy')
+                                  <td style="color:green">Buy</td>
+                                @else
+                                  <td style="color:red">Sell</td>
+                                @endif
+                                @if ($order->profit > 0)
+                                  <td style="color: green">${{ $order->profit }}</td>
+                                @else
+                                  <td style="color: red">${{ $order->profit }}</td>
+                                @endif
                               </tr>
                             @endforeach
                           </tbody>
@@ -57,10 +65,10 @@
                             <a class="nav-link active" id="pills-market-order-tab" data-toggle="pill" href="#pills-market-order"
                               role="tab" aria-controls="pills-market-order" aria-selected="true">Info</a>
                           </li>
-                          <li class="nav-item" role="presentation">
+                          {{-- <li class="nav-item" role="presentation">
                             <a class="nav-link" id="pills-limite-order-tab" data-toggle="pill" href="#pills-limite-order"
                               role="tab" aria-controls="pills-limite-order" aria-selected="false">Edit</a>
-                          </li>
+                          </li> --}}
                         </ul>
                         <div class="tab-content" id="pills-tabContent">
                             {{-- Info --}}
@@ -82,7 +90,7 @@
                                             
                                         </div>
 
-                                        <button class="btn-blue" type="button" style="width: 100%" onclick="closeOrder()">
+                                        <button id="closeButton" class="btn-blue" type="button" style="width: 100%" onclick="closeOrder()">
                                             Close Order 
                                             <span id="ask-price">0.0000</span>
                                         </button>
@@ -98,6 +106,31 @@
                             </div>
                         </div>
                     </div>
+                    <div class="exchange__widget" style="width: 100%; display: none" id="order-history">
+                      <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                          <a class="nav-link active" id="pills-market-order-tab" data-toggle="pill" href="#pills-market-order"
+                            role="tab" aria-controls="pills-market-order" aria-selected="true">Info</a>
+                        </li>
+                      </ul>
+                      <div class="tab-content" id="pills-tabContent">
+                          {{-- Info --}}
+                          <div class="tab-pane fade show active" id="pills-market-order" role="tabpanel"
+                              aria-labelledby="pills-market-order-tab">
+                              <div class="text-white">
+                                  <h2 class="exchange__widget-title">Symbol: <span id="selSymHistory" >sym</span></h2>
+                                  <h2 class="exchange__widget-title">Order ID: <span id="positionIDHistory" ></span></h2>
+                                  <h2 class="exchange__widget-title">Open Time: <span id="openTimeDataHistory" ></span></h2>
+                                  <h2 class="exchange__widget-title">Close Time: <span id="closeTimeDataHistory" ></span></h2>
+                                  <h2 class="exchange__widget-title">Type: <span id="typeDataHistory" ></span></h2>
+                                  <h2 class="exchange__widget-title">Open Price: $ <span id="openPriceDataHistory" ></span></h2>
+                                  <h2 class="exchange__widget-title">Close Price: $ <span id="closePriceDataHistory" ></span></h2>
+                                  <h2 class="exchange__widget-title">Lot Size: <span id="lotSizeDataHistory" ></span></h2>
+                                  <h2 class="exchange__widget-title">P/L: $ <span id="profitDataHistory" ></span></h2>
+                              </div>
+                          </div>
+                      </div>
+                    </div>
                 </div>
                 {{-- end content --}}
             </div>
@@ -112,6 +145,9 @@
         let selectedOrder = null;
         const askPriceElement = document.getElementById('ask-price');
         const marketElement = document.getElementById('marketPrice');
+        const selectedSymbolElement = document.getElementById('selected-symbol');
+        const symbolOrderElement = document.getElementById('symbol-order');
+        const orderHistoryElement = document.getElementById('order-history');
 
         window.appEnv = "{{ env('APP_ENV') }}";
         const baseUrl = window.appEnv === 'production' ? 'https://fxtrado-backend.currenttech.pro' : 'http://localhost:3000';
@@ -122,26 +158,23 @@
             socket = new WebSocket(wsUrl);
 
             socket.onopen = function() {
-                console.log('WebSocket connection established');
+              socket.send(JSON.stringify({ userId: userId }));
+              console.log('WebSocket connection established');
             };
 
             socket.onmessage = function(event) {
                 const data = JSON.parse(event.data);
-                const orderData = data;
+                const orderData = data.pOrders;
                 
-                const filterUser = orderData.filter(user => user.user_id === userId)
+                // const filterUser = orderData.filter(user => user.user_id === userId)
 
                 // Get the table body element
                 const ordersTableBody = document.getElementById('orders-table-body');
-                const selectedSymbolElement = document.getElementById('selected-symbol');
-                const symbolOrderElement = document.getElementById('symbol-order');
-                
 
                 // Clear the table body before appending new data
                 ordersTableBody.innerHTML = '';
-
-                if (filterUser && filterUser.length > 0) {
-                    filterUser.forEach(order => {
+                if (orderData && orderData.length > 0) {
+                    orderData.forEach(order => {
                         const row = document.createElement('tr');
 
                         const symbolCell = document.createElement('td');
@@ -186,6 +219,7 @@
                                 // If the symbol exists, update the symbol-order and hide the selected-symbol
                                 symbolOrderElement.style.display = 'block';
                                 selectedSymbolElement.style.display = 'none';
+                                orderHistoryElement.style.display = 'none';
 
                                 // You can add code here to load the chart or details for the selected symbol
 
@@ -240,12 +274,14 @@
 
                     if (selectedSymbol && selectedOrder) {
                       // Check if the selected symbol is still in the latest filtered data
-                      const updatedOrder = filterUser.find(order => order.symbol === selectedSymbol);
+                      const updatedOrder = orderData.find(order => order.symbol === selectedSymbol);
 
                       if (updatedOrder) {
                           // Keep the symbol-order visible and update the ask-price with the latest profit
                           symbolOrderElement.style.display = 'block';
                           selectedSymbolElement.style.display = 'none';
+                          orderHistoryElement.style.display = 'none';
+
                           askPriceElement.innerText = updatedOrder.profit || '0.0000';
                           if (updatedOrder.type === 'buy') {
                             marketElement.innerText = updatedOrder.market_ask || '0.0000';
@@ -256,6 +292,7 @@
                           // If the symbol no longer exists in the data, reset to default
                           selectedSymbol = null;
                           symbolOrderElement.style.display = 'none';
+                          orderHistoryElement.style.display = 'none';
                           selectedSymbolElement.style.display = 'block';
                           selectedSymbolElement.textContent = 'Choose forex symbol to view chart..';
                           askPriceElement.innerText = '0.0000';
@@ -272,6 +309,7 @@
                     ordersTableBody.appendChild(row);
                     selectedSymbol = null;
                     symbolOrderElement.style.display = 'none';
+                    orderHistoryElement.style.display = 'none';
                     selectedSymbolElement.style.display = 'block';
                     selectedSymbolElement.textContent = 'Choose forex symbol to view chart..';
                 }
@@ -307,6 +345,7 @@
           const marketPrice = document.getElementById('marketPrice').innerText;
           const openPrice = document.getElementById('openPriceData').innerText;
           const userId = window.userID = {{ auth()->id() }};
+          const closeButton = document.getElementById('closeButton');
 
           const api = window.appEnv === 'production' ? 'https://fxtrado-backend.currenttech.pro/api/closeOrder' : 'http://localhost:3000/api/closeOrder';
 
@@ -412,8 +451,27 @@
                 },
                 onClick: function(){} // Callback after click
               }).showToast();
+            } finally {
+              sellButton.disabled = false;
             }
           }
+        }
+
+        const selectOrders = (order) => {
+          symbolOrderElement.style.display = 'none';
+          selectedSymbolElement.style.display = 'none';
+          orderHistoryElement.style.display = 'block';
+
+          document.getElementById('selSymHistory').innerText = order.symbol;
+          document.getElementById('positionIDHistory').innerText = order.order_id;
+          document.getElementById('openTimeDataHistory').innerText = order.open_time;
+          document.getElementById('closeTimeDataHistory').innerText = order.close_time ? order.close_time : 'N/A';  // Handling case where close time might not be available
+          document.getElementById('typeDataHistory').innerText = order.type;
+          document.getElementById('openPriceDataHistory').innerText = order.price;
+          document.getElementById('closePriceDataHistory').innerText = order.close_price ? order.close_price : 'N/A';
+          document.getElementById('lotSizeDataHistory').innerText = order.volume;
+          document.getElementById('profitDataHistory').innerText = order.profit ? order.profit : 'N/A';
+
         }
     </script>
 @endsection

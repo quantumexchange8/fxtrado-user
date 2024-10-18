@@ -13,7 +13,7 @@ class OrderController extends Controller
 
         $user = Auth::user();
 
-        $orders = Order::where('user_id', $user->id)->where('status', 'closed')->get();
+        $orders = Order::where('user_id', $user->id)->where('status', 'closed')->latest()->get();
 
         return view('Orders/Orders', [
             'orders' => $orders,

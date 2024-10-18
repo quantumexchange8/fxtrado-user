@@ -44,7 +44,6 @@
 
   <script>
 
-    console.log
     document.getElementById('registerForm').addEventListener('submit', function() {
         // Disable the submit button to prevent multiple submissions
         document.getElementById('submitBtn').disabled = true;

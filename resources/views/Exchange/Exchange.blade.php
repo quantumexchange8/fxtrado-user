@@ -21,7 +21,10 @@
                   <tbody class="exchange__widget__table">
                     @foreach ($allPairs as $allPair)
                       <tr data-symbol="{{ $allPair->symbol_pair }}" onclick="selectSymbol('{{ $allPair->symbol_pair }}')">
-                        <td style="min-width: 115px"><img src="assets/img/coin/btc.svg" class="svgInject" alt="svg"> {{ $allPair->base }}{{ $allPair->quote }}</td>
+                        <td style="min-width: 115px">
+                          {{-- <img id="symbol_icon" src="{{ asset('assets/img/symbolIcon/' . $allPair->symbol_pair . '.png') }}" alt="forex Pair" style="width: 20px; height: auto;">  --}}
+                          {{ $allPair->base }}{{ $allPair->quote }}
+                        </td>
                         <td class="bid" style="color: #dc2626 !important">0.0000</td> <!-- Bid placeholder -->
                         <td class="ask" style="color: #16a34a !important">0.0000</td> <!-- Ask placeholder -->
                       </tr>
@@ -440,30 +443,33 @@
                 <tr>
                   <th>Symbol</th>
                   <th>Type</th>
-                  <th>Amount</th>
-                  <th></th>
+                  <th>Profit</th>
+                  {{-- <th>Status</th> --}}
                 </tr>
               </thead>
               <tbody class="exchange__widget__table">
-                <tr>
-                  <td><img src="assets/img/coin/btc.svg" class="svgInject" alt="svg"> btc</td>
-                  <td>0.0203</td>
-                  <td>$50k</td>
-                  <td><img src="assets/img/svg-icon/cart.svg" class="svgInject" alt="svg"></td>
-                </tr>
-                <tr>
-                  <td><img src="assets/img/coin/act.svg" class="svgInject" alt="svg"> act</td>
-                  <td>0.0203</td>
-                  <td>$24k</td>
-                  <td><img src="assets/img/svg-icon/cart.svg" class="svgInject" alt="svg"></td>
-                </tr>
-                <tr>
-                  <td><img src="assets/img/coin/actn.svg" class="svgInject" alt="svg"> actn</td>
-                  <td>0.0203</td>
-                  <td>$22k</td>
-                  <td><img src="assets/img/svg-icon/cart.svg" class="svgInject" alt="svg"></td>
-                </tr>
-                
+                @foreach ($orderHistories as $orderHistory)
+                  <tr>
+                    <td>
+                      {{ $orderHistory->symbol }}
+                    </td>
+                    <td>
+                      {{ $orderHistory->type }}
+                    </td>
+                    @if ($orderHistory->profit > 0)
+                      <td style="color:#16a34a">
+                        $+{{ $orderHistory->profit }}
+                      </td>
+                    @else
+                      <td style="color: #dc2626">
+                        ${{ $orderHistory->profit }}
+                      </td>
+                    @endif
+                    {{-- <td style="color: #dc2626">
+                      {{ $orderHistory->status }}
+                    </td> --}}
+                  </tr>
+                @endforeach
               </tbody>
             </table>
           </div>
@@ -553,7 +559,13 @@
             <div id="trading-chart-transparent"></div>
           </div>
           <div class="exchange__widget" style="display: none" id="symbol-order">
-            <div id="selSym" style="font-size: 20px;font-weight: bold;background:#1d4ed8" class="text-2xl text-white text-center font-bold mb-2 flex justify-center">sym</div>
+            <div style="background:#1d4ed8; display:flex; justify-content:center;align-items: center;gap: 20px">
+              <div>
+                <img id="currencyImage" src="" alt="Currency Pair" style="width: 60px; height: auto;">
+              </div>
+              <div id="selSym" style="font-size: 20px;font-weight: bold" class="text-2xl text-white text-center font-bold">sym</div>
+            </div>
+            
             <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
               {{-- <li class="nav-item" role="presentation">
                 <a class="nav-link active" id="pills-market-order-tab" data-toggle="pill" href="#pills-market-order"
@@ -608,7 +620,7 @@
                         </div> --}}
                       {{-- </div> --}}
                     </div>
-                    <button class="btn-green" type="button" onclick="buyOrder()">
+                    <button id="buyButton" class="btn-green" type="button" onclick="buyOrder()">
                       Buy
                       <span id="ask-price">0.0000</span>
                     </button>
@@ -619,7 +631,7 @@
                       
                     </div>
                     
-                    <button class="btn-red" type="button" onclick="sellOrder()"> 
+                    <button id="sellButton" class="btn-red" type="button" onclick="sellOrder()"> 
                       Sell
                       <span id="bid-price">0.0000</span>
                     </button>
@@ -800,6 +812,9 @@
       
       symbolElement.style.display = 'none';
       selSym.innerText = currencyPair;
+      const currencyImage = document.getElementById('currencyImage');
+
+      currencyImage.src = `/assets/img/symbolIcon/${currencyPair}.png`;
 
       if (currencyPair) {
         forexChart.style.display = 'block';
@@ -816,6 +831,10 @@
       const askPrice = document.getElementById('ask-price').innerText;
       const userId = window.userID = {{ auth()->id() }};
       let lot = document.getElementById('order-amount').value;
+      const buyButton = document.getElementById('buyButton');
+
+      // Disable the button to prevent multiple submissions
+      buyButton.disabled = true;
 
       // Default to 0.01 if the input is empty or less than the minimum value
       if (!lot || parseFloat(lot) < 0.01) {
@@ -848,7 +867,8 @@
             volume: lot ? lot : '0.01',
           });
 
-          Toastify({
+          if (response.data.success) {
+            Toastify({
               text: "Order successfully placed",
               duration: 3000,
               destination: "https://github.com/apvarun/toastify-js",
@@ -862,6 +882,22 @@
               },
               onClick: function(){} // Callback after click
             }).showToast();
+          } else {
+            Toastify({
+              text: "Failed to place order",
+              duration: 3000,
+              destination: "https://github.com/apvarun/toastify-js",
+              newWindow: true,
+              close: true,
+              gravity: "top", // `top` or `bottom`
+              position: "right", // `left`, `center` or `right`
+              stopOnFocus: true, // Prevents dismissing of toast on hover
+              style: {
+                background: "linear-gradient(to right, #f87171, #b91c1c)",
+              },
+              onClick: function(){} // Callback after click
+            }).showToast();
+          }
 
         }  catch (error) {
           console.error('server error:', error);
@@ -881,6 +917,8 @@
               onClick: function(){} // Callback after click
             }).showToast();
             
+          } finally {
+            buyButton.disabled = false;
           }
         
 
@@ -941,7 +979,11 @@
         const bidPrice = document.getElementById('bid-price').innerText;
         const userId = window.userID = {{ auth()->id() }};
         let lot = document.getElementById('order-amount').value;
-        
+        const sellButton = document.getElementById('sellButton');
+
+        // Disable the button to prevent multiple submissions
+        sellButton.disabled = true;
+
         if (!lot || parseFloat(lot) < 0.01) {
           lot = 0.01;
         }
@@ -972,7 +1014,8 @@
             volume: lot ? lot : '0.01',
           });
 
-          Toastify({
+          if (response.data.success) {
+            Toastify({
               text: "Order successfully placed",
               duration: 3000,
               destination: "https://github.com/apvarun/toastify-js",
@@ -986,10 +1029,25 @@
               },
               onClick: function(){} // Callback after click
             }).showToast();
+          } else {
+            Toastify({
+              text: "Failed to place order",
+              duration: 3000,
+              destination: "https://github.com/apvarun/toastify-js",
+              newWindow: true,
+              close: true,
+              gravity: "top", // `top` or `bottom`
+              position: "right", // `left`, `center` or `right`
+              stopOnFocus: true, // Prevents dismissing of toast on hover
+              style: {
+                background: "linear-gradient(to right, #f87171, #b91c1c)",
+              },
+              onClick: function(){} // Callback after click
+            }).showToast();
+          }
 
           }  catch (error) {
             console.error('server error:', error);
-
             Toastify({
                 text: "Error placing order",
                 duration: 3000,
@@ -1005,6 +1063,8 @@
                 onClick: function(){} // Callback after click
               }).showToast();
 
+          } finally {
+            sellButton.disabled = false;
           }
 
           // Post the order to the API

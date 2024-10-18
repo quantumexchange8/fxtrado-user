@@ -20,5 +20,6 @@ class Order extends Model
         'close_time',
         'status',
         'profit',
+        'close_price',
     ];
 }
