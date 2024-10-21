@@ -453,9 +453,15 @@
                     <td>
                       {{ $orderHistory->symbol }}
                     </td>
-                    <td>
-                      {{ $orderHistory->type }}
-                    </td>
+                    @if ($orderHistory->type === 'buy')
+                      <td>
+                        Buy
+                      </td>
+                    @else
+                      <td>
+                        Sell
+                      </td>
+                    @endif
                     @if ($orderHistory->profit > 0)
                       <td style="color:#16a34a">
                         $+{{ $orderHistory->profit }}
@@ -835,6 +841,7 @@
 
       // Disable the button to prevent multiple submissions
       buyButton.disabled = true;
+      buyButton.style.background = '#374151'
 
       // Default to 0.01 if the input is empty or less than the minimum value
       if (!lot || parseFloat(lot) < 0.01) {
@@ -983,6 +990,7 @@
 
         // Disable the button to prevent multiple submissions
         sellButton.disabled = true;
+        sellButton.style.background = '#374151'
 
         if (!lot || parseFloat(lot) < 0.01) {
           lot = 0.01;

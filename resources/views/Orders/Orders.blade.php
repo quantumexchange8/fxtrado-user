@@ -45,9 +45,9 @@
                                   <td style="color:red">Sell</td>
                                 @endif
                                 @if ($order->profit > 0)
-                                  <td style="color: green">${{ $order->profit }}</td>
+                                  <td style="color: green">${{ $order->closed_profit }}</td>
                                 @else
-                                  <td style="color: red">${{ $order->profit }}</td>
+                                  <td style="color: red">${{ $order->closed_profit }}</td>
                                 @endif
                               </tr>
                             @endforeach
@@ -126,7 +126,7 @@
                                   <h2 class="exchange__widget-title">Open Price: $ <span id="openPriceDataHistory" ></span></h2>
                                   <h2 class="exchange__widget-title">Close Price: $ <span id="closePriceDataHistory" ></span></h2>
                                   <h2 class="exchange__widget-title">Lot Size: <span id="lotSizeDataHistory" ></span></h2>
-                                  <h2 class="exchange__widget-title">P/L: $ <span id="profitDataHistory" ></span></h2>
+                                  <h2 class="exchange__widget-title">Profit/Loss: $ <span id="profitDataHistory" ></span></h2>
                               </div>
                           </div>
                       </div>
@@ -466,11 +466,11 @@
           document.getElementById('positionIDHistory').innerText = order.order_id;
           document.getElementById('openTimeDataHistory').innerText = order.open_time;
           document.getElementById('closeTimeDataHistory').innerText = order.close_time ? order.close_time : 'N/A';  // Handling case where close time might not be available
-          document.getElementById('typeDataHistory').innerText = order.type;
+          document.getElementById('typeDataHistory').innerText = order.type === 'buy' ? 'Buy' : 'Sell';
           document.getElementById('openPriceDataHistory').innerText = order.price;
           document.getElementById('closePriceDataHistory').innerText = order.close_price ? order.close_price : 'N/A';
           document.getElementById('lotSizeDataHistory').innerText = order.volume;
-          document.getElementById('profitDataHistory').innerText = order.profit ? order.profit : 'N/A';
+          document.getElementById('profitDataHistory').innerText = order.closed_profit ? order.closed_profit : 'N/A';
 
         }
     </script>

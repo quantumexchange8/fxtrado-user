@@ -75,23 +75,22 @@ class ForexController extends Controller
         }
 
         if ($order->type === 'buy') {
-            $profit = ($order->market_bid - $order->price) * $order->volume * $decimal;
-            $closeprice = $order->market_bid;
+            $profit = ($order->close_price - $order->price) * $order->volume * $decimal;
+            $closeprice = $order->close_price;
+
         } elseif ($order->type === 'sell') {
-            $profit = ($order->price - $order->market_ask ) * $order->volume * $decimal;
-            $closeprice = $order->market_ask;
+            $profit = ($order->price - $order->close_price ) * $order->volume * $decimal;
+            $closeprice = $order->close_price;
         }
 
-        $formatProfit = number_format($profit, 2);
-
-        $order->update([
-            'profit' => $formatProfit,
-            'close_price' => $closeprice,
-        ]);
-        
-        Log::debug([$order->order_id, $formatProfit, $wallet->balance, $wallet->balance += $formatProfit]);
-        $wallet->balance += $formatProfit;
+        $wallet->balance += $profit;
         $wallet->save();
+
+        $order->closed_profit = $profit;
+        $order->close_price = $closeprice;
+        $order->save();
+
+        Log::debug(['calculation details', $order->order_id, $profit]);
 
         return redirect()->back();
     }

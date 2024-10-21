@@ -15,7 +15,7 @@ class ProfileController extends Controller
     public function updateProfile(Request $request)
     {
 
-        dd($request->all());
+        // dd($request->all());
 
         return redirect()->back();
     }
@@ -23,7 +23,7 @@ class ProfileController extends Controller
     public function updateSecurity(Request $request)
     {
 
-        dd($request->all());
+        // dd($request->all());
 
         return redirect()->back();
     }
