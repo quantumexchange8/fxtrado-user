@@ -159,4 +159,10 @@ class WalletController extends Controller
 
         return response()->json(['success' => false, 'message' => 'Deposit Failed']);
     }
+
+    public function withdrawal(Request $request)
+    {
+
+        return redirect()->back();
+    }
 }
