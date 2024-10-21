@@ -14,12 +14,20 @@
                         <thead>
                           <tr>
                             <th>Symbol</th>
-                            {{-- <th>Order ID</th> --}}
+                            <th>Order ID</th>
                             <th style="min-width:80px">Type</th>
-                            <th style="min-width:120px">P/L</th>
+                            {{-- <th style="min-width:120px">P/L</th> --}}
                           </tr>
                         </thead>
-                        <tbody class="exchange__widget__table" id="orders-table-body">
+                        <tbody class="exchange__widget__table">
+                          @foreach ($openOrders as $openOrder)
+                            <tr onclick="selectOpenOrders({{ json_encode($openOrder) }})">
+                              <td>{{ $openOrder->symbol }}</td>
+                              <td>{{ $openOrder->order_id }}</td>
+                              <td>{{ $openOrder->type }}</td>
+                              {{-- <td id="floatingProfit">{{ $openOrder->profit }}</td> --}}
+                            </tr>
+                          @endforeach
                         </tbody>
                       </table>
                     </div>
@@ -81,8 +89,9 @@
                                     <h2 class="exchange__widget-title">Open Time: <span id="openTimeData" ></span></h2>
                                     <h2 class="exchange__widget-title">Type: <span id="typeData" ></span></h2>
                                     <h2 class="exchange__widget-title">Lot Size: <span id="lotSizeData" ></span></h2>
-                                    <h2 class="exchange__widget-title">Open Price: <span id="openPriceData" ></span> -> <span id="marketPrice" ></span></h2>
-                                    {{-- <h2 class="exchange__widget-title">Current Price: <span id="currentPriceData" ></span></h2> --}}
+                                    <h2 class="exchange__widget-title">Open Price: <span id="openPriceData" ></span></h2>
+                                    <h2 class="exchange__widget-title">Current Price: <span id="marketPrice" >0.00000</span></h2>
+                                    <h2 class="exchange__widget-title">Profit / Loss: $<span id="profitData" >0.00</span></h2>
 
                                     <div>
                                         
@@ -92,7 +101,7 @@
 
                                         <button id="closeButton" class="btn-blue" type="button" style="width: 100%" onclick="closeOrder()">
                                             Close Order 
-                                            <span id="ask-price">0.0000</span>
+                                            {{-- <span id="ask-price">0.0000</span> --}}
                                         </button>
                                     </div>
                                 </div>
@@ -143,16 +152,53 @@
         let reconnectInterval = 5000;
         let selectedSymbol = null;
         let selectedOrder = null;
-        const askPriceElement = document.getElementById('ask-price');
+        // const askPriceElement = document.getElementById('ask-price');
         const marketElement = document.getElementById('marketPrice');
         const selectedSymbolElement = document.getElementById('selected-symbol');
         const symbolOrderElement = document.getElementById('symbol-order');
         const orderHistoryElement = document.getElementById('order-history');
+        const selectedSym = document.getElementById('selSym');
+        const positionIDElement = document.getElementById('positionID');
+        const marketPriceElement = document.getElementById('marketPrice');
+        const profitDataElement = document.getElementById('profitData');
+
+        let selectedOrderId = null;
 
         window.appEnv = "{{ env('APP_ENV') }}";
         const baseUrl = window.appEnv === 'production' ? 'https://fxtrado-backend.currenttech.pro' : 'http://localhost:3000';
         const userId = window.userID = {{ auth()->id() }};
 
+        const selectOpenOrders = (order) => {
+            // Store the selected order's ID
+            selectedOrderId = order.order_id;
+
+            // Find the hidden div and message container
+            const symbolOrderDiv = document.getElementById('symbol-order');
+
+            const positionID = document.getElementById('positionID');
+            const openTimeData = document.getElementById('openTimeData');
+            const typeData = document.getElementById('typeData');
+            const lotSizeData = document.getElementById('lotSizeData');
+            const openPriceData = document.getElementById('openPriceData');
+
+            // Show the hidden div
+            symbolOrderDiv.style.display = 'block';
+            selectedSymbolElement.style.display = 'none'
+            selectedSym.innerText = order.symbol;
+            positionID.innerText = order.order_id;
+            openTimeData.innerText = order.open_time;
+            
+            if (order.type === 'buy') {
+              typeData.innerText = 'Buy';
+              typeData.style.color = '#16a34a';
+            } else {
+              typeData.innerText = 'Sell';
+              typeData.style.color = '#dc2626';
+            }
+            lotSizeData.innerText = order.volume;
+            openPriceData.innerText = order.price;
+        };
+        
         function connectWebSocket() {
             const wsUrl = window.appEnv === 'production' ? 'wss://fxtrado-backend.currenttech.pro/getOrder' : 'ws://localhost:3000/getOrder';
             socket = new WebSocket(wsUrl);
@@ -166,154 +212,44 @@
                 const data = JSON.parse(event.data);
                 const orderData = data.pOrders;
                 
-                // const filterUser = orderData.filter(user => user.user_id === userId)
+                const matchedOrder = orderData.find(order => order.order_id === selectedOrderId);
+                console.log(selectedOrderId)
+                if (matchedOrder) {
+                  const profitDataElement = document.getElementById('profitData');
+                  
+                  if (matchedOrder.profit > 0 ) {
+                    profitDataElement.innerText = matchedOrder.profit;
+                    profitDataElement.style.color = '#16a34a'
+                  } else {
+                    profitDataElement.innerText = matchedOrder.profit;
+                    profitDataElement.style.color = '#dc2626'
+                  }
 
-                // Get the table body element
-                const ordersTableBody = document.getElementById('orders-table-body');
+                  if (matchedOrder.type === 'buy') {
+                    marketElement.innerText = matchedOrder.market_bid;
+                  } else {
+                    marketElement.innerText = matchedOrder.market_ask;
+                  }
+                  
 
-                // Clear the table body before appending new data
-                ordersTableBody.innerHTML = '';
-                if (orderData && orderData.length > 0) {
-                    orderData.forEach(order => {
-                        const row = document.createElement('tr');
-
-                        const symbolCell = document.createElement('td');
-                        symbolCell.textContent = order.symbol;
-                        row.appendChild(symbolCell);
-
-                        row.onclick = () => {
-                            if (order.symbol) {
-                                selSym.innerText = order.symbol;
-                                positionID.innerText = order.order_id;
-                                typeData.innerText = order.type;
-                                lotSizeData.innerText = order.volume;
-                                openPriceData.innerText = order.price;
-                                
-                                // currentPriceData.innerText = order.price;
-
-                                const openTimeElement = document.getElementById('openTimeData');
-
-                                // Convert the ISO string to a JavaScript Date object
-                                const openTime = new Date(order.open_time);
-
-                                // Get the date components
-                                const year = openTime.getFullYear();
-                                const month = String(openTime.getMonth() + 1).padStart(2, '0');  // Months are zero-based
-                                const day = String(openTime.getDate()).padStart(2, '0');
-
-                                // Get the time components
-                                const hours = String(openTime.getHours()).padStart(2, '0');
-                                const minutes = String(openTime.getMinutes()).padStart(2, '0');
-                                const seconds = String(openTime.getSeconds()).padStart(2, '0');
-
-                                // Format the date and time as "YYYY-MM-DD HH:MM:SS"
-                                const formattedOpenTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-
-                                // Set the formatted date and time in the HTML element
-                                openTimeElement.innerText = formattedOpenTime;
-
-                                // Update the selectedSymbol to the clicked symbol
-                                selectedSymbol = order.symbol;
-                                selectedOrder = order; 
-
-                                // If the symbol exists, update the symbol-order and hide the selected-symbol
-                                symbolOrderElement.style.display = 'block';
-                                selectedSymbolElement.style.display = 'none';
-                                orderHistoryElement.style.display = 'none';
-
-                                // You can add code here to load the chart or details for the selected symbol
-
-                                askPriceElement.innerText = order.profit || '0.0000';
-                                if (order.type === 'buy') {
-                                  marketElement.innerText = order.market_ask || '0.0000';
-                                } else if (order.type === 'sell') {
-                                  marketElement.innerText = order.market_bid || '0.0000';
-                                }
-                            }
-                        };
-
-                        // const orderIdCell = document.createElement('td');
-                        // orderIdCell.textContent = order.order_id || 'N/A';
-
-                        const typeCell = document.createElement('td');
-
-                        const icon = document.createElement('i');
-                        if (order.type === 'buy') {
-                            icon.classList.add('fa-solid', 'fa-caret-up');  // Buy = caret up
-                            typeCell.style.color = 'green';
-                        } else {
-                            icon.classList.add('fa-solid', 'fa-caret-down');  // Sell = caret down
-                            typeCell.style.color = 'red';
-                        }
-                        typeCell.appendChild(icon);  // Append icon to the typeCell
-
-                        // Append type text
-                        const typeText = document.createTextNode(' ' + (order.type || 'N/A'));  // Add space before type
-                        typeCell.appendChild(typeText);
-
-                        const amtCell = document.createElement('td');
-                        
-                        // Format profit/loss with +US$ or -US$ based on the value
-                        let formattedProfit;
-                        if (order.profit < 0) {
-                            formattedProfit = `-US$${Math.abs(order.profit).toFixed(2)}`;  // Ensure no double negative, and show two decimal places
-                            amtCell.style.color = 'red';  // Red color for negative profit
-                        } else {
-                            formattedProfit = `+US$${order.profit}`;  // Positive profit with two decimal places
-                            amtCell.style.color = 'green';  // Green color for positive profit
-                        }
-                        
-                        amtCell.textContent = formattedProfit || 'N/A';
-
-                        // row.appendChild(orderIdCell);
-                        row.appendChild(typeCell);
-                        row.appendChild(amtCell);
-
-                        ordersTableBody.appendChild(row);
-                    });
-
-                    if (selectedSymbol && selectedOrder) {
-                      // Check if the selected symbol is still in the latest filtered data
-                      const updatedOrder = orderData.find(order => order.symbol === selectedSymbol);
-
-                      if (updatedOrder) {
-                          // Keep the symbol-order visible and update the ask-price with the latest profit
-                          symbolOrderElement.style.display = 'block';
-                          selectedSymbolElement.style.display = 'none';
-                          orderHistoryElement.style.display = 'none';
-
-                          askPriceElement.innerText = updatedOrder.profit || '0.0000';
-                          if (updatedOrder.type === 'buy') {
-                            marketElement.innerText = updatedOrder.market_ask || '0.0000';
-                          } else if (updatedOrder.type === 'sell') {
-                            marketElement.innerText = updatedOrder.market_bid || '0.0000';
-                          }
-                      } else {
-                          // If the symbol no longer exists in the data, reset to default
-                          selectedSymbol = null;
-                          symbolOrderElement.style.display = 'none';
-                          orderHistoryElement.style.display = 'none';
-                          selectedSymbolElement.style.display = 'block';
-                          selectedSymbolElement.textContent = 'Choose forex symbol to view chart..';
-                          askPriceElement.innerText = '0.0000';
-                          marketElement.innerText = '0.0000';
-                      }
-                    } 
-
-                } else {
-                    const row = document.createElement('tr');
-                    const noDataCell = document.createElement('td');
-                    noDataCell.colSpan = 3; // Adjust this based on the number of columns
-                    noDataCell.textContent = 'No orders available';
-                    row.appendChild(noDataCell);
-                    ordersTableBody.appendChild(row);
-                    selectedSymbol = null;
-                    symbolOrderElement.style.display = 'none';
-                    orderHistoryElement.style.display = 'none';
-                    selectedSymbolElement.style.display = 'block';
-                    selectedSymbolElement.textContent = 'Choose forex symbol to view chart..';
                 }
+                
+                // if (gotData) {
+                //   if (gotData.type === 'buy') {
+                //     marketPriceElement.innerText = gotData.market_bid;
+                //   } else {
+                //     marketPriceElement.innerText = gotData.market_ask;
+                //   }
 
+                //   if (gotData.profit > 0) {
+                //     profitDataElement.innerText = gotData.profit;
+                //     profitDataElement.style.color  = '#16a34a'
+                //   } else {
+                //     profitDataElement.innerText = gotData.profit;
+                //     profitDataElement.style.color  = '#dc2626'
+                //   }
+                // }
+                
             };
 
             socket.onerror = function(error) {
@@ -338,21 +274,24 @@
         };
 
         const closeOrder = async () => {
-          const selectedSymbol = document.getElementById('selSym').innerText;
-          const askPrice = document.getElementById('ask-price').innerText;
+          
+          // const askPrice = document.getElementById('ask-price').innerText;
           const orderId = document.getElementById('positionID').innerText;
           const type = document.getElementById('typeData').innerText;
           const marketPrice = document.getElementById('marketPrice').innerText;
           const openPrice = document.getElementById('openPriceData').innerText;
           const userId = window.userID = {{ auth()->id() }};
           const closeButton = document.getElementById('closeButton');
+          
+          closeButton.disabled = true;
+          closeButton.style.background = '#374151'
 
           const api = window.appEnv === 'production' ? 'https://fxtrado-backend.currenttech.pro/api/closeOrder' : 'http://localhost:3000/api/closeOrder';
 
           if (orderId) {
             const orderData = {
-              symbol: selectedSymbol,
-              price: askPrice,
+              symbol: selectedSym,
+              price: marketPriceElement,
               orderId: orderId,
               userId: userId,
               type: type,
@@ -363,8 +302,8 @@
             try {
 
               const response = await axios.post('/closeOrder', {
-                symbol: selectedSymbol,
-                price: askPrice,
+                symbol: selectedSym,
+                price: marketPriceElement,
                 orderId: orderId,
                 userId: userId,
                 type: type,
@@ -386,6 +325,11 @@
                 },
                 onClick: function(){} // Callback after click
               }).showToast();
+
+              // Redirect to the orders page after showing the toast
+              setTimeout(() => {
+                  window.location.href = '/orders'; // Change this to your actual route
+              }, 3000); // Redirect after 3 seconds
 
               // const response = await fetch(api, {
               //   method: 'POST',
@@ -452,7 +396,7 @@
                 onClick: function(){} // Callback after click
               }).showToast();
             } finally {
-              sellButton.disabled = false;
+              closeButton.disabled = false;
             }
           }
         }

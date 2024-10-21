@@ -594,7 +594,7 @@
                     <h2><img src="assets/img/svg-icon/buy.svg" class="svgInject" alt="svg"> Quick buy </h2> 
                     <div class="exchange__widget__order-note-item">
                       <p>Lot Size</p>
-                      <input id="order-amount" type="number" min="0.01" step="0.01" class="form-control" placeholder="Amount">
+                      <input id="order-amount" type="number" min="0.01" step="0.01" value="0.01" class="form-control" placeholder="Amount">
                       {{-- <div class="exchange__widget__order-buy-coin"> --}}
                         {{-- <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
                           BTC
@@ -707,13 +707,13 @@
   <script>
     let socket;
     let reconnectInterval = 1000; // Retry after 5 seconds
+    let reconnectAttempts = 0;
     window.appEnv = "{{ env('APP_ENV') }}";
 
     // Function to establish WebSocket connection
     function connectWebSocket() {
-        if (socket && socket.readyState !== WebSocket.CLOSED) {
-            console.warn("WebSocket connection already open or connecting. Not creating a new one.");
-            return;
+        if (socket && (socket.readyState === WebSocket.OPEN || socket.readyState === WebSocket.CONNECTING)) {
+          return;
         }
         const wsUrl = window.appEnv === 'production' ? 'wss://fxtrado-backend.currenttech.pro/forex_pair' : 'ws://localhost:3000/forex_pair';
         
@@ -723,6 +723,7 @@
 
         socket.onopen = function() {
             console.log('WebSocket connection established');
+            reconnectAttempts = 0;
         };
 
         socket.onmessage = function(event) {
@@ -749,7 +750,11 @@
 
         socket.onclose = function() {
             console.warn('WebSocket connection closed, attempting to reconnect...');
-            setTimeout(connectWebSocket, reconnectInterval); // Attempt to reconnect
+            setTimeout(() => {
+              reconnectAttempts++;
+              reconnectInterval = Math.min(10000, reconnectInterval * 2); // Max wait time of 10 seconds
+              connectWebSocket();
+            }, reconnectInterval);
         };
     }
 

@@ -92,6 +92,6 @@ class ForexController extends Controller
 
         Log::debug(['calculation details', $order->order_id, $profit]);
 
-        return redirect()->back();
+        return redirect()->route('orders');
     }
 }
