@@ -24,7 +24,11 @@
                             <tr onclick="selectOpenOrders({{ json_encode($openOrder) }})">
                               <td>{{ $openOrder->symbol }}</td>
                               <td>{{ $openOrder->order_id }}</td>
-                              <td>{{ $openOrder->type }}</td>
+                              @if ($openOrder->type === 'buy')
+                                <td style="color:green">Buy</td>
+                              @else
+                                <td style="color:red">Sell</td>
+                              @endif
                               {{-- <td id="floatingProfit">{{ $openOrder->profit }}</td> --}}
                             </tr>
                           @endforeach
@@ -84,14 +88,14 @@
                                 aria-labelledby="pills-market-order-tab">
                                 <div class="text-white">
                                     <h2 class="exchange__widget-title" style="margin-bottom: 0px;font-weight:600">Symbol: <span id="selSym" >sym</span></h2>
-                                    <h2 class="exchange__widget-title">Position ID: <span id="positionID" ></span></h2>
+                                    <h2 class="exchange__widget-title">Position ID: <span style="font-weight:600" id="positionID" ></span></h2>
                                     {{-- <h2 class="exchange__widget-title">Margin: <span id="marginData" ></span></h2> --}}
-                                    <h2 class="exchange__widget-title">Open Time: <span id="openTimeData" ></span></h2>
-                                    <h2 class="exchange__widget-title">Type: <span id="typeData" ></span></h2>
-                                    <h2 class="exchange__widget-title">Lot Size: <span id="lotSizeData" ></span></h2>
-                                    <h2 class="exchange__widget-title">Open Price: <span id="openPriceData" ></span></h2>
-                                    <h2 class="exchange__widget-title">Current Price: <span id="marketPrice" >0.00000</span></h2>
-                                    <h2 class="exchange__widget-title">Profit / Loss: $<span id="profitData" >0.00</span></h2>
+                                    <h2 class="exchange__widget-title">Open Time: <span style="font-weight:600" id="openTimeData" ></span></h2>
+                                    <h2 class="exchange__widget-title">Type: <span style="font-weight:600" id="typeData" ></span></h2>
+                                    <h2 class="exchange__widget-title">Lot Size: <span style="font-weight:600" id="lotSizeData" ></span></h2>
+                                    <h2 class="exchange__widget-title">Open Price: <span style="font-weight:600" id="openPriceData" ></span></h2>
+                                    <h2 class="exchange__widget-title">Current Price: <span style="font-weight:600" id="marketPrice" >0.00000</span></h2>
+                                    <h2 class="exchange__widget-title">Profit / Loss: $<span style="font-weight:600" id="profitData" >0.00</span></h2>
 
                                     <div>
                                         

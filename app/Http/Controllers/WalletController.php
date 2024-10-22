@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
+use function PHPUnit\Framework\isEmpty;
+
 class WalletController extends Controller
 {
     public function wallet()
@@ -18,7 +20,7 @@ class WalletController extends Controller
 
         $user = Auth::user()->id;
 
-        $transactions = Transaction::where('user_id', $user)->get();
+        $transactions = Transaction::where('user_id', $user)->latest()->get();
 
         return view('Wallets/Wallet', [
             'transactions' => $transactions
@@ -42,7 +44,7 @@ class WalletController extends Controller
             'user_id' => $user->id,
             'transaction_number' => $transaction_id,
             'transaction_type' => 'Deposit',
-            'status' => 'Processing',
+            'status' => 'processing',
         ]);
 
         $payoutSetting = config('payment-gateway');
@@ -163,6 +165,30 @@ class WalletController extends Controller
     public function withdrawal(Request $request)
     {
 
-        return redirect()->back();
+        $user = Auth::user();
+        $wallet = Wallet::where('user_id', $user->id)->first();
+        
+        if ($request->wallet_address == null) {
+            return response()->json(['error' => 'Failed, Wallet address field is required'], 400);
+        }
+
+        if ($request->amount > $wallet->balance) {
+            return response()->json(['error' => 'Failed, withdraw amout exceed wallet balance'], 400);
+        }
+
+        if ($request->amount <= 0 ) {
+            return response()->json(['error' => 'Failed, invalid withdraw amout'], 400);
+        }
+        
+        $transaction = Transaction::create([
+            'user_id' => $user->id,
+            'transaction_number' => RunningNumberService::getID('transaction'),
+            'to_wallet' => $request->wallet_address,
+            'amount' => $request->amount,
+            'transaction_type' => 'Withdrawal',
+            'status' => 'processing',
+        ]);
+
+        return response()->json(['message' => 'Withdrawal successful']);
     }
 }

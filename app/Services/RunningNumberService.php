@@ -9,8 +9,8 @@ class RunningNumberService
 {
     public static function getID($type): string
     {
-        if ($type === 'shift') {
-            $format = RunningNumber::where('type', 'shift')->first();
+        if ($type === 'order_opened') {
+            $format = RunningNumber::where('type', 'order_opened')->first();
             $lastID =  $format['last_number'] + 1;
             $format->increment('last_number');
             $format->save();
@@ -21,7 +21,7 @@ class RunningNumberService
             $lastID =  $format['last_number'] + 1;
             $format->increment('last_number');
             $format->save();
-            return Str::padLeft($lastID, $format['digits'], "0");
+            return $format['prefix'] . Str::padLeft($lastID, $format['digits'], "0");
         }
     }
 }

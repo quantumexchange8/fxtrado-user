@@ -78,7 +78,7 @@
                       <td class="green">
                         {{ $transaction->status}}
                       </td>
-                    @elseif($transaction->status === 'Processing')
+                    @elseif($transaction->status === 'processing')
                       <td class="blue">
                         {{ $transaction->status}}
                       </td>
@@ -97,9 +97,91 @@
     </div>
   </div>
 
+<!-- Withdraw Modal -->
+<div class="modal fade" id="withdrawModal" tabindex="-1" aria-labelledby="withdrawModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="withdrawModalLabel">Withdraw</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="border:none">X</button>
+        </div>
+        <div class="modal-body">
+            <form id="withdrawForm">
+                <!-- Your form fields go here -->
+                <div class="mb-3">
+                  <label for="wallet_address" class="form-label">Wallet Address</label>
+                  <input type="text" class="form-control" id="wallet_address" required>
+                </div>
+                <div class="mb-3">
+                    <label for="amount" class="form-label">Amount</label>
+                    <input type="number" class="form-control" id="amount" required max="{{ Auth::user()->wallet->balance }}">
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-close" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary" id="submitWithdraw">Withdraw</button>
+        </div>
+      </div>
+  </div>
+</div>
+
+
   <script>
     const deposit = () => {
         document.getElementById('depositForm').submit();
     }
   </script>
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script>
+    $(document).ready(function() {
+        $('.btn-red').on('click', function() {
+            $('#withdrawModal').modal('show');
+        });
+
+        $('.btn-close').on('click', function() {
+            $('#withdrawModal').modal('hide');
+        });
+    
+        $('#submitWithdraw').on('click', function() {
+            // Get the values from the form
+            const amount = $('#amount').val();
+            const wallet_address = $('#wallet_address').val();
+    
+            // Make an API call to your Laravel backend to process the withdrawal
+            axios.post('/withdrawal', {
+                amount: amount,
+                wallet_address: wallet_address,
+            })
+            .then(response => {
+                // Handle success (e.g., show a success message)
+                Toastify({
+                    text: "Withdrawal successful!",
+                    duration: 3000,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "green",
+                }).showToast();
+                // Optionally close the modal
+                $('#withdrawModal').modal('hide');
+            })
+            .catch(error => {
+                // Handle error (e.g., show an error message)
+                const errorMessage = error.response && error.response.data.error 
+                  ? error.response.data.error 
+                  : 'Withdrawal failed!';
+
+                Toastify({
+                    text: errorMessage,
+                    duration: 3000,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "red",
+                }).showToast();
+            });
+        });
+    });
+  </script>
+  
 @endsection
