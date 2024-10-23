@@ -129,6 +129,16 @@
 
   <script>
     const deposit = () => {
+        const depositButton = document.getElementById('depositButton');
+        
+        // Disable the button and change its background color
+        depositButton.disabled = true;
+        depositButton.style.setProperty('background', '#1f2937', 'important');
+        
+        // Optionally, you can change the button text to indicate processing
+        depositButton.innerText = 'Processing...';
+
+        // Submit the form
         document.getElementById('depositForm').submit();
     }
   </script>
@@ -145,6 +155,10 @@
         });
     
         $('#submitWithdraw').on('click', function() {
+
+            const submitButton = $('#submitWithdraw');
+            submitButton.prop('disabled', true);
+
             // Get the values from the form
             const amount = $('#amount').val();
             const wallet_address = $('#wallet_address').val();
@@ -179,6 +193,10 @@
                     position: "right",
                     backgroundColor: "red",
                 }).showToast();
+            })
+            .finally(() => {
+                // Re-enable the button after processing (in case of success or error)
+                submitButton.prop('disabled', false);
             });
         });
     });

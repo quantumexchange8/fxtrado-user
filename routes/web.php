@@ -30,6 +30,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/forex_pair', [ForexController::class, 'forexPair'])->name('forex_pair');
     Route::post('/openOrders', [ForexController::class, 'openOrders'])->name('openOrders');
     Route::post('/closeOrder', [ForexController::class, 'closeOrder'])->name('closeOrder');
+    Route::get('/getChartData', [ForexController::class, 'getChartData'])->name('getChartData');
+    Route::get('/getCandles', [ForexController::class, 'getCandles'])->name('getCandles');
     
     // Orders
     Route::get('/orders', [OrderController::class, 'orders'])->name('orders');

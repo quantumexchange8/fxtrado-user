@@ -462,13 +462,13 @@
                         Sell
                       </td>
                     @endif
-                    @if ($orderHistory->profit > 0)
+                    @if ($orderHistory->closed_profit > 0)
                       <td style="color:#16a34a">
-                        $+{{ $orderHistory->profit }}
+                        $+{{ $orderHistory->closed_profit }}
                       </td>
                     @else
                       <td style="color: #dc2626">
-                        ${{ $orderHistory->profit }}
+                        ${{ $orderHistory->closed_profit }}
                       </td>
                     @endif
                     {{-- <td style="color: #dc2626">
@@ -719,7 +719,7 @@
         
         socket = new WebSocket(wsUrl); // Update this with your correct WebSocket URL
 
-        console.log('env: ', window.appEnv, 'url ', wsUrl) // for testing purpose
+        // console.log('env: ', window.appEnv, 'url ', wsUrl) // for testing purpose
 
         socket.onopen = function() {
             console.log('WebSocket connection established');
@@ -814,28 +814,28 @@
     // Reconnect on page load
     window.onload = connectWebSocket;
 
-    const selectSymbol = (currencyPair) => {
-      const container = document.getElementById('selected-pair-container');
-      const forexChart = document.getElementById('symbol-chart');
-      const forexOrder = document.getElementById('symbol-order');
-      const symbolElement = document.getElementById('selected-symbol');
-      symbolElement.innerText = currencyPair;
+    // const selectSymbol = (currencyPair) => {
+    //   const container = document.getElementById('selected-pair-container');
+    //   const forexChart = document.getElementById('symbol-chart');
+    //   const forexOrder = document.getElementById('symbol-order');
+    //   const symbolElement = document.getElementById('selected-symbol');
+    //   symbolElement.innerText = currencyPair;
       
-      symbolElement.style.display = 'none';
-      selSym.innerText = currencyPair;
-      const currencyImage = document.getElementById('currencyImage');
+    //   symbolElement.style.display = 'none';
+    //   selSym.innerText = currencyPair;
+    //   const currencyImage = document.getElementById('currencyImage');
 
-      currencyImage.src = `/assets/img/symbolIcon/${currencyPair}.png`;
+    //   currencyImage.src = `/assets/img/symbolIcon/${currencyPair}.png`;
 
-      if (currencyPair) {
-        forexChart.style.display = 'block';
-        forexOrder.style.display = 'block';
-        container.style.display = 'block';
-      }
+    //   if (currencyPair) {
+    //     forexChart.style.display = 'block';
+    //     forexOrder.style.display = 'block';
+    //     container.style.display = 'block';
+    //   }
 
-      document.getElementById('ask-price').innerText = '0.0000';
-      document.getElementById('bid-price').innerText = '0.0000';
-    }
+    //   document.getElementById('ask-price').innerText = '0.0000';
+    //   document.getElementById('bid-price').innerText = '0.0000';
+    // }
 
     const buyOrder = async () => {
       const selectedSymbol = document.getElementById('selected-symbol').innerText;
@@ -846,7 +846,7 @@
 
       // Disable the button to prevent multiple submissions
       buyButton.disabled = true;
-      buyButton.style.background = '#374151'
+      buyButton.style.setProperty('background', '#1f2937', 'important');
 
       // Default to 0.01 if the input is empty or less than the minimum value
       if (!lot || parseFloat(lot) < 0.01) {
@@ -931,6 +931,7 @@
             
           } finally {
             buyButton.disabled = false;
+            buyButton.style.setProperty('background', '#05c46b');
           }
         
 
@@ -995,7 +996,7 @@
 
         // Disable the button to prevent multiple submissions
         sellButton.disabled = true;
-        sellButton.style.background = '#374151'
+        sellButton.style.setProperty('background', '#1f2937', 'important');
 
         if (!lot || parseFloat(lot) < 0.01) {
           lot = 0.01;
@@ -1078,6 +1079,7 @@
 
           } finally {
             sellButton.disabled = false;
+            sellButton.style.setProperty('background', '#ff3f34');
           }
 
           // Post the order to the API

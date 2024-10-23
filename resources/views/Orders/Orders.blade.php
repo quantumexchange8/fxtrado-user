@@ -6,15 +6,18 @@
                 @include('layouts.topbar')
 
                 {{-- content --}}
-                <div class="col-lg-4 col-xl-4">
+                <div class="col-lg-8 col-xl-8">
                     <div class="exchange__widget">
                       <h2 class="exchange__widget-title" style="margin-bottom: 10px">Order</h2>
                       {{-- <div style="color:white;font-weight:700">Floating Profit: <span id="floatingProfit"></span> </div> --}}
                       <table class="table">
                         <thead>
                           <tr>
+                            <th>Open Time</th>
                             <th>Symbol</th>
                             <th>Order ID</th>
+                            <th>Open Price</th>
+                            <th>Lot</th>
                             <th style="min-width:80px">Type</th>
                             {{-- <th style="min-width:120px">P/L</th> --}}
                           </tr>
@@ -22,8 +25,11 @@
                         <tbody class="exchange__widget__table">
                           @foreach ($openOrders as $openOrder)
                             <tr onclick="selectOpenOrders({{ json_encode($openOrder) }})">
+                              <td>{{ $openOrder->open_time }}</td>
                               <td>{{ $openOrder->symbol }}</td>
                               <td>{{ $openOrder->order_id }}</td>
+                              <td>{{ $openOrder->price }}</td>
+                              <td>{{ $openOrder->volume }}</td>
                               @if ($openOrder->type === 'buy')
                                 <td style="color:green">Buy</td>
                               @else
@@ -40,26 +46,30 @@
                         <table class="table" style="overflow-x:auto;">
                           <thead>
                             <tr>
+                              <th>Close Date</th>
                               <th>Symbol</th>
                               <th>Order ID</th>
-                              <th>Type</th>
+                              <th>Lot</th>
                               <th>P/L</th>
+                              <th>Type</th>
                             </tr>
                           </thead>
                           <tbody class="exchange__widget__table">
                             @foreach ($orders as $order) 
                               <tr onclick="selectOrders({{ json_encode($order) }})">
+                                <td>{{ $order->close_time }}</td>
                                 <td>{{ $order->symbol }}</td>
                                 <td>{{ $order->order_id }}</td>
-                                @if ($order->type === 'buy')
-                                  <td style="color:green">Buy</td>
-                                @else
-                                  <td style="color:red">Sell</td>
-                                @endif
+                                <td>{{ $order->volume }}</td>
                                 @if ($order->profit > 0)
                                   <td style="color: green">${{ $order->closed_profit }}</td>
                                 @else
                                   <td style="color: red">${{ $order->closed_profit }}</td>
+                                @endif
+                                @if ($order->type === 'buy')
+                                  <td style="color:green">Buy</td>
+                                @else
+                                  <td style="color:red">Sell</td>
                                 @endif
                               </tr>
                             @endforeach
@@ -67,15 +77,15 @@
                         </table>
                     </div>
                 </div>
-                <div style="display: flex;justify-content: center;background:#171717" class="col-lg-8 col-xl-8">
+                <div style="display: flex;justify-content: center;background:#171717" class="col-lg-4 col-xl-4">
                     <div style="color: white;display:flex;justify-content: center;font-size:20px">
                       <p><strong id="selected-symbol">Choose Orders to view details..</strong></p>
                     </div>
                     <div class="exchange__widget" style="width: 100%; display: none" id="symbol-order">
-                        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                        <ul class="nav mb-3" id="pills-tab" role="tablist">
                           <li class="nav-item" role="presentation">
-                            <a class="nav-link active" id="pills-market-order-tab" data-toggle="pill" href="#pills-market-order"
-                              role="tab" aria-controls="pills-market-order" aria-selected="true">Info</a>
+                            <a class="nav-link active" id="pills-market-order-tab" style="padding: 0px; color:white;font-size:18px;font-weight:600" data-toggle="pill" href="#pills-market-order"
+                              role="tab" aria-controls="pills-market-order" aria-selected="true">Order Details</a>
                           </li>
                           {{-- <li class="nav-item" role="presentation">
                             <a class="nav-link" id="pills-limite-order-tab" data-toggle="pill" href="#pills-limite-order"
@@ -131,15 +141,16 @@
                           <div class="tab-pane fade show active" id="pills-market-order" role="tabpanel"
                               aria-labelledby="pills-market-order-tab">
                               <div class="text-white">
-                                  <h2 class="exchange__widget-title">Symbol: <span id="selSymHistory" >sym</span></h2>
-                                  <h2 class="exchange__widget-title">Order ID: <span id="positionIDHistory" ></span></h2>
-                                  <h2 class="exchange__widget-title">Open Time: <span id="openTimeDataHistory" ></span></h2>
-                                  <h2 class="exchange__widget-title">Close Time: <span id="closeTimeDataHistory" ></span></h2>
-                                  <h2 class="exchange__widget-title">Type: <span id="typeDataHistory" ></span></h2>
-                                  <h2 class="exchange__widget-title">Open Price: $ <span id="openPriceDataHistory" ></span></h2>
-                                  <h2 class="exchange__widget-title">Close Price: $ <span id="closePriceDataHistory" ></span></h2>
-                                  <h2 class="exchange__widget-title">Lot Size: <span id="lotSizeDataHistory" ></span></h2>
-                                  <h2 class="exchange__widget-title">Profit/Loss: $ <span id="profitDataHistory" ></span></h2>
+                                  <h2 class="exchange__widget-title">Symbol: <span id="selSymHistory" style="font-weight: 600" >sym</span></h2>
+                                  <h2 class="exchange__widget-title">Order ID: <span id="positionIDHistory" style="font-weight: 600"></span></h2>
+                                  <h2 class="exchange__widget-title">Open Time: <span id="openTimeDataHistory" style="font-weight: 600"></span></h2>
+                                  <h2 class="exchange__widget-title">Close Time: <span id="closeTimeDataHistory" style="font-weight: 600"></span></h2>
+                                  <h2 class="exchange__widget-title">Type: <span id="typeDataHistory" style="font-weight: 600"></span></h2>
+                                  <h2 class="exchange__widget-title">Open Price: $ <span id="openPriceDataHistory" style="font-weight: 600"></span></h2>
+                                  <h2 class="exchange__widget-title">Close Price: $ <span id="closePriceDataHistory" style="font-weight: 600"></span></h2>
+                                  <h2 class="exchange__widget-title">Lot Size: <span id="lotSizeDataHistory" style="font-weight: 600"></span></h2>
+                                  <h2 class="exchange__widget-title">Profit/Loss: <span id="profitDataHistory" style="font-weight: 600"></span></h2>
+                                  <h2 class="exchange__widget-title">Remark: <span id="remarkData" style="font-weight: 600"></span></h2>
                               </div>
                           </div>
                       </div>
@@ -169,7 +180,6 @@
         let selectedOrderId = null;
 
         window.appEnv = "{{ env('APP_ENV') }}";
-        const baseUrl = window.appEnv === 'production' ? 'https://fxtrado-backend.currenttech.pro' : 'http://localhost:3000';
         const userId = window.userID = {{ auth()->id() }};
 
         const selectOpenOrders = (order) => {
@@ -188,6 +198,7 @@
             // Show the hidden div
             symbolOrderDiv.style.display = 'block';
             selectedSymbolElement.style.display = 'none'
+            orderHistoryElement.style.display = 'none'
             selectedSym.innerText = order.symbol;
             positionID.innerText = order.order_id;
             openTimeData.innerText = order.open_time;
@@ -217,7 +228,7 @@
                 const orderData = data.pOrders;
                 
                 const matchedOrder = orderData.find(order => order.order_id === selectedOrderId);
-                console.log(selectedOrderId)
+                
                 if (matchedOrder) {
                   const profitDataElement = document.getElementById('profitData');
                   
@@ -414,12 +425,38 @@
           document.getElementById('positionIDHistory').innerText = order.order_id;
           document.getElementById('openTimeDataHistory').innerText = order.open_time;
           document.getElementById('closeTimeDataHistory').innerText = order.close_time ? order.close_time : 'N/A';  // Handling case where close time might not be available
-          document.getElementById('typeDataHistory').innerText = order.type === 'buy' ? 'Buy' : 'Sell';
+          
           document.getElementById('openPriceDataHistory').innerText = order.price;
           document.getElementById('closePriceDataHistory').innerText = order.close_price ? order.close_price : 'N/A';
           document.getElementById('lotSizeDataHistory').innerText = order.volume;
-          document.getElementById('profitDataHistory').innerText = order.closed_profit ? order.closed_profit : 'N/A';
+          document.getElementById('remarkData').innerText = order.remark ? order.remark : ' - ';
+          
 
+          const profitElement = document.getElementById('profitDataHistory');
+          
+          if (order.closed_profit !== null && order.closed_profit !== undefined) {
+
+            // Apply color based on the profit value
+            if (order.closed_profit > 0) {
+              profitElement.style.color = 'green'; // Green for positive or zero profit
+              profitElement.innerText = '$ +' + order.closed_profit;
+            } else {
+              profitElement.style.color = 'red';   // Red for negative profit
+              profitElement.innerText = '$ ' + order.closed_profit;
+            }
+          } else {
+            profitElement.innerText = 'N/A';
+            profitElement.style.color = 'black';  // Default color when there's no profit data
+          }
+
+          const typeElement = document.getElementById('typeDataHistory');
+          if (order.type === 'buy') {
+            typeElement.style.color = 'green';
+            typeElement.innerText = 'Buy';
+          } else {
+            typeElement.style.color = 'red';
+            typeElement.innerText = 'Sell';
+          }
         }
     </script>
 @endsection

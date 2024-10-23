@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\ForexPair;
+use App\Models\HistoryChart;
 use App\Models\Order;
 use App\Models\Wallet;
 use App\Services\RunningNumberService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class ForexController extends Controller
@@ -18,7 +20,11 @@ class ForexController extends Controller
     {
         $user = Auth::user();
         $allPairs = ForexPair::where('status', 'active')->get();
-        $orderHistories = Order::where('user_id', $user->id)->where('status', 'closed')->latest()->get();
+        $orderHistories = Order::where('user_id', $user->id)
+            ->where('status', 'closed')
+            ->latest()
+            ->take(5)
+            ->get();
 
         return view('Exchange/Exchange', [
             'allPairs' => $allPairs,
@@ -31,6 +37,10 @@ class ForexController extends Controller
         $user = Auth::user();
 
         $wallet = Wallet::where('user_id', $user->id)->first();
+
+        if ($request->price <= 0) {
+            return response()->json(['success' => false, 'message' => 'Invalid Open Pricing']);
+        }
         
         if ($request->price < $wallet->balance) {
             $order = Order::create([
@@ -58,6 +68,10 @@ class ForexController extends Controller
 
         $order = Order::where('order_id', $request->orderId)->first();
         $wallet = Wallet::where('user_id', $user->id)->first();
+
+        if ($order->status === 'closed') {
+            return redirect()->route('orders');
+        }
 
         $order->update([
             'close_price' => $request->marketPrice,
@@ -93,5 +107,30 @@ class ForexController extends Controller
         Log::debug(['calculation details', $order->order_id, $profit]);
 
         return redirect()->route('orders');
+    }
+
+    public function getChartData(Request $request)
+    {
+        $symbol = $request->query('symbol');
+        
+        // Fetch candlestick data (you'll need to adjust your query to fit your DB structure)
+        $candles = DB::table('history_chart')
+                    ->where('symbol', $symbol)
+                    ->select('Date', 'open', 'high', 'low', 'close', 'volume')
+                    ->orderBy('Date', 'asc')
+                    ->get();
+
+        // Return data in JSON format
+        return response()->json($candles);
+    }
+
+    public function getCandles(Request $request)
+    {
+        
+        $symbol = $request->symbol;
+        
+        $candle = HistoryChart::where('Symbol', $symbol)->get();
+        
+        return response()->json($candle);
     }
 }

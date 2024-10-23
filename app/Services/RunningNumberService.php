@@ -15,7 +15,7 @@ class RunningNumberService
             $format->increment('last_number');
             $format->save();
 
-            return $lastID;
+            return Str::padLeft($lastID, $format['digits'], "0");
         } else {
             $format = RunningNumber::where('type', $type)->first();
             $lastID =  $format['last_number'] + 1;
