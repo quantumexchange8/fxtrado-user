@@ -708,18 +708,24 @@
     let socket;
     let reconnectInterval = 1000; // Retry after 5 seconds
     let reconnectAttempts = 0;
-    window.appEnv = "{{ env('APP_ENV') }}";
+
+    function getWebSocketUrl() {
+      const appEnv = "{{ env('APP_ENV') }}"; // Make sure this is rendered server-side
+      return appEnv === 'production' 
+          ? 'wss://fxtrado-backend.currenttech.pro/forex_pair' 
+          : 'ws://localhost:3000/forex_pair';
+    }
 
     // Function to establish WebSocket connection
     function connectWebSocket() {
         if (socket && (socket.readyState === WebSocket.OPEN || socket.readyState === WebSocket.CONNECTING)) {
           return;
         }
-        const wsUrl = window.appEnv === 'production' ? 'wss://fxtrado-backend.currenttech.pro/forex_pair' : 'ws://localhost:3000/forex_pair';
-        
+
+        const wsUrl = getWebSocketUrl(); // Use the utility function to get the URL
         socket = new WebSocket(wsUrl); // Update this with your correct WebSocket URL
 
-        console.log('env: ', window.appEnv, 'url ', wsUrl) // for testing purpose
+        console.log(wsUrl) // for testing purpose
 
         socket.onopen = function() {
             console.log('WebSocket connection established');
