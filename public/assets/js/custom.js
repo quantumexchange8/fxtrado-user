@@ -136,59 +136,59 @@
     }
 
     // WebSocket logic to receive live candlestick updates
-    function connectWebSocket() {
-      if (socket && (socket.readyState === WebSocket.OPEN || socket.readyState === WebSocket.CONNECTING)) {
-        return;
-      }
+    // function connectWebSocket() {
+    //   if (socket && (socket.readyState === WebSocket.OPEN || socket.readyState === WebSocket.CONNECTING)) {
+    //     return;
+    //   }
 
-      const wsUrl = window.appEnv === 'production' ? 'wss://fxtrado-backend.currenttech.pro/getChartData' : 'ws://localhost:3000/getChartData';
+    //   const wsUrl = window.appEnv === 'production' ? 'wss://fxtrado-backend.currenttech.pro/getChartData' : 'ws://localhost:3000/getChartData';
 
-      socket = new WebSocket(wsUrl);
+    //   socket = new WebSocket(wsUrl);
 
-      socket.onopen = function() {
-        console.log('WebSocket connection established');
-        reconnectAttempts = 0;
-      }
+    //   socket.onopen = function() {
+    //     console.log('WebSocket connection established');
+    //     reconnectAttempts = 0;
+    //   }
 
-      socket.onmessage = function(event) {
-        const data = JSON.parse(event.data);
-        const chartData = data.chartData[0];
+    //   socket.onmessage = function(event) {
+    //     const data = JSON.parse(event.data);
+    //     const chartData = data.chartData[0];
         
-        const filteredData = chartData.filter(candle => candle.Symbol === currentSymbol);
+    //     const filteredData = chartData.filter(candle => candle.Symbol === currentSymbol);
         
-        candleSeries.setData([]); // Clear old candlestick data
-        volumeSeries.setData([]); // Clear old volume data
+    //     candleSeries.setData([]); // Clear old candlestick data
+    //     volumeSeries.setData([]); // Clear old volume data
 
-        filteredData.forEach(candleData => {
-          const candleTime = new Date(candleData.Date).getTime() / 1000;
+    //     filteredData.forEach(candleData => {
+    //       const candleTime = new Date(candleData.Date).getTime() / 1000;
 
-          const candle = {
-            time: candleTime,  // Convert Date to UNIX timestamp
-            open: parseFloat(candleData.Open),
-            high: parseFloat(candleData.High),
-            low: parseFloat(candleData.Low),
-            close: parseFloat(candleData.Close)
-          };
+    //       const candle = {
+    //         time: candleTime,  // Convert Date to UNIX timestamp
+    //         open: parseFloat(candleData.Open),
+    //         high: parseFloat(candleData.High),
+    //         low: parseFloat(candleData.Low),
+    //         close: parseFloat(candleData.Close)
+    //       };
 
-          const volume = {
-            time: candleTime,  // Convert Date to UNIX timestamp
-            value: candleData.volume ? parseFloat(candleData.volume) : 0, // Default to 0 if volume is null
-            color: candle.close < candle.open ? 'rgba(255, 128, 159, 0.25)' : 'rgba(107, 255, 193, 0.25)',
-          };
+    //       const volume = {
+    //         time: candleTime,  // Convert Date to UNIX timestamp
+    //         value: candleData.volume ? parseFloat(candleData.volume) : 0, // Default to 0 if volume is null
+    //         color: candle.close < candle.open ? 'rgba(255, 128, 159, 0.25)' : 'rgba(107, 255, 193, 0.25)',
+    //       };
 
-          candleSeries.update(candle);
-          volumeSeries.update(volume);
-        });
-      }
+    //       candleSeries.update(candle);
+    //       volumeSeries.update(volume);
+    //     });
+    //   }
 
-      socket.onerror = (error) => {
-        console.error('WebSocket error:', error);
-      };
+    //   socket.onerror = (error) => {
+    //     console.error('WebSocket error:', error);
+    //   };
 
-      socket.onclose = () => {
-        console.log('WebSocket closed');
-      };
-    }
+    //   socket.onclose = () => {
+    //     console.log('WebSocket closed');
+    //   };
+    // }
 
     async function loadCandleStickData(currentSymbol) {
       try {

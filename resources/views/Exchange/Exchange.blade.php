@@ -719,7 +719,7 @@
         
         socket = new WebSocket(wsUrl); // Update this with your correct WebSocket URL
 
-        // console.log('env: ', window.appEnv, 'url ', wsUrl) // for testing purpose
+        console.log('env: ', window.appEnv, 'url ', wsUrl) // for testing purpose
 
         socket.onopen = function() {
             console.log('WebSocket connection established');
