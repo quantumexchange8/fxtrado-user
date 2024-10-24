@@ -179,7 +179,13 @@
 
         let selectedOrderId = null;
 
-        window.appEnv = "{{ env('APP_ENV') }}";
+        function getWebSocketUrl() {
+          const appEnv = "{{ env('APP_ENV') }}"; // Make sure this is rendered server-side
+          return appEnv === 'production' 
+              ? 'wss://fxtrado-backend.currenttech.pro/forex_pair' 
+              : 'ws://localhost:3000/forex_pair';
+        }
+
         const userId = window.userID = {{ auth()->id() }};
 
         const selectOpenOrders = (order) => {
@@ -215,8 +221,14 @@
         };
         
         function connectWebSocket() {
-            const wsUrl = window.appEnv === 'production' ? 'wss://fxtrado-backend.currenttech.pro/getOrder' : 'ws://localhost:3000/getOrder';
+            if (socket && (socket.readyState === WebSocket.OPEN || socket.readyState === WebSocket.CONNECTING)) {
+              return;
+            }
+
+            const wsUrl = getWebSocketUrl();
             socket = new WebSocket(wsUrl);
+
+            console.log(wsUrl) // for testing purpose
 
             socket.onopen = function() {
               socket.send(JSON.stringify({ userId: userId }));
