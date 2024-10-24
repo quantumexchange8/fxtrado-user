@@ -182,8 +182,8 @@
         function getWebSocketUrl() {
           const appEnv = "{{ env('APP_ENV') }}"; // Make sure this is rendered server-side
           return appEnv === 'production' 
-              ? 'wss://fxtrado-backend.currenttech.pro/forex_pair' 
-              : 'ws://localhost:3000/forex_pair';
+              ? 'wss://fxtrado-backend.currenttech.pro/getOrder' 
+              : 'ws://localhost:3000/getOrder';
         }
 
         const userId = window.userID = {{ auth()->id() }};
