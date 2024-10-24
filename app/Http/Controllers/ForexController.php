@@ -7,6 +7,7 @@ use App\Models\HistoryChart;
 use App\Models\Order;
 use App\Models\Wallet;
 use App\Services\RunningNumberService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -109,17 +110,17 @@ class ForexController extends Controller
         return redirect()->route('orders');
     }
 
+    // NOT IN USE
     public function getChartData(Request $request)
     {
         $symbol = $request->query('symbol');
         
         // Fetch candlestick data (you'll need to adjust your query to fit your DB structure)
-        $candles = DB::table('history_chart')
+        $candles = DB::table('history_charts')
                     ->where('symbol', $symbol)
                     ->select('Date', 'open', 'high', 'low', 'close', 'volume')
                     ->orderBy('Date', 'asc')
                     ->get();
-
         // Return data in JSON format
         return response()->json($candles);
     }
@@ -128,9 +129,19 @@ class ForexController extends Controller
     {
         
         $symbol = $request->symbol;
+        $currentDate = Carbon::now('UTC');
         
-        $candle = HistoryChart::where('Symbol', $symbol)->get();
-        
+
+        $day = $currentDate->day;
+        $month = $currentDate->month;
+        $year = $currentDate->year;
+
+        $candle = HistoryChart::where('Symbol', $symbol)
+                ->whereDay('Date', $day)     // Filters records for the current day
+                ->whereMonth('Date', $month) // Filters for the current month
+                ->whereYear('Date', $year)   // Filters for the current year
+                ->get();
+
         return response()->json($candle);
     }
 }

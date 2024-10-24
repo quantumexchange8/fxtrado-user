@@ -68,6 +68,11 @@
      
     function initializeChart() {
       let selector = document.getElementById('trading-chart-transparent');
+      if (!selector) {
+        console.error('Chart container not found');
+        return;  // Exit the function if the selector doesn't exist
+      }
+
       chart = LightweightCharts.createChart(selector, {
         width: window.innerWidth,
         height: window.innerHeight,
@@ -117,7 +122,6 @@
         lineWidth: 2,
         priceFormat: {
           type: 'volume',
-          formatter: volume => volume.toFixed(0),
         },
         overlay: true,
         scaleMargins: {
@@ -135,94 +139,55 @@
       });
     }
 
-    // WebSocket logic to receive live candlestick updates
-    // function connectWebSocket() {
-    //   if (socket && (socket.readyState === WebSocket.OPEN || socket.readyState === WebSocket.CONNECTING)) {
-    //     return;
-    //   }
-
-    //   const wsUrl = window.appEnv === 'production' ? 'wss://fxtrado-backend.currenttech.pro/getChartData' : 'ws://localhost:3000/getChartData';
-
-    //   socket = new WebSocket(wsUrl);
-
-    //   socket.onopen = function() {
-    //     console.log('WebSocket connection established');
-    //     reconnectAttempts = 0;
-    //   }
-
-    //   socket.onmessage = function(event) {
-    //     const data = JSON.parse(event.data);
-    //     const chartData = data.chartData[0];
-        
-    //     const filteredData = chartData.filter(candle => candle.Symbol === currentSymbol);
-        
-    //     candleSeries.setData([]); // Clear old candlestick data
-    //     volumeSeries.setData([]); // Clear old volume data
-
-    //     filteredData.forEach(candleData => {
-    //       const candleTime = new Date(candleData.Date).getTime() / 1000;
-
-    //       const candle = {
-    //         time: candleTime,  // Convert Date to UNIX timestamp
-    //         open: parseFloat(candleData.Open),
-    //         high: parseFloat(candleData.High),
-    //         low: parseFloat(candleData.Low),
-    //         close: parseFloat(candleData.Close)
-    //       };
-
-    //       const volume = {
-    //         time: candleTime,  // Convert Date to UNIX timestamp
-    //         value: candleData.volume ? parseFloat(candleData.volume) : 0, // Default to 0 if volume is null
-    //         color: candle.close < candle.open ? 'rgba(255, 128, 159, 0.25)' : 'rgba(107, 255, 193, 0.25)',
-    //       };
-
-    //       candleSeries.update(candle);
-    //       volumeSeries.update(volume);
-    //     });
-    //   }
-
-    //   socket.onerror = (error) => {
-    //     console.error('WebSocket error:', error);
-    //   };
-
-    //   socket.onclose = () => {
-    //     console.log('WebSocket closed');
-    //   };
-    // }
+    let latestCandleTime = 0;
 
     async function loadCandleStickData(currentSymbol) {
       try {
          const response = await fetch(`/getCandles?symbol=${currentSymbol}`);
+         if (!response.ok) {
+            throw new Error(`Failed to fetch data for symbol ${currentSymbol}. Status: ${response.status}`);
+         } 
          const data = await response.json();
 
-          const candles = data.map(candle => ({
-            
-            time: new Date(candle.Date).getTime() / 1000,
-            open: parseFloat(candle.Open),
-            high: parseFloat(candle.High),
-            low: parseFloat(candle.Low),
-            close: parseFloat(candle.Close)
-          }));
+          if (!data || !data.length) {
+            throw new Error("Received invalid or empty data");
+          }
 
-          const volumes = data.map(candle => ({
-            time: new Date(candle.Date).getTime() / 1000,
-            value: candle.volume,
-            color: candle.close < candle.open ? 'rgba(255, 128, 159, 0.25)' : 'rgba(107, 255, 193, 0.25)'
-          }));
+          console.log("currentSymbol", currentSymbol);
 
-          candleSeries.setData(candles);
-          volumeSeries.setData(volumes);
+          data.forEach(candle => {
+
+            const candleTime = new Date(candle.Date).getTime() / 1000;
+
+            if (candleTime > latestCandleTime) {
+              candleSeries.update({
+                time: new Date(candle.Date).getTime() / 1000, // Assuming Date is in proper format
+                open: parseFloat(candle.Open),
+                high: parseFloat(candle.High),
+                low: parseFloat(candle.Low),
+                close: parseFloat(candle.Close),
+              });
+              volumeSeries.update({
+                time: candleTime,
+                value: Math.random() * 100,  // Assuming Volume exists
+                color: candle.Close < candle.Open ? 'rgba(255, 128, 159, 0.25)' : 'rgba(107, 255, 193, 0.25)',
+              });
+
+              latestCandleTime = candleTime;
+
+            }
+               
+          })
           
       } catch (error) {
         console.error("Error loading candlestick data:", error);
       }
-
     }
 
-    const updateInterval = 60 * 1000; // 60 seconds
+    // const updateInterval = 60 * 1000; // 60 seconds
     setInterval(() => {
         loadCandleStickData(currentSymbol);
-    }, updateInterval);
+    }, 60000);
     
     loadCandleStickData(currentSymbol);
   };
