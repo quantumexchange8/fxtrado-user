@@ -74,11 +74,19 @@ class ForexController extends Controller
             return redirect()->route('orders');
         }
 
-        $order->update([
-            'close_price' => $request->marketPrice,
-            'close_time' => now(),
-            'status' => 'closed',
-        ]);
+        if ($order->type === 'buy') {
+            $order->update([
+                'close_price' => $order->market_bid,
+                'close_time' => now(),
+                'status' => 'closed',
+            ]);
+        } else {
+            $order->update([
+                'close_price' => $order->market_ask,
+                'close_time' => now(),
+                'status' => 'closed',
+            ]);
+        }
 
         $symbol = ForexPair::where('symbol_pair', $order->symbol)->first();
         if ($symbol->digits === 5) {
@@ -97,6 +105,8 @@ class ForexController extends Controller
             $profit = ($order->price - $order->close_price ) * $order->volume * $decimal;
             $closeprice = $order->close_price;
         }
+
+        // dd($order->close_price, $order->price, $order->volume, $decimal, $closeprice);
 
         $wallet->balance += $profit;
         $wallet->save();

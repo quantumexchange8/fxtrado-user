@@ -179,6 +179,9 @@ class WalletController extends Controller
         if ($request->amount <= 0 ) {
             return response()->json(['error' => 'Failed, invalid withdraw amout'], 400);
         }
+
+        $wallet->balance -= $request->amount;
+        $wallet->save();
         
         $transaction = Transaction::create([
             'user_id' => $user->id,
