@@ -1,9 +1,7 @@
 <nav class="navigation">
     <div class="navigation__header">
       <a href="index.html" class="navigation-header-link">
-        <span class="navigation__header-icon-wrapper"><img src="assets/img/logo.svg"
-            class="svgInject navigation__header-icon" alt="logo"></span>
-        <span class="navigation__header-label">FxTrado</span>
+        <img src="assets/img/fxtrado_logo.svg" class="svgInject" alt="logo">
       </a>
     </div>
     <div class="navigation__list">

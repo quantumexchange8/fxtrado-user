@@ -19,7 +19,7 @@
                             <th>Open Price</th>
                             <th>Lot</th>
                             <th style="min-width:80px">Type</th>
-                            {{-- <th style="min-width:120px">P/L</th> --}}
+                            <th>P/L</th>
                           </tr>
                         </thead>
                         <tbody class="exchange__widget__table">
@@ -35,7 +35,7 @@
                               @else
                                 <td style="color:red">Sell</td>
                               @endif
-                              {{-- <td id="floatingProfit">{{ $openOrder->profit }}</td> --}}
+                              <td id="floatingProfit-{{ $openOrder->order_id }}">0.00</td>
                             </tr>
                           @endforeach
                         </tbody>
@@ -241,6 +241,17 @@
                 
                 const matchedOrder = orderData.find(order => order.order_id === selectedOrderId);
                 
+                orderData.forEach((matchedOrder) => {
+                  const floatingProfitElement = document.getElementById(`floatingProfit-${matchedOrder.order_id}`);
+                  
+                  if (floatingProfitElement) {
+                    floatingProfitElement.innerText = '$' + matchedOrder.profit;
+
+                    // Set color based on profit being positive or negative
+                    floatingProfitElement.style.color = matchedOrder.profit > 0 ? '#16a34a' : '#dc2626';
+                  }
+                });
+
                 if (matchedOrder) {
                   const profitDataElement = document.getElementById('profitData');
                   

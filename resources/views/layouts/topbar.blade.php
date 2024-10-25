@@ -24,7 +24,6 @@
             aria-haspopup="true" aria-expanded="false">
             <div class="header__user-profile-icon">
                 <img src="assets/img/svg-icon/avatar.svg" class="svgInject" alt="svg">
-                <span>9</span>
             </div>
             <div class="header__user-profile-text">
                 <h2>{{Auth::user()->name}}</h2>
