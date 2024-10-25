@@ -39,7 +39,7 @@
     selSym.innerText = currencyPair;
     
     const currencyImage = document.getElementById('currencyImage');
-    currencyImage.src = `/assets/img/icon/${currencyPair}.png`;
+    currencyImage.src = `/assets/img/symbolIcon/${currencyPair}.png`;
 
     if (currencyPair) {
       forexChart.style.display = 'block';
