@@ -20,15 +20,26 @@
                           <div class="exchange__widget">
                             <h2 class="exchange__widget-title">General Information</h2>
                             <div class="exchange__widget__profile">
-                              <form action="{{ route('updateProfile') }}" method="POST">
+                              <form action="{{ route('updateProfile') }}" method="POST" onsubmit="disableButton()">
                                 @csrf
                                 <div class="row">
                                   <div class="col-md-12">
                                     <div class="exchange__widget__profile-avatar">
                                       <img src="assets/img/svg-icon/avatar.svg" class="svgInject" alt="svg">
-                                      <span><img src="assets/img/svg-icon/edit.svg" class="svgInject" alt="svg"></span>
+                                      {{-- <span><img src="assets/img/svg-icon/edit.svg" class="svgInject" alt="svg"></span> --}}
                                     </div>
                                   </div>
+                                  @if ($user->email_verified_at == null)
+                                    <div class="col-md-12" style="display: flex; gap:4px; flex-direction:column;">
+                                      {{-- <div style="display: flex; gap:24px; align-items:center">
+                                        <label for="email">Verify Account</label>
+                                        <button class="type" style="margin-top: 0px">Verify</button>
+                                      </div> --}}
+                                      <div style="display: flex; gap:8px;">
+                                        <i class="fa fa-exclamation-circle" style="color: white" aria-hidden="true"></i> <span class="text-white text-xs" style="font-size:14px">We will send a verification email to your email address shortly. Please ensure you enter the correct address.</span>
+                                      </div>
+                                    </div>
+                                  @endif
                                   <div class="col-md-6">
                                     <label for="firstName">First Name</label>
                                     <input type="text" name="firstName" value="{{ $user->name}}" class="form-control" id="firstName" placeholder="First Name">
@@ -37,10 +48,17 @@
                                     <label for="lastName">Last Name</label>
                                     <input type="text" name="lastName" value="{{ $user->last_name }}"  class="form-control" id="lastName" placeholder="Last Name">
                                   </div>
-                                  <div class="col-md-12">
-                                    <label for="email">Email</label>
-                                    <input type="email" name="email" value="{{ $user->email }}" class="form-control" id="email" placeholder="Enter Your Email" disabled>
-                                  </div>
+                                  @if ($user->email_verified_at !== null)
+                                    <div class="col-md-12">
+                                      <label for="email">Email</label>
+                                      <input type="email" name="email" value="{{ $user->email }}" class="form-control" id="email" placeholder="Enter Your Email" disabled>
+                                    </div>
+                                  @else 
+                                    <div class="col-md-12">
+                                      <label for="email">Email</label>
+                                      <input type="email" name="email" value="{{ $user->email }}" class="form-control" id="email" placeholder="Enter Your Email">
+                                    </div>
+                                  @endif
                                   <div class="col-md-12">
                                     <label for="number">Phone Number</label>
                                     <input type="number" name="number" value="{{ $user->phone_number }}" class="form-control" id="number" placeholder="Enter Your Number">
@@ -65,9 +83,16 @@
                                     <label for="country">Country</label>
                                     <input type="text" name="country" value="{{ $user->country }}" class="form-control" id="country" placeholder="Enter Your Country">
                                   </div>
-                                  <div class="col-md-12">
-                                    <button type="submit">Save</button>
-                                  </div>
+                                  @if ($user->email_verified_at == null)
+                                    <input type="text" hidden name="verifyAcc" value="{{ 'verifyUser' }}" class="form-control" id="verifyAcc">
+                                    <div class="col-md-12">
+                                      <button type="submit" id="saveVerifyButton">Save and Verify Account</button>
+                                    </div>
+                                  @else
+                                    <div class="col-md-12">
+                                      <button type="submit" id="saveVerifyButton">Save</button>
+                                    </div>
+                                  @endif
                                 </div>
                               </form>
                             </div>
@@ -135,6 +160,12 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+        function disableButton() {
+          const button = document.getElementById('saveVerifyButton') || document.querySelector('button[type="submit"]');
+          button.disabled = true;
+          button.style.setProperty('background', '#1f2937', 'important');
+        }
+
         $('#securityForm').on('submit', function(e) {
             e.preventDefault(); // Prevent the form from submitting traditionally
 

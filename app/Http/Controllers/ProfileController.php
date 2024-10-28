@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Redirect;
 
 class ProfileController extends Controller
 {
@@ -20,6 +21,7 @@ class ProfileController extends Controller
 
     public function updateProfile(Request $request)
     {
+
         $auth = Auth::user();
         $user = User::find($auth->id);
 
@@ -29,6 +31,10 @@ class ProfileController extends Controller
 
         if (!is_null($request->lastName) && $request->lastName !== '') {
             $user->last_name = $request->lastName;
+        }
+
+        if (!is_null($request->email) && $request->email !== '') {
+            $user->email = $request->email;
         }
 
         if (!is_null($request->number) && $request->number !== '') {
@@ -56,6 +62,12 @@ class ProfileController extends Controller
         }
 
         $user->save();
+
+        if ($request->verifyAcc === 'verifyUser') {
+            $user->sendEmailVerificationNotification();
+
+            return Redirect::back()->with('message', 'Verification email has been sent.');
+        }
 
         return redirect()->route('profile');
     }

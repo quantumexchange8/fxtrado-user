@@ -704,6 +704,15 @@
     </div>
   </div>
 
+  @if(count($allPairs) > 0)
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Call selectSymbol with the first symbol from $allPairs
+            selectSymbol("{{ $allPairs[0]->symbol_pair }}");
+        });
+    </script>
+  @endif
+
   <script>
     let socket;
     let reconnectInterval = 1000; // Retry after 5 seconds

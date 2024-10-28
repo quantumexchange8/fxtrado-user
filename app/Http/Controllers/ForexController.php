@@ -140,18 +140,38 @@ class ForexController extends Controller
         
         $symbol = $request->symbol;
         $currentDate = Carbon::now('UTC');
+
+
         
+        $startOfPeriod = $currentDate->copy()->subDays($currentDate->dayOfWeek)->setTime(17, 0, 0);
+        $endOfPeriod = $startOfPeriod->copy()->addDays(5);
 
         $day = $currentDate->day;
         $month = $currentDate->month;
         $year = $currentDate->year;
 
-        $candle = HistoryChart::where('Symbol', $symbol)
-                ->whereDay('Date', $day)     // Filters records for the current day
-                ->whereMonth('Date', $month) // Filters for the current month
-                ->whereYear('Date', $year)   // Filters for the current year
-                ->get();
+        if ($currentDate->between($startOfPeriod, $endOfPeriod)) {
+            // current date data
+            $candle = HistoryChart::where('Symbol', $symbol)
+                    ->whereDay('Date', $day)     // Filters records for the current day
+                    ->whereMonth('Date', $month) // Filters for the current month
+                    ->whereYear('Date', $year)   // Filters for the current year
+                    ->get();
+        } else {
+            // last 5 day open market data
+            $candle = HistoryChart::where('Symbol', $symbol)
+                    ->whereBetween('Date', [$startOfPeriod, $endOfPeriod])
+                    ->get();
+        }
 
         return response()->json($candle);
+    }
+
+    public function getRealTimeOHLC()
+    {
+
+        // $liveCandles = 
+
+        // return response()->json($liveCandles);
     }
 }

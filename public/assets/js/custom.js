@@ -82,10 +82,10 @@
         },
         grid: {
           vertLines: {
-            color: '#ffffff0d',
+            color: '#444',
           },
           horzLines: {
-            color: '#ffffff0d',
+            color: '#444',
           },
         },
         crosshair: {

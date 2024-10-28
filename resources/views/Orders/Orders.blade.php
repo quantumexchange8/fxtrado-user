@@ -322,7 +322,7 @@
           const closeButton = document.getElementById('closeButton');
           
           closeButton.disabled = true;
-          closeButton.style.background = '#374151'
+          closeButton.style.setProperty('background', '#374151', 'important');
 
           const api = window.appEnv === 'production' ? 'https://fxtrado-backend.currenttech.pro/api/closeOrder' : 'http://localhost:3000/api/closeOrder';
 
@@ -349,6 +349,13 @@
                 openPrice: openPrice,
               });
 
+              window.location.href = '/orders';
+
+              // Redirect to the orders page after showing the toast
+              // setTimeout(() => {
+              //     window.location.href = '/orders'; // Change this to your actual route
+              // }, 500); // Redirect after 5 miliseconds
+
               Toastify({
                 text: "Order successfully close",
                 duration: 3000,
@@ -363,11 +370,6 @@
                 },
                 onClick: function(){} // Callback after click
               }).showToast();
-
-              // Redirect to the orders page after showing the toast
-              setTimeout(() => {
-                  window.location.href = '/orders'; // Change this to your actual route
-              }, 3000); // Redirect after 3 seconds
 
               // const response = await fetch(api, {
               //   method: 'POST',
