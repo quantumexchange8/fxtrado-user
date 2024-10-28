@@ -140,6 +140,7 @@
     }
 
     let latestCandleTime = 0;
+    let currentCandle = { open: 0, high: 0, low: Infinity, close: 0, time: 0 };
 
     async function loadCandleStickData(currentSymbol) {
       try {
@@ -184,6 +185,34 @@
       }
     }
 
+    async function fetchRealTimeOHLC(symbol) {
+      try {
+        const response = await fetch(`/getRealTimeOHLC?symbol=${symbol}`);
+        const { bid, ask, time } = await response.json();
+    
+        // Assuming time is UNIX timestamp in seconds
+        const candleTime = Math.floor(time / 60) * 60; // Round to the minute
+    
+        if (candleTime !== currentCandle.time) {
+          // Update previous candle and start a new one
+          candleSeries.update(currentCandle);
+          currentCandle = { open: bid, high: bid, low: bid, close: bid, time: candleTime };
+        }
+    
+        // Update current candle with latest tick
+        currentCandle.close = bid;
+        currentCandle.high = Math.max(currentCandle.high, bid);
+        currentCandle.low = Math.min(currentCandle.low, bid);
+    
+        candleSeries.update(currentCandle); // Update ongoing candle visually
+        document.getElementById('bid-price').innerText = bid.toFixed(4);
+        document.getElementById('ask-price').innerText = ask.toFixed(4);
+    
+      } catch (error) {
+        console.error("Error fetching real-time OHLC data:", error);
+      }
+    }
+
     // const updateInterval = 60 * 1000; // 60 seconds
     setInterval(() => {
         loadCandleStickData(currentSymbol);
@@ -192,9 +221,19 @@
     loadCandleStickData(currentSymbol);
   };
 
-  // $('.navigation').on('hover', function () {
-  //   $(this).toggleClass('navigation--open');
-  // });
+  $('.navigation').hover(
+    function () {
+      // On hover: hide small logo, show large logo
+      $(this).find('.navigation__logo--small').hide();
+      $(this).find('.navigation__logo--large').show();
+    },
+    function () {
+      // On hover out: show small logo, hide large logo
+      $(this).find('.navigation__logo--small').show();
+      $(this).find('.navigation__logo--large').hide();
+    }
+  );
+  
 
   // make tr linkable
   $('.markets-pair-list tr').on('click', function () {
