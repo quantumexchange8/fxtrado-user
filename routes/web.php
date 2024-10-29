@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ForexController;
+use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegisterController;
@@ -14,6 +15,8 @@ Route::get('/', function () {
 });
 
 Route::post('deposit_callback', [WalletController::class, 'depositCallback'])->name('depositCallback');
+
+Route::get('/switch-language/{lang}', [LanguageController::class, 'switchLanguage'])->name('switch.language');
 
 Route::middleware('auth')->group(function () {
     // Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');

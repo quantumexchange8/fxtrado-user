@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ session('locale', 'en') }}">
 
 <head>
   <meta charset="UTF-8">
@@ -40,6 +40,21 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/js/all.min.js"></script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
   
+  <script>
+    function toggleLanguage() {
+        // Get current language from session or default to 'en'
+        const currentLang = "{{ session('locale', 'en') }}";
+
+        console.log(currentLang)
+        
+        // Determine next language based on current language
+        const nextLang = currentLang === 'en' ? 'tw' : 'en';
+
+        // Redirect to the switch language route
+        window.location.href = `/switch-language/${nextLang}`;
+    }
+  </script>
+
 </body>
 
 </html>

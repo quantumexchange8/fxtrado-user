@@ -15,11 +15,11 @@
     <div class="col-md-12">
         <div class="exchange__widget_center">
             <div class="exchange__widget exchange-email-verify">
-                <h4>Email Verification</h4>
+                <h4>{{ __('email_verification') }}</h4>
                 <span>
-                    A verification email has been sent to your inbox. Please check your email and follow the instructions to verify your account.
+                  {{ __('verification_message') }}
                 </span>
-                <span>Already verified? <a href="{{ route('login')}}">Login</a></span>
+                <span>{{ __('already_verify') }}? <a href="{{ route('login')}}">{{ __('login') }}</a></span>
             </div>          
         </div>
     </div>

@@ -7,15 +7,15 @@
         @include('layouts.topbar')
         <div class="col-lg-4 col-xl-3">
           <div class="exchange__widget">
-            <h2 class="exchange__widget-title">Forex Symbols</h2>
+            <h2 class="exchange__widget-title">{{ __('forex_symbol') }}</h2>
             <div class="tab-content">
               <div class="tab-pane fade show active" id="BTC" role="tabpanel" style="overflow-x:auto;">
                 <table class="table">
                   <thead>
                     <tr>
-                      <th style="min-width: 125px">Name</th>
-                      <th>Bid</th>
-                      <th>Ask</th>
+                      <th style="min-width: 125px">{{ __('name') }}</th>
+                      <th>{{ __('bid') }}</th>
+                      <th>{{ __('ask') }}</th>
                     </tr>
                   </thead>
                   <tbody class="exchange__widget__table">
@@ -433,7 +433,7 @@
           </div>
           <div class="exchange__widget">
             <div class="exchange__widget-title" style="display: flex;justify-content:space-between">
-              <span>Order History</span>
+              <span>{{ __('order_history') }}</span>
               <a href="{{ route('orders') }}">
                 <i class="fa-solid fa-circle-arrow-right" style="color: white"></i>
               </a>
@@ -441,9 +441,9 @@
             <table class="table">
               <thead>
                 <tr>
-                  <th>Symbol</th>
-                  <th>Type</th>
-                  <th>Profit</th>
+                  <th>{{ __('symbol') }}</th>
+                  <th>{{ __('type') }}</th>
+                  <th>{{ __('profit') }}</th>
                   {{-- <th>Status</th> --}}
                 </tr>
               </thead>
@@ -591,9 +591,9 @@
                 aria-labelledby="pills-market-order-tab">
                 <div class="exchange__widget__order">
                   <div class="exchange__widget__order-note">
-                    <h2><img src="assets/img/svg-icon/buy.svg" class="svgInject" alt="svg"> Quick buy </h2> 
+                    <h2><img src="assets/img/svg-icon/buy.svg" class="svgInject" alt="svg">{{ __('quick_buy') }}  </h2> 
                     <div class="exchange__widget__order-note-item">
-                      <p>Lot Size</p>
+                      <p>{{ __('lot_size') }}</p>
                       <input id="order-amount" type="number" min="0.01" step="0.01" value="0.01" class="form-control" placeholder="Amount">
                       {{-- <div class="exchange__widget__order-buy-coin"> --}}
                         {{-- <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
@@ -627,18 +627,18 @@
                       {{-- </div> --}}
                     </div>
                     <button id="buyButton" class="btn-green" type="button" onclick="buyOrder()">
-                      Buy
+                      {{ __('buy') }}
                       <span id="ask-price">0.0000</span>
                     </button>
                   </div>
                   <div class="exchange__widget__order-note">
-                    <h2><img src="assets/img/svg-icon/sell.svg" class="svgInject" alt="svg"> Quick sell</h2>
+                    <h2><img src="assets/img/svg-icon/sell.svg" class="svgInject" alt="svg">{{ __('quick_sell') }} </h2>
                     <div class="exchange__widget__order-note-item" style="height: 52px">
                       
                     </div>
                     
                     <button id="sellButton" class="btn-red" type="button" onclick="sellOrder()"> 
-                      Sell
+                      {{ __('sell') }}
                       <span id="bid-price">0.0000</span>
                     </button>
                   </div>

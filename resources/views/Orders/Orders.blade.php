@@ -8,50 +8,50 @@
                 {{-- content --}}
                 <div class="col-lg-8 col-xl-8">
                     <div class="exchange__widget">
-                      <h2 class="exchange__widget-title" style="margin-bottom: 10px">Order</h2>
+                      <h2 class="exchange__widget-title" style="margin-bottom: 10px">{{ __('order') }}</h2>
                       {{-- <div style="color:white;font-weight:700">Floating Profit: <span id="floatingProfit"></span> </div> --}}
                       <table class="table">
                         <thead>
                           <tr>
-                            <th>Open Time</th>
-                            <th>Symbol</th>
-                            <th>Order ID</th>
-                            <th>Open Price</th>
-                            <th>Lot</th>
-                            <th style="min-width:80px">Type</th>
-                            <th>P/L</th>
+                            <th>{{ __('open_time') }}</th>
+                            <th style="width: 115px">{{ __('symbol2') }}</th>
+                            <th style="width: 115px">{{ __('order_id') }}</th>
+                            <th style="width: 150px">{{ __('open_price') }}</th>
+                            <th style="width: 115px">{{ __('lot_size') }}</th>
+                            <th style="width: 115px" style="min-width:80px">{{ __('type') }}</th>
+                            <th style="width: 115px">{{ __('profit') }}</th>
                           </tr>
                         </thead>
                         <tbody class="exchange__widget__table">
                           @foreach ($openOrders as $openOrder)
                             <tr onclick="selectOpenOrders({{ json_encode($openOrder) }})">
                               <td>{{ $openOrder->open_time }}</td>
-                              <td>{{ $openOrder->symbol }}</td>
-                              <td>{{ $openOrder->order_id }}</td>
-                              <td>{{ $openOrder->price }}</td>
-                              <td>{{ $openOrder->volume }}</td>
+                              <td style="width: 115px">{{ $openOrder->symbol }}</td>
+                              <td style="width: 115px">{{ $openOrder->order_id }}</td>
+                              <td style="width: 150px">{{ $openOrder->price }}</td>
+                              <td style="width: 115px">{{ $openOrder->volume }}</td>
                               @if ($openOrder->type === 'buy')
-                                <td style="color:green">Buy</td>
+                                <td style="color:green; width: 115px">Buy</td>
                               @else
-                                <td style="color:red">Sell</td>
+                                <td style="color:red; width: 115px">Sell</td>
                               @endif
-                              <td id="floatingProfit-{{ $openOrder->order_id }}">0.00</td>
+                              <td id="floatingProfit-{{ $openOrder->order_id }}" style="width: 115px">0.00</td>
                             </tr>
                           @endforeach
                         </tbody>
                       </table>
                     </div>
                     <div class="exchange__widget">
-                        <h2 class="exchange__widget-title">Order History</h2>
+                        <h2 class="exchange__widget-title">{{ __('order_order_history') }}</h2>
                         <table class="table" style="overflow-x:auto;">
                           <thead>
                             <tr>
-                              <th>Close Date</th>
-                              <th>Symbol</th>
-                              <th>Order ID</th>
-                              <th>Lot</th>
-                              <th>P/L</th>
-                              <th>Type</th>
+                              <th>{{ __('close_date') }}</th>
+                              <th>{{ __('symbol2') }}</th>
+                              <th>{{ __('order_id') }}</th>
+                              <th>{{ __('lot_size') }}</th>
+                              <th>{{ __('profit') }}</th>
+                              <th>{{ __('type') }}</th>
                             </tr>
                           </thead>
                           <tbody class="exchange__widget__table">
@@ -85,7 +85,7 @@
                         <ul class="nav mb-3" id="pills-tab" role="tablist">
                           <li class="nav-item" role="presentation">
                             <a class="nav-link active" id="pills-market-order-tab" style="padding: 0px; color:white;font-size:18px;font-weight:600" data-toggle="pill" href="#pills-market-order"
-                              role="tab" aria-controls="pills-market-order" aria-selected="true">Order Details</a>
+                              role="tab" aria-controls="pills-market-order" aria-selected="true">{{ __('order_detail') }}</a>
                           </li>
                           {{-- <li class="nav-item" role="presentation">
                             <a class="nav-link" id="pills-limite-order-tab" data-toggle="pill" href="#pills-limite-order"
@@ -97,15 +97,15 @@
                             <div class="tab-pane fade show active" id="pills-market-order" role="tabpanel"
                                 aria-labelledby="pills-market-order-tab">
                                 <div class="text-white">
-                                    <h2 class="exchange__widget-title" style="margin-bottom: 0px;font-weight:600">Symbol: <span id="selSym" >sym</span></h2>
-                                    <h2 class="exchange__widget-title">Position ID: <span style="font-weight:600" id="positionID" ></span></h2>
+                                    <h2 class="exchange__widget-title" style="margin-bottom: 0px;font-weight:600">{{ __('symbol2') }}: <span id="selSym" >sym</span></h2>
+                                    <h2 class="exchange__widget-title">{{ __('position_id') }}: <span style="font-weight:600" id="positionID" ></span></h2>
                                     {{-- <h2 class="exchange__widget-title">Margin: <span id="marginData" ></span></h2> --}}
-                                    <h2 class="exchange__widget-title">Open Time: <span style="font-weight:600" id="openTimeData" ></span></h2>
-                                    <h2 class="exchange__widget-title">Type: <span style="font-weight:600" id="typeData" ></span></h2>
-                                    <h2 class="exchange__widget-title">Lot Size: <span style="font-weight:600" id="lotSizeData" ></span></h2>
-                                    <h2 class="exchange__widget-title">Open Price: <span style="font-weight:600" id="openPriceData" ></span></h2>
-                                    <h2 class="exchange__widget-title">Current Price: <span style="font-weight:600" id="marketPrice" >0.00000</span></h2>
-                                    <h2 class="exchange__widget-title">Profit / Loss: $<span style="font-weight:600" id="profitData" >0.00</span></h2>
+                                    <h2 class="exchange__widget-title">{{ __('open_time') }}: <span style="font-weight:600" id="openTimeData" ></span></h2>
+                                    <h2 class="exchange__widget-title">{{ __('type') }}: <span style="font-weight:600" id="typeData" ></span></h2>
+                                    <h2 class="exchange__widget-title">{{ __('lot_size') }}: <span style="font-weight:600" id="lotSizeData" ></span></h2>
+                                    <h2 class="exchange__widget-title">{{ __('open_price') }}: <span style="font-weight:600" id="openPriceData" ></span></h2>
+                                    <h2 class="exchange__widget-title">{{ __('current_price') }}: <span style="font-weight:600" id="marketPrice" >0.00000</span></h2>
+                                    <h2 class="exchange__widget-title">{{ __('profit') }}: $<span style="font-weight:600" id="profitData" >0.00</span></h2>
 
                                     <div>
                                         
@@ -114,7 +114,7 @@
                                         </div>
 
                                         <button id="closeButton" class="btn-blue" type="button" style="width: 100%" onclick="closeOrder()">
-                                            Close Order 
+                                          {{ __('close_order') }}
                                             {{-- <span id="ask-price">0.0000</span> --}}
                                         </button>
                                     </div>
@@ -133,7 +133,7 @@
                       <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                         <li class="nav-item" role="presentation">
                           <a class="nav-link active" id="pills-market-order-tab" data-toggle="pill" href="#pills-market-order"
-                            role="tab" aria-controls="pills-market-order" aria-selected="true">Info</a>
+                            role="tab" aria-controls="pills-market-order" aria-selected="true">{{ __('info') }}</a>
                         </li>
                       </ul>
                       <div class="tab-content" id="pills-tabContent">
@@ -141,16 +141,16 @@
                           <div class="tab-pane fade show active" id="pills-market-order" role="tabpanel"
                               aria-labelledby="pills-market-order-tab">
                               <div class="text-white">
-                                  <h2 class="exchange__widget-title">Symbol: <span id="selSymHistory" style="font-weight: 600" >sym</span></h2>
-                                  <h2 class="exchange__widget-title">Order ID: <span id="positionIDHistory" style="font-weight: 600"></span></h2>
-                                  <h2 class="exchange__widget-title">Open Time: <span id="openTimeDataHistory" style="font-weight: 600"></span></h2>
-                                  <h2 class="exchange__widget-title">Close Time: <span id="closeTimeDataHistory" style="font-weight: 600"></span></h2>
-                                  <h2 class="exchange__widget-title">Type: <span id="typeDataHistory" style="font-weight: 600"></span></h2>
-                                  <h2 class="exchange__widget-title">Open Price: $ <span id="openPriceDataHistory" style="font-weight: 600"></span></h2>
-                                  <h2 class="exchange__widget-title">Close Price: $ <span id="closePriceDataHistory" style="font-weight: 600"></span></h2>
-                                  <h2 class="exchange__widget-title">Lot Size: <span id="lotSizeDataHistory" style="font-weight: 600"></span></h2>
-                                  <h2 class="exchange__widget-title">Profit/Loss: <span id="profitDataHistory" style="font-weight: 600"></span></h2>
-                                  <h2 class="exchange__widget-title">Remark: <span id="remarkData" style="font-weight: 600"></span></h2>
+                                  <h2 class="exchange__widget-title">{{ __('symbol2') }}: <span id="selSymHistory" style="font-weight: 600" >sym</span></h2>
+                                  <h2 class="exchange__widget-title">{{ __('position_id') }}: <span id="positionIDHistory" style="font-weight: 600"></span></h2>
+                                  <h2 class="exchange__widget-title">{{ __('open_time') }}: <span id="openTimeDataHistory" style="font-weight: 600"></span></h2>
+                                  <h2 class="exchange__widget-title">{{ __('close_date') }}: <span id="closeTimeDataHistory" style="font-weight: 600"></span></h2>
+                                  <h2 class="exchange__widget-title">{{ __('type') }}: <span id="typeDataHistory" style="font-weight: 600"></span></h2>
+                                  <h2 class="exchange__widget-title">{{ __('open_price') }}: $ <span id="openPriceDataHistory" style="font-weight: 600"></span></h2>
+                                  <h2 class="exchange__widget-title">{{ __('close_price') }}: $ <span id="closePriceDataHistory" style="font-weight: 600"></span></h2>
+                                  <h2 class="exchange__widget-title">{{ __('lot_size') }}: <span id="lotSizeDataHistory" style="font-weight: 600"></span></h2>
+                                  <h2 class="exchange__widget-title">{{ __('profit') }}: <span id="profitDataHistory" style="font-weight: 600"></span></h2>
+                                  <h2 class="exchange__widget-title">{{ __('remark') }}: <span id="remarkData" style="font-weight: 600"></span></h2>
                               </div>
                           </div>
                       </div>
@@ -162,6 +162,15 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    @if(count($openOrders) > 0)
+      <script>
+          document.addEventListener('DOMContentLoaded', function() {
+              // Call selectOpenOrders with the first order object from $openOrders
+              const firstOrder = @json($openOrders[0]);
+              selectOpenOrders(firstOrder);
+          });
+      </script>
+    @endif
     <script>
         let socket;
         let reconnectInterval = 5000;

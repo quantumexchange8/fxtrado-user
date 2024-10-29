@@ -18,7 +18,7 @@
           <span class="navigation__item-icon-wrapper"><img src="assets/img/svg-icon/dash.svg"
               class="svgInject navigation__item-icon" alt="svg">
           </span>
-          <span class="navigation__item-label">Exchange</span>
+          <span class="navigation__item-label">{{ __('exchange') }}</span>
         </a>
       </li>
       <li class="navigation__item">
@@ -26,7 +26,7 @@
           <span class="navigation__item-icon-wrapper"><img src="assets/img/svg-icon/history.svg"
               class="svgInject navigation__item-icon" alt="svg">
           </span>
-          <span class="navigation__item-label">Order History</span>
+          <span class="navigation__item-label">{{ __('sidebar_order_history') }}</span>
         </a>
       </li>
       <li class="navigation__item">
@@ -34,7 +34,7 @@
           <span class="navigation__item-icon-wrapper"><img src="assets/img/svg-icon/wallet.svg"
               class="svgInject navigation__item-icon" alt="svg">
           </span>
-          <span class="navigation__item-label">Wallets</span>
+          <span class="navigation__item-label">{{ __('wallet') }}</span>
         </a>
       </li>
       <li class="navigation__item">
@@ -42,7 +42,7 @@
           <span class="navigation__item-icon-wrapper"><img src="assets/img/svg-icon/user.svg"
               class="svgInject navigation__item-icon" alt="svg">
           </span>
-          <span class="navigation__item-label">Profile</span>
+          <span class="navigation__item-label">{{ __('profile') }}</span>
         </a>
       </li>
     </ul>

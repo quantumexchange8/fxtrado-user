@@ -9,15 +9,18 @@
             <div class="header__sidebar-icon">
             <img src="assets/img/svg-icon/left-bar.svg" class="svgInject" alt="svg">
             </div>
+            <div class="header__user-profile">
+                <i class="fa-solid fa-language" style="width: 50px;height:40px;cursor: pointer;color:white" onclick="toggleLanguage()"></i>
+            </div>
             <div class="header__user-balance">
             <div class="header__user-balance-icon">
                 <img src="assets/img/svg-icon/wallet.svg" class="svgInject" alt="svg">
             </div>
             <div class="header__user-balance-text">
                 <span style="font-size: 12px;color:white">
-                    Wallet No: {{ Auth::user()->wallet->wallet_no ?? '' }}
+                    {{ __('wallet_no') }}: {{ Auth::user()->wallet->wallet_no ?? '' }}
                 </span>
-                <h2>Balance: <span>$ {{ Auth::user()->wallet->balance ?? 'No wallet found' }}</span></h2>
+                <h2>{{ __('balance') }}: <span>$ {{ Auth::user()->wallet->balance ?? 'No wallet found' }}</span></h2>
             </div>
             </div>
             <div class="header__user-profile dropdown-toggle" style="background-color: #171717" id="dropdownMenuButton" data-toggle="dropdown"
@@ -28,9 +31,9 @@
             <div class="header__user-profile-text">
                 <h2>{{Auth::user()->name}}</h2>
                 @if (Auth::user()->email_verified_at != null)
-                    <span><img src="assets/img/svg-icon/check.svg" class="svgInject" alt="svg"> Verified</span>
+                    <span><img src="assets/img/svg-icon/check.svg" class="svgInject" alt="svg">{{ __('Verified') }} </span>
                 @else
-                    <span style="color: #f87171"><img src="assets/img/svg-icon/check-error.svg" class="svgInject" alt="svg"> Unverified</span>
+                    <span style="color: #f87171"><img src="assets/img/svg-icon/check-error.svg" class="svgInject" alt="svg">{{ __('unverified') }} </span>
                 @endif
             </div>
             </div>
@@ -48,7 +51,7 @@
                 @csrf
                 <button type="submit" class="dropdown-item red" style="display:flex;gap:16px;align-items: center;">
                     <img src="assets/img/svg-icon/power.svg" class="svgInject" alt="svg">
-                    <span>Logout</span>
+                    <span>{{ __('logout') }}</span>
                 </button>
             </form>
             </div>

@@ -66,7 +66,7 @@ class WalletController extends Controller
             'token' => $token,
             'userName' => $user->name,
             'userEmail' => $user->email,
-            'locale' => $selectedPayout['language'],
+            'locale' => app()->getLocale(),
         ];
 
         $url = $selectedPayout['paymentUrl'] . '/payment';

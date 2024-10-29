@@ -34,6 +34,10 @@ class ProfileController extends Controller
         }
 
         if (!is_null($request->email) && $request->email !== '') {
+            $request->validate([
+                'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
+            ]);
+            
             $user->email = $request->email;
         }
 
