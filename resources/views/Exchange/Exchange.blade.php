@@ -734,7 +734,7 @@
         const wsUrl = getWebSocketUrl(); // Use the utility function to get the URL
         socket = new WebSocket(wsUrl); // Update this with your correct WebSocket URL
 
-        console.log(wsUrl) // for testing purpose
+        // console.log(wsUrl) // for testing purpose
 
         socket.onopen = function() {
             console.log('WebSocket connection established');

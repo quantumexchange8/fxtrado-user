@@ -52,8 +52,6 @@
         function toggleLanguage() {
             // Get current language from session or default to 'en'
             const currentLang = "{{ session('locale', 'en') }}";
-
-            console.log(currentLang)
             
             // Determine next language based on current language
             const nextLang = currentLang === 'en' ? 'tw' : 'en';

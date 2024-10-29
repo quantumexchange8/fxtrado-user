@@ -74,7 +74,7 @@
             <table class="table">
               <thead>
                 <tr>
-                  <th style="max-width: 200px">{{ __('date') }}</th>
+                  <th class="mobileHidden" style="max-width: 200px">{{ __('date') }}</th>
                   <th class="mobileHidden">{{ __('position_id') }}</th>
                   <th>{{ __('type') }}</th>
                   <th>{{ __('amount') }}</th>
@@ -87,7 +87,7 @@
               <tbody class="exchange__widget__table">
                 @foreach ($transactions as $transaction)
                   <tr class="transaction-row" data-id="{{ $transaction->id }}" data-created-at="{{ $transaction->created_at }}" data-details="{{ $transaction }}">
-                    <td style="max-width: 200px">{{ $transaction->created_at }}</td>
+                    <td class="mobileHidden" style="max-width: 200px">{{ $transaction->created_at }}</td>
                     <td class="mobileHidden">{{ $transaction->transaction_number }}</td>
                     @if ($transaction->transaction_type === 'Deposit')
                       <td>{{ __('deposit') }}</td>

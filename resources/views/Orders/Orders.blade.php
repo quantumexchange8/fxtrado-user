@@ -62,7 +62,7 @@
                         <table class="table" style="overflow-x:auto;">
                           <thead>
                             <tr>
-                              <th>{{ __('close_date') }}</th>
+                              <th class="mobileHidden">{{ __('close_date') }}</th>
                               <th>{{ __('symbol2') }}</th>
                               <th class="mobileHidden">{{ __('order_id') }}</th>
                               <th class="mobileHidden">{{ __('lot_size') }}</th>
@@ -73,7 +73,7 @@
                           <tbody class="exchange__widget__table">
                             @foreach ($orders as $order) 
                               <tr onclick="window.innerWidth <= 768 ? showMobileOrderModal({{ json_encode($order) }}) : selectOrders({{ json_encode($order) }})">
-                                <td>{{ $order->close_time }}</td>
+                                <td class="mobileHidden">{{ $order->close_time }}</td>
                                 <td>{{ $order->symbol }}</td>
                                 <td class="mobileHidden">{{ $order->order_id }}</td>
                                 <td class="mobileHidden">{{ $order->volume }}</td>
@@ -192,27 +192,22 @@
             </div>
            
             <div>
-              {{ __('position_id') }}:<span id="modalOrderId"></span>
+              {{ __('position_id') }}: <span id="modalOrderId"></span>
             </div>
             <div>
-              {{ __('open_time') }}:
-              <span id="modalOpenTime"></span>
+              {{ __('open_time') }}: <span id="modalOpenTime"></span>
             </div>
             <div>
-              {{ __('open_price') }}:
-              <span id="modalPrice"></span>
+              {{ __('open_price') }}: <span id="modalPrice"></span>
             </div>
             <div>
-              {{ __('lot_size') }}:
-              <span id="modalVolume"></span>
+              {{ __('lot_size') }}: <span id="modalVolume"></span>
             </div>
             <div>
-              {{ __('type') }}:
-              <span id="modalType"></span>
+              {{ __('type') }}: <span id="modalType"></span>
             </div>
             <div>
-              {{ __('profit') }}:
-              <span id="modalProfit"></span>
+              {{ __('profit') }}: $ <span id="modalProfit"></span>
             </div>
           </div>
           <div class="modal-footer">
@@ -294,6 +289,8 @@
           function showMobileModal(order) {
             $('#mobileModal').modal('show');
 
+              selectedOrderId = order.order_id;
+
               // Populate modal with order data
               document.getElementById('modalSymbol').innerText = `${order.symbol}`;
               document.getElementById('modalOrderId').innerText = `${order.order_id}`;
@@ -331,15 +328,16 @@
               document.getElementById('mobileModal').style.display = 'none';
           }
 
-          function updateProfitDisplay(closed_profit) {
+          function updateProfitDisplay(profit) {
+            
               const profitElement = document.getElementById('modalProfit');
 
-              if (closed_profit > 0) {
+              if (profit > 0) {
                   profitElement.style.color = 'green';
-                  profitElement.innerText = `$ +${closed_profit}`;
+                  profitElement.innerText = `$ +${profit}`;
               } else {
                   profitElement.style.color = 'red';
-                  profitElement.innerText = `$ ${closed_profit}`;
+                  profitElement.innerText = `$ ${profit}`;
               }
           }
       </script>
@@ -410,7 +408,7 @@
             const wsUrl = getWebSocketUrl();
             socket = new WebSocket(wsUrl);
 
-            console.log(wsUrl) // for testing purpose
+            // console.log(wsUrl) // for testing purpose
 
             socket.onopen = function() {
               socket.send(JSON.stringify({ userId: userId }));
@@ -436,14 +434,21 @@
 
                 if (matchedOrder) {
                   const profitDataElement = document.getElementById('profitData');
-                  updateProfitDisplay(matchedOrder.profit);
+                  const profitModalDataElement = document.getElementById('modalProfit');
+                  
                   
                   if (matchedOrder.profit > 0 ) {
                     profitDataElement.innerText = matchedOrder.profit;
                     profitDataElement.style.color = '#16a34a'
+
+                    profitModalDataElement.innerText = matchedOrder.profit;
+                    profitModalDataElement.style.color = '#16a34a'
                   } else {
                     profitDataElement.innerText = matchedOrder.profit;
                     profitDataElement.style.color = '#dc2626'
+
+                    profitModalDataElement.innerText = matchedOrder.profit;
+                    profitModalDataElement.style.color = '#dc2626'
                   }
 
                   if (matchedOrder.type === 'buy') {
@@ -454,23 +459,6 @@
                   
 
                 }
-                
-                // if (gotData) {
-                //   if (gotData.type === 'buy') {
-                //     marketPriceElement.innerText = gotData.market_bid;
-                //   } else {
-                //     marketPriceElement.innerText = gotData.market_ask;
-                //   }
-
-                //   if (gotData.profit > 0) {
-                //     profitDataElement.innerText = gotData.profit;
-                //     profitDataElement.style.color  = '#16a34a'
-                //   } else {
-                //     profitDataElement.innerText = gotData.profit;
-                //     profitDataElement.style.color  = '#dc2626'
-                //   }
-                // }
-                
             };
 
             socket.onerror = function(error) {
