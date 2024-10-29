@@ -214,7 +214,7 @@
     // const updateInterval = 60 * 1000; // 60 seconds
     setInterval(() => {
         loadCandleStickData(currentSymbol);
-    }, 60000);
+    }, 10000);
     
     loadCandleStickData(currentSymbol);
   };

@@ -1,6 +1,15 @@
 @extends('layouts.master')
 @section('contents')
-    
+
+<style>
+
+  @media (max-width: 768px) {
+    .mobileHidden {
+      display: none !important;
+    }
+  }
+</style>
+
 <div class="exchange__wrapper">
     <div class="container-fluid">
       <div class="row sm-gutters">
@@ -431,7 +440,7 @@
               </div>
             </div>
           </div>
-          <div class="exchange__widget">
+          <div class="exchange__widget mobileHidden">
             <div class="exchange__widget-title" style="display: flex;justify-content:space-between">
               <span>{{ __('order_history') }}</span>
               <a href="{{ route('orders') }}">
