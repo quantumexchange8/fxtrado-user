@@ -1,5 +1,21 @@
 @extends('layouts.master')
 @section('contents')
+
+<style>
+  @media (max-width: 768px) {
+    .exchange__widget, .exchange__widget__trading {
+      padding: 0px
+    }
+    .mobileHidden {
+      display: none !important;
+    }
+    .exchange__widget table tbody {
+      height: auto;
+    }
+  }
+
+</style>
+
     <div class="exchange__wrapper">
         <div class="container-fluid">
             <div class="row sm-gutters">
@@ -13,9 +29,9 @@
                       <table class="table">
                         <thead>
                           <tr>
-                            <th>{{ __('open_time') }}</th>
+                            <th class="mobileHidden">{{ __('open_time') }}</th>
                             <th style="width: 115px">{{ __('symbol2') }}</th>
-                            <th style="width: 115px">{{ __('order_id') }}</th>
+                            <th class="mobileHidden" style="width: 115px">{{ __('order_id') }}</th>
                             <th style="width: 150px">{{ __('open_price') }}</th>
                             <th style="width: 115px">{{ __('lot_size') }}</th>
                             <th style="width: 115px" style="min-width:80px">{{ __('type') }}</th>
@@ -24,10 +40,10 @@
                         </thead>
                         <tbody class="exchange__widget__table">
                           @foreach ($openOrders as $openOrder)
-                            <tr onclick="selectOpenOrders({{ json_encode($openOrder) }})">
-                              <td>{{ $openOrder->open_time }}</td>
+                            <tr onclick="window.innerWidth <= 768 ? showMobileModal({{ json_encode($openOrder) }}) : selectOpenOrders({{ json_encode($openOrder) }})">
+                              <td class="mobileHidden">{{ $openOrder->open_time }}</td>
                               <td style="width: 115px">{{ $openOrder->symbol }}</td>
-                              <td style="width: 115px">{{ $openOrder->order_id }}</td>
+                              <td class="mobileHidden" style="width: 115px">{{ $openOrder->order_id }}</td>
                               <td style="width: 150px">{{ $openOrder->price }}</td>
                               <td style="width: 115px">{{ $openOrder->volume }}</td>
                               @if ($openOrder->type === 'buy')
@@ -48,19 +64,19 @@
                             <tr>
                               <th>{{ __('close_date') }}</th>
                               <th>{{ __('symbol2') }}</th>
-                              <th>{{ __('order_id') }}</th>
-                              <th>{{ __('lot_size') }}</th>
-                              <th>{{ __('profit') }}</th>
+                              <th class="mobileHidden">{{ __('order_id') }}</th>
+                              <th class="mobileHidden">{{ __('lot_size') }}</th>
+                              <th >{{ __('profit') }}</th>
                               <th>{{ __('type') }}</th>
                             </tr>
                           </thead>
                           <tbody class="exchange__widget__table">
                             @foreach ($orders as $order) 
-                              <tr onclick="selectOrders({{ json_encode($order) }})">
+                              <tr onclick="window.innerWidth <= 768 ? showMobileOrderModal({{ json_encode($order) }}) : selectOrders({{ json_encode($order) }})">
                                 <td>{{ $order->close_time }}</td>
                                 <td>{{ $order->symbol }}</td>
-                                <td>{{ $order->order_id }}</td>
-                                <td>{{ $order->volume }}</td>
+                                <td class="mobileHidden">{{ $order->order_id }}</td>
+                                <td class="mobileHidden">{{ $order->volume }}</td>
                                 @if ($order->profit > 0)
                                   <td style="color: green">${{ $order->closed_profit }}</td>
                                 @else
@@ -78,10 +94,10 @@
                     </div>
                 </div>
                 <div style="display: flex;justify-content: center;background:#171717" class="col-lg-4 col-xl-4">
-                    <div style="color: white;display:flex;justify-content: center;font-size:20px">
+                    <div class="mobileHidden" style="color: white;display:flex;justify-content: center;font-size:20px">
                       <p><strong id="selected-symbol">Choose Orders to view details..</strong></p>
                     </div>
-                    <div class="exchange__widget" style="width: 100%; display: none" id="symbol-order">
+                    <div class="exchange__widget mobileHidden" style="width: 100%; display: none" id="symbol-order">
                         <ul class="nav mb-3" id="pills-tab" role="tablist">
                           <li class="nav-item" role="presentation">
                             <a class="nav-link active" id="pills-market-order-tab" style="padding: 0px; color:white;font-size:18px;font-weight:600" data-toggle="pill" href="#pills-market-order"
@@ -161,14 +177,171 @@
         </div>
     </div>
 
+    <div class="modal fade" id="mobileModal" tabindex="-1" role="dialog" aria-labelledby="orderModalLabel" aria-hidden="true" style="display: none;">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="orderModalLabel">{{ __('info') }}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" style="display: flex; flex-direction:column;gap:8px">
+            <div>
+              {{ __('symbol2') }}: <span id="modalSymbol"></span>
+            </div>
+           
+            <div>
+              {{ __('position_id') }}:<span id="modalOrderId"></span>
+            </div>
+            <div>
+              {{ __('open_time') }}:
+              <span id="modalOpenTime"></span>
+            </div>
+            <div>
+              {{ __('open_price') }}:
+              <span id="modalPrice"></span>
+            </div>
+            <div>
+              {{ __('lot_size') }}:
+              <span id="modalVolume"></span>
+            </div>
+            <div>
+              {{ __('type') }}:
+              <span id="modalType"></span>
+            </div>
+            <div>
+              {{ __('profit') }}:
+              <span id="modalProfit"></span>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" onclick="closeMobileModal()" data-dismiss="modal">{{ __('close') }}</button>
+            <button type="button" id="closeButton" class="btn btn-primary" onclick="closeOrder()">{{ __('close_order') }}</button>
+            
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="modal fade" id="mobileOrderModal" tabindex="-1" role="dialog" aria-labelledby="orderHistoryModalLabel" aria-hidden="true" style="display: none;">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="orderHistoryModalLabel">{{ __('order_order_history') }}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" style="display: flex; flex-direction:column;gap:8px">
+            <div>
+              {{ __('symbol2') }}: <span id="symbol2Modal"></span>
+            </div>
+           
+            <div>
+              {{ __('position_id') }}: <span id="position_idModal"></span>
+            </div>
+            <div>
+              {{ __('open_time') }}: <span id="open_timeModal"></span>
+            </div>
+            <div>
+              {{ __('close_date') }}: <span id="close_dateModal"></span>
+            </div>
+            <div>
+              {{ __('type') }}: <span id="typeModal"></span>
+            </div>
+            <div>
+              {{ __('open_price') }}: <span id="open_priceModal"></span>
+            </div>
+            <div>
+              {{ __('close_price') }}: <span id="close_priceModal"></span>
+            </div>
+            <div>
+              {{ __('lot_size') }}: <span id="lot_sizeModal"></span>
+            </div>
+            <div>
+              {{ __('profit') }}: $<span id="profitModal"></span>
+            </div>
+            <div>
+              {{ __('remark') }}: <span id="remarkModal"></span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     @if(count($openOrders) > 0)
       <script>
           document.addEventListener('DOMContentLoaded', function() {
-              // Call selectOpenOrders with the first order object from $openOrders
-              const firstOrder = @json($openOrders[0]);
-              selectOpenOrders(firstOrder);
+              // Check if the screen width is greater than 768px
+              if (window.innerWidth > 768) {
+                  const firstOrder = @json($openOrders[0]);
+                  selectOpenOrders(firstOrder);
+              }
           });
+
+          // Re-run this logic if the window is resized, so it only applies `selectOpenOrders` when width > 768px
+          window.addEventListener('resize', function() {
+              if (window.innerWidth > 768) {
+                  const firstOrder = @json($openOrders[0]);
+                  selectOpenOrders(firstOrder);
+              }
+          });
+
+          function showMobileModal(order) {
+            $('#mobileModal').modal('show');
+
+              // Populate modal with order data
+              document.getElementById('modalSymbol').innerText = `${order.symbol}`;
+              document.getElementById('modalOrderId').innerText = `${order.order_id}`;
+              document.getElementById('modalOpenTime').innerText = ` ${order.open_time}`;
+              document.getElementById('modalPrice').innerText = `${order.price}`;
+              document.getElementById('modalVolume').innerText = `${order.volume}`;
+              document.getElementById('modalType').innerText = `${order.type === 'buy' ? 'Buy' : 'Sell'}`;
+
+              updateProfitDisplay(order.closed_profit || 0);
+
+              // document.getElementById('modalProfit').innerText = `Profit: 0.00`;
+
+              // Display the modal
+              document.getElementById('mobileModal').style.display = 'flex';
+          }
+
+          function showMobileOrderModal(order) {
+            $('#mobileOrderModal').modal('show');
+
+            document.getElementById('symbol2Modal').innerText = `${order.symbol}`;
+            document.getElementById('position_idModal').innerText = `${order.order_id}`;
+            document.getElementById('open_timeModal').innerText = `${order.open_time}`;
+            document.getElementById('close_dateModal').innerText = `${order.close_time}`;
+            document.getElementById('typeModal').innerText = `${order.type === 'buy' ? 'Buy' : 'Sell'}`;
+            document.getElementById('open_priceModal').innerText = `${order.price}`;
+            document.getElementById('close_priceModal').innerText = `${order.close_price}`;
+            document.getElementById('lot_sizeModal').innerText = `${order.volume}`;
+            document.getElementById('profitModal').innerText = `${order.closed_profit}`;
+            document.getElementById('remarkModal').innerText = `${order.remark ? order.remark : '-'}`;
+            
+          }
+
+          function closeMobileModal() {
+              $('#mobileModal').modal('hide');
+              document.getElementById('mobileModal').style.display = 'none';
+          }
+
+          function updateProfitDisplay(closed_profit) {
+              const profitElement = document.getElementById('modalProfit');
+
+              if (closed_profit > 0) {
+                  profitElement.style.color = 'green';
+                  profitElement.innerText = `$ +${closed_profit}`;
+              } else {
+                  profitElement.style.color = 'red';
+                  profitElement.innerText = `$ ${closed_profit}`;
+              }
+          }
       </script>
     @endif
     <script>
@@ -263,6 +436,7 @@
 
                 if (matchedOrder) {
                   const profitDataElement = document.getElementById('profitData');
+                  updateProfitDisplay(matchedOrder.profit);
                   
                   if (matchedOrder.profit > 0 ) {
                     profitDataElement.innerText = matchedOrder.profit;
@@ -324,6 +498,7 @@
           
           // const askPrice = document.getElementById('ask-price').innerText;
           const orderId = document.getElementById('positionID').innerText;
+          const positionId = document.getElementById('modalOrderId').innerText;
           const type = document.getElementById('typeData').innerText;
           const marketPrice = document.getElementById('marketPrice').innerText;
           const openPrice = document.getElementById('openPriceData').innerText;
@@ -335,7 +510,7 @@
 
           const api = window.appEnv === 'production' ? 'https://fxtrado-backend.currenttech.pro/api/closeOrder' : 'http://localhost:3000/api/closeOrder';
 
-          if (orderId) {
+          if (orderId || positionId) {
             const orderData = {
               symbol: selectedSym,
               price: marketPriceElement,
@@ -348,10 +523,12 @@
 
             try {
 
+              
               const response = await axios.post('/closeOrder', {
                 symbol: selectedSym,
                 price: marketPriceElement,
-                orderId: orderId,
+                orderId: orderId || positionId,
+                // positionId: positionId,
                 userId: userId,
                 type: type,
                 marketPrice: marketPrice,

@@ -104,6 +104,7 @@
     "enter_your_username": "Enter Your Username",
     "enter_your_fullname": "Enter Your Full name",
     "enter_current_password": "Enter Current Password",
+    "save_verify": "Save and Verify Account",
 
     
     "email_required": "The email field is required.",
@@ -119,6 +120,7 @@
     "verification_message": "A verification email has been sent to your inbox. Please check your email and follow the instructions to verify your account.",
     "already_verify": "Already verified.",
 
-    "logging": "Logging..."
+    "logging": "Logging...",
+    "language": "繁体中文"
 
 }

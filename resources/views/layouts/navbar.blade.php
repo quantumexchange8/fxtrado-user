@@ -1,3 +1,11 @@
+<style>
+  @media (min-width: 768px) {
+        .language {
+            display: none !important;
+        }
+    }
+</style>
+
 <nav class="navigation">
   <div class="navigation__header">
     <img src="assets/img/fxtrado_logo.svg" class="svgInject navigation__logo--large" alt="fxtrado logo" style="display: none;">
@@ -44,6 +52,12 @@
           </span>
           <span class="navigation__item-label">{{ __('profile') }}</span>
         </a>
+      </li>
+      <li class="navigation__item language" style="display: flex;items-center" onclick="toggleLanguage()">
+        <span class="navigation__item-icon-wrapper">
+          <i class="fa-solid fa-language" style="width: 40px;height:30px;cursor: pointer;color:white"></i>
+        </span>
+        <span class="navigation__item-label">{{ __('language') }}</span>
       </li>
     </ul>
   </div>

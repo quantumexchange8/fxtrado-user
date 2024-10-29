@@ -86,7 +86,7 @@
                                   @if ($user->email_verified_at == null)
                                     <input type="text" hidden name="verifyAcc" value="{{ 'verifyUser' }}" class="form-control" id="verifyAcc">
                                     <div class="col-md-12">
-                                      <button type="submit" id="saveVerifyButton">Save and Verify Account</button>
+                                      <button type="submit" id="saveVerifyButton">{{ __('save_verify') }}</button>
                                     </div>
                                   @else
                                     <div class="col-md-12">

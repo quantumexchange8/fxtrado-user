@@ -8,6 +8,12 @@
     white-space: nowrap;
     max-width: 200px;
   }
+
+  @media (max-width: 768px) {
+    .mobileHidden {
+      display: none !important;
+    }
+  }
 </style>
 
 <div class="exchange__wrapper">
@@ -69,7 +75,7 @@
               <thead>
                 <tr>
                   <th style="max-width: 200px">{{ __('date') }}</th>
-                  <th>{{ __('position_id') }}</th>
+                  <th class="mobileHidden">{{ __('position_id') }}</th>
                   <th>{{ __('type') }}</th>
                   <th>{{ __('amount') }}</th>
                   {{-- <th>From Wallet</th>
@@ -82,7 +88,7 @@
                 @foreach ($transactions as $transaction)
                   <tr class="transaction-row" data-id="{{ $transaction->id }}" data-created-at="{{ $transaction->created_at }}" data-details="{{ $transaction }}">
                     <td style="max-width: 200px">{{ $transaction->created_at }}</td>
-                    <td>{{ $transaction->transaction_number }}</td>
+                    <td class="mobileHidden">{{ $transaction->transaction_number }}</td>
                     @if ($transaction->transaction_type === 'Deposit')
                       <td>{{ __('deposit') }}</td>
                     @else
@@ -148,7 +154,7 @@
 
 <!-- Transaction Modal -->
 <div class="modal fade" id="transactionModal" tabindex="-1" role="dialog" aria-labelledby="transactionModalLabel" aria-hidden="true">
-  <div class="modal-dialog" style="" role="document">
+  <div class="modal-dialog" role="document">
       <div class="modal-content">
           <div class="modal-header">
               <h5 class="modal-title" id="transactionModalLabel">{{ __('transaction_detail') }}</h5>

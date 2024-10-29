@@ -1,3 +1,15 @@
+<style>
+    @media (max-width: 768px) {
+        .language {
+            display: none;
+        }
+        .sm-gutters > .col, .sm-gutters > [class*='col-'] {
+            padding-right: 0px;
+            padding-left: 0px;
+        }
+    }
+</style>
+
 <div class="col-md-12">
     <div class="header">
     <div class="row">
@@ -9,7 +21,7 @@
             <div class="header__sidebar-icon">
             <img src="assets/img/svg-icon/left-bar.svg" class="svgInject" alt="svg">
             </div>
-            <div class="header__user-profile">
+            <div class="header__user-profile language">
                 <i class="fa-solid fa-language" style="width: 50px;height:40px;cursor: pointer;color:white" onclick="toggleLanguage()"></i>
             </div>
             <div class="header__user-balance">

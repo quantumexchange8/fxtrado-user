@@ -33,14 +33,6 @@ class ProfileController extends Controller
             $user->last_name = $request->lastName;
         }
 
-        if (!is_null($request->email) && $request->email !== '') {
-            $request->validate([
-                'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
-            ]);
-            
-            $user->email = $request->email;
-        }
-
         if (!is_null($request->number) && $request->number !== '') {
             $user->phone_number = $request->number;
         }
@@ -65,13 +57,20 @@ class ProfileController extends Controller
             $user->country = $request->country;
         }
 
-        $user->save();
+        if (!is_null($request->email) && $request->email !== '') {
+            $request->validate([
+                'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
+            ]);
 
-        if ($request->verifyAcc === 'verifyUser') {
-            $user->sendEmailVerificationNotification();
+            $user->email = $request->email;
 
-            return Redirect::back()->with('message', 'Verification email has been sent.');
+            if ($request->verifyAcc === 'verifyUser') {
+                $user->sendEmailVerificationNotification();
+                // return Redirect::back()->with('message', 'Verification email has been sent.');
+            }
         }
+
+        $user->save();
 
         return redirect()->route('profile');
     }

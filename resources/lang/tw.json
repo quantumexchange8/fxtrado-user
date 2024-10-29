@@ -104,6 +104,7 @@
     "enter_your_username": "輸入名稱",
     "enter_your_fullname": "輸入您的全名",
     "enter_current_password": "輸入當前密碼",
+    "save_verify": "儲存並驗證",
 
     "email_required": "電子郵件欄位為必填項",
     "email_invalid": "電子郵件必須是有效的電子郵件地址",
@@ -118,5 +119,6 @@
     "verification_message": "驗證電子郵件已發送至您的收件匣。請檢查您的電子郵件並按照指示驗證您的帳戶。",
     "already_verify": "已經驗證",
 
-    "logging": "登入中..."
+    "logging": "登入中...",
+    "language": "English"
 }
