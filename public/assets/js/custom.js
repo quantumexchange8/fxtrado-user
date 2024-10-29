@@ -154,8 +154,6 @@
             throw new Error("Received invalid or empty data");
           }
 
-          console.log("currentSymbol", currentSymbol);
-
           data.forEach(candle => {
 
             const candleTime = new Date(candle.Date).getTime() / 1000;
