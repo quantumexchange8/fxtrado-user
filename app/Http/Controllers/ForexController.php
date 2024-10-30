@@ -184,7 +184,6 @@ class ForexController extends Controller
         }
 
         $response = [
-            'currentSymbol' => $symbol,
             'bid' => $latestTick->Bid,
             'ask' => $latestTick->Ask,
             'time' => strtotime($latestTick->Date), // Convert to UNIX timestamp

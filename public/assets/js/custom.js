@@ -19,7 +19,7 @@
     $('body').toggleClass('mobile-nav');
   });
 
-  let socket;
+let socket;
 let reconnectInterval = 1000; // Retry after 1 second
 let reconnectAttempts = 0;
 let currentSymbol = null;
@@ -27,12 +27,11 @@ window.appEnv = "{{ env('APP_ENV') }}";
 let fetchInterval = null;
 let latestCandleTime = 0;
 let currentCandle = { open: 0, high: 0, low: Infinity, close: 0, time: 0 };
-let candleAbortController;
-let realTimeAbortController;
+
 
 // trading chart version3
 window.selectSymbol = async function (currencyPair) {
-  // console.log('selected symbol:', currencyPair);
+  console.log('selected symbol:', currencyPair);
   
   // Check if the selected currency pair is the same as the current one
   if (currencyPair === currentSymbol) {
@@ -40,13 +39,6 @@ window.selectSymbol = async function (currencyPair) {
     return;
   }
 
-  // Abort any ongoing requests for the old symbol
-  if (candleAbortController) {
-    candleAbortController.abort();
-  }
-  if (realTimeAbortController) {
-    realTimeAbortController.abort();
-  }
 
   // Reset for the new symbol
   currentSymbol = currencyPair;
@@ -187,15 +179,9 @@ function initializeChart() {
 }
 
 async function loadCandleStickData(currentSymbol) {
-  // Abort any ongoing request for the old symbol
-  if (candleAbortController) {
-    candleAbortController.abort();
-  }
-  candleAbortController = new AbortController();
-  const signal = candleAbortController.signal;
 
   try {
-    const response = await fetch(`/getCandles?symbol=${currentSymbol}`, { signal });
+    const response = await fetch(`/getCandles?symbol=${currentSymbol}`);
     if (!response.ok) {
       throw new Error(`Failed to fetch data for symbol ${currentSymbol}. Status: ${response.status}`);
     }
@@ -224,24 +210,14 @@ async function loadCandleStickData(currentSymbol) {
     // }));
     // volumeSeries.setData(volumes);
   } catch (error) {
-    if (error.name === 'AbortError') {
-      console.warn("Candle stick data request aborted.");
-    } else {
-      console.error("Error loading candlestick data:", error);
-    }
+    console.error("Error loading candlestick data:", error);
   }
 }
 
 async function fetchRealTimeOHLC(symbol) {
-  // Abort any ongoing request for the old symbol
-  if (realTimeAbortController) {
-    realTimeAbortController.abort();
-  }
-  realTimeAbortController = new AbortController();
-  const signal = realTimeAbortController.signal;
 
   try {
-    const response = await fetch(`/getRealTimeOHLC?symbol=${symbol}`, { signal });
+    const response = await fetch(`/getRealTimeOHLC?symbol=${symbol}`);
     if (!response.ok) {
       throw new Error(`Failed to fetch data for symbol ${symbol}. Status: ${response.status}`);
     }
@@ -283,11 +259,7 @@ async function fetchRealTimeOHLC(symbol) {
     document.getElementById('ask-price').innerText = ask.toFixed(4);
 
   } catch (error) {
-    if (error.name === 'AbortError') {
-      console.warn("Real-time OHLC request aborted.");
-    } else {
-      console.error("Error fetching real-time OHLC data:", error);
-    }
+    console.error("Error fetching real-time OHLC data:", error);
   }
 }
 
