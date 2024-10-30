@@ -20,204 +20,278 @@
   });
 
   let socket;
-  let reconnectInterval = 1000; // Retry after 5 seconds
-  let reconnectAttempts = 0;
-  let currentSymbol = null;
-  window.appEnv = "{{ env('APP_ENV') }}";
+let reconnectInterval = 1000; // Retry after 1 second
+let reconnectAttempts = 0;
+let currentSymbol = null;
+window.appEnv = "{{ env('APP_ENV') }}";
+let fetchInterval = null;
+let latestCandleTime = 0;
+let currentCandle = { open: 0, high: 0, low: Infinity, close: 0, time: 0 };
+let candleAbortController;
+let realTimeAbortController;
 
-  // trading chart version3
-  window.selectSymbol = function (currencyPair) {
+// trading chart version3
+window.selectSymbol = async function (currencyPair) {
+  // console.log('selected symbol:', currencyPair);
+  
+  // Check if the selected currency pair is the same as the current one
+  if (currencyPair === currentSymbol) {
+    console.log('Same symbol selected, no action taken.');
+    return;
+  }
 
-    const container = document.getElementById('selected-pair-container');
-    const forexChart = document.getElementById('symbol-chart');
-    const forexOrder = document.getElementById('symbol-order');
-    const symbolElement = document.getElementById('selected-symbol');
-    
-    symbolElement.innerText = currencyPair;
-    symbolElement.style.display = 'none';
-    const selSym = document.getElementById('selSym'); // Ensure `selSym` is defined
-    selSym.innerText = currencyPair;
-    
-    const currencyImage = document.getElementById('currencyImage');
-    currencyImage.src = `/assets/img/symbolIcon/${currencyPair}.png`;
+  // Abort any ongoing requests for the old symbol
+  if (candleAbortController) {
+    candleAbortController.abort();
+  }
+  if (realTimeAbortController) {
+    realTimeAbortController.abort();
+  }
 
-    if (currencyPair) {
-      forexChart.style.display = 'block';
-      forexOrder.style.display = 'block';
-      container.style.display = 'block';
+  // Reset for the new symbol
+  currentSymbol = currencyPair;
+  latestCandleTime = 0;
+  currentCandle = { open: 0, high: 0, low: Infinity, close: 0, time: 0 };
+
+  const container = document.getElementById('selected-pair-container');
+  const forexChart = document.getElementById('symbol-chart');
+  const forexOrder = document.getElementById('symbol-order');
+  const symbolElement = document.getElementById('selected-symbol');
+
+  symbolElement.innerText = currencyPair;
+  symbolElement.style.display = 'none';
+  const selSym = document.getElementById('selSym');
+  selSym.innerText = currencyPair;
+
+  const currencyImage = document.getElementById('currencyImage');
+  currencyImage.src = `/assets/img/symbolIcon/${currencyPair}.png`;
+
+  if (currencyPair) {
+    forexChart.style.display = 'block';
+    forexOrder.style.display = 'block';
+    container.style.display = 'block';
+  }
+
+  document.getElementById('ask-price').innerText = '0.0000';
+  document.getElementById('bid-price').innerText = '0.0000';
+
+  // Clear any existing fetch intervals
+  if (fetchInterval) {
+    clearInterval(fetchInterval);
+    fetchInterval = null;
+  }
+
+  // Check if chart div exists and initialize chart
+  if ($('#trading-chart-transparent').length) {
+    if (chart) {
+      chart.remove(); // Remove the existing chart instance
+    }
+    await initializeChart(); // Ensure chart is initialized
+  } else {
+    console.error('Chart container not found');
+    return; // Exit if the chart container is not found
+  }
+
+  // Load candlestick data and wait for it to finish
+  await loadCandleStickData(currentSymbol); // Initial load
+
+  // Fetch real-time data and set interval
+  await fetchRealTimeData(currentSymbol);
+};
+
+async function fetchRealTimeData(symbol) {
+  // console.log('fetch real-time symbol', symbol);
+
+  // Initial fetch
+  await fetchRealTimeOHLC(symbol);
+
+  // Set an interval for fetching real-time OHLC data every second
+  fetchInterval = setInterval(async () => {
+    // console.log('interval real-time symbol', symbol);
+    await fetchRealTimeOHLC(symbol);
+  }, 1000);
+}
+
+function initializeChart() {
+  let selector = document.getElementById('trading-chart-transparent');
+  if (!selector) {
+    console.error('Chart container not found');
+    return;
+  }
+
+  chart = LightweightCharts.createChart(selector, {
+    width: window.innerWidth,
+    height: window.innerHeight,
+    layout: {
+      backgroundColor: '#ffffff05',
+      textColor: '#ffffff',
+    },
+    grid: {
+      vertLines: {
+        color: '#444',
+      },
+      horzLines: {
+        color: '#444',
+      },
+    },
+    crosshair: {
+      mode: LightweightCharts.CrosshairMode.Normal,
+    },
+    priceScale: {
+      borderColor: '#46495d',
+    },
+    timeScale: {
+      borderColor: '#46495d',
+      timeVisible: true,
+      tickMarkFormatter: (time) => {
+        const date = new Date(time * 1000);
+        const formattedTime = date.toUTCString().split(' ')[4]; // Gets "HH:MM:SS GMT"
+        return `${formattedTime.split(' GMT')[0]}`; // Excludes GMT part
+      },
+    }
+  });
+
+  candleSeries = chart.addCandlestickSeries({
+    upColor: '#05c46b',
+    downColor: '#ff3f34',
+    borderDownColor: '#ff3f34',
+    borderUpColor: '#05c46b',
+    wickDownColor: '#ff3f34',
+    wickUpColor: '#05c46b',
+    priceFormat: {
+      type: 'custom',
+      formatter: price => price.toFixed(5),
+    },
+  });
+
+  volumeSeries = chart.addHistogramSeries({
+    color: '#385263',
+    lineWidth: 2,
+    priceFormat: {
+      type: 'volume',
+    },
+    overlay: true,
+    scaleMargins: {
+      top: 0.9,
+      bottom: 0,
+    },
+  });
+
+  window.addEventListener('resize', () => {
+    chart.applyOptions({
+      width: $('#trading-chart-transparent').width(),
+      height: 400,
+    });
+    setTimeout(() => chart.timeScale().fitContent(), 0);
+  });
+}
+
+async function loadCandleStickData(currentSymbol) {
+  // Abort any ongoing request for the old symbol
+  if (candleAbortController) {
+    candleAbortController.abort();
+  }
+  candleAbortController = new AbortController();
+  const signal = candleAbortController.signal;
+
+  try {
+    const response = await fetch(`/getCandles?symbol=${currentSymbol}`, { signal });
+    if (!response.ok) {
+      throw new Error(`Failed to fetch data for symbol ${currentSymbol}. Status: ${response.status}`);
+    }
+    const data = await response.json();
+
+    if (!data || !data.length) {
+      throw new Error("Received invalid or empty data");
     }
 
-    document.getElementById('ask-price').innerText = '0.0000';
-    document.getElementById('bid-price').innerText = '0.0000';
+    latestCandleTime = new Date(data[data.length - 1].Date).getTime() / 1000;
 
-    currentSymbol = currencyPair;
+    const candles = data.map(candle => ({
+      time: parseInt(candle.Date),
+      open: parseFloat(candle.Open),
+      high: parseFloat(candle.High),
+      low: parseFloat(candle.Low),
+      close: parseFloat(candle.Close),
+    }));
+    candleSeries.setData(candles);
 
-    // Check if chart div exists and initialize chart
-    if ($('#trading-chart-transparent').length) {
-      let selector = document.getElementById('trading-chart-transparent');
-
-      if (chart) {
-        chart.remove();  // Remove the existing chart instance
-      }
-      
-      initializeChart();
-      
+    // Optionally update volume data if applicable
+    // const volumes = data.map(candle => ({
+    //   time: new Date(candle.Date).getTime() / 1000,
+    //   value: Math.random() * 100,
+    //   color: candle.Close < candle.Open ? 'rgba(255, 128, 159, 0.25)' : 'rgba(107, 255, 193, 0.25)',
+    // }));
+    // volumeSeries.setData(volumes);
+  } catch (error) {
+    if (error.name === 'AbortError') {
+      console.warn("Candle stick data request aborted.");
     } else {
-      console.error('Chart container not found');
+      console.error("Error loading candlestick data:", error);
     }
-     
-    function initializeChart() {
-      let selector = document.getElementById('trading-chart-transparent');
-      if (!selector) {
-        console.error('Chart container not found');
-        return;  // Exit the function if the selector doesn't exist
+  }
+}
+
+async function fetchRealTimeOHLC(symbol) {
+  // Abort any ongoing request for the old symbol
+  if (realTimeAbortController) {
+    realTimeAbortController.abort();
+  }
+  realTimeAbortController = new AbortController();
+  const signal = realTimeAbortController.signal;
+
+  try {
+    const response = await fetch(`/getRealTimeOHLC?symbol=${symbol}`, { signal });
+    if (!response.ok) {
+      throw new Error(`Failed to fetch data for symbol ${symbol}. Status: ${response.status}`);
+    }
+
+    const { bid, ask, time } = await response.json();
+
+    if (!time || bid == null || ask == null) {
+      console.warn("Received incomplete data:", { time, bid, ask });
+      return;
+    }
+
+    // Assuming time is UNIX timestamp in seconds
+    const candleTime = Math.floor(time / 60) * 60; // Round to the minute
+
+    if (currentCandle.time === 0 || candleTime !== currentCandle.time) {
+      if (currentCandle.time !== 0 && currentCandle.time !== candleTime) {
+        candleSeries.update(currentCandle); // Finalize last candle
       }
 
-      chart = LightweightCharts.createChart(selector, {
-        width: window.innerWidth,
-        height: window.innerHeight,
-        layout: {
-          backgroundColor: '#ffffff05',
-          textColor: '#ffffff',
-        },
-        grid: {
-          vertLines: {
-            color: '#444',
-          },
-          horzLines: {
-            color: '#444',
-          },
-        },
-        crosshair: {
-          mode: LightweightCharts.CrosshairMode.Normal,
-        },
-        priceScale: {
-          borderColor: '#46495d',
-        },
-        timeScale: {
-          borderColor: '#46495d',
-          timeVisible: true,
-          tickMarkFormatter: (time) => {
-            const date = new Date(time * 1000); // Convert to milliseconds
-            return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Format as HH:MM
-        },
-        },
-      });
-
-      candleSeries = chart.addCandlestickSeries({
-        upColor: '#05c46b',
-        downColor: '#ff3f34',
-        borderDownColor: '#ff3f34',
-        borderUpColor: '#05c46b',
-        wickDownColor: '#ff3f34',
-        wickUpColor: '#05c46b',
-        priceFormat: {
-          type: 'custom', // Use custom formatting
-          formatter: price => price.toFixed(5), // Show 5 decimal places, adjust as needed
-        },
-      });
-      
-      volumeSeries = chart.addHistogramSeries({
-        color: '#385263',
-        lineWidth: 2,
-        priceFormat: {
-          type: 'volume',
-        },
-        overlay: true,
-        scaleMargins: {
-          top: 0.9,
-          bottom: 0,
-        },
-      });
-
-      window.addEventListener('resize', () => {
-        chart.applyOptions({
-            width: $('#trading-chart-transparent').width(),
-            height: 600,
-        });
-        setTimeout(() => chart.timeScale().fitContent(), 0);
-      });
+      // Start a new candle
+      currentCandle = {
+        open: bid,
+        high: Math.max(bid, ask),
+        low: Math.min(bid, ask),
+        close: bid,
+        time: candleTime,
+      };  
+      latestCandleTime = candleTime;
+    } else {
+      // Update existing candle within the same minute
+      currentCandle.close = bid;
+      currentCandle.high = Math.max(currentCandle.high, bid, ask);
+      currentCandle.low = Math.min(currentCandle.low, bid, ask);
     }
 
-    let latestCandleTime = 0;
-    let currentCandle = { open: 0, high: 0, low: Infinity, close: 0, time: 0 };
+    // Visual update of the ongoing candle
+    candleSeries.update(currentCandle);
+    document.getElementById('bid-price').innerText = bid.toFixed(4);
+    document.getElementById('ask-price').innerText = ask.toFixed(4);
 
-    async function loadCandleStickData(currentSymbol) {
-      try {
-         const response = await fetch(`/getCandles?symbol=${currentSymbol}`);
-         if (!response.ok) {
-            throw new Error(`Failed to fetch data for symbol ${currentSymbol}. Status: ${response.status}`);
-         } 
-         const data = await response.json();
-
-          if (!data || !data.length) {
-            throw new Error("Received invalid or empty data");
-          }
-
-          data.forEach(candle => {
-
-            const candleTime = new Date(candle.Date).getTime() / 1000;
-
-            if (candleTime > latestCandleTime) {
-              candleSeries.update({
-                time: new Date(candle.Date).getTime() / 1000, // Assuming Date is in proper format
-                open: parseFloat(candle.Open),
-                high: parseFloat(candle.High),
-                low: parseFloat(candle.Low),
-                close: parseFloat(candle.Close),
-              });
-              volumeSeries.update({
-                time: candleTime,
-                value: Math.random() * 100,  // Assuming Volume exists
-                color: candle.Close < candle.Open ? 'rgba(255, 128, 159, 0.25)' : 'rgba(107, 255, 193, 0.25)',
-              });
-
-              latestCandleTime = candleTime;
-
-            }
-               
-          })
-          
-      } catch (error) {
-        console.error("Error loading candlestick data:", error);
-      }
+  } catch (error) {
+    if (error.name === 'AbortError') {
+      console.warn("Real-time OHLC request aborted.");
+    } else {
+      console.error("Error fetching real-time OHLC data:", error);
     }
+  }
+}
 
-    async function fetchRealTimeOHLC(symbol) {
-      try {
-        const response = await fetch(`/getRealTimeOHLC?symbol=${symbol}`);
-        const { bid, ask, time } = await response.json();
-    
-        // Assuming time is UNIX timestamp in seconds
-        const candleTime = Math.floor(time / 60) * 60; // Round to the minute
-    
-        if (candleTime !== currentCandle.time) {
-          // Update previous candle and start a new one
-          candleSeries.update(currentCandle);
-          currentCandle = { open: bid, high: bid, low: bid, close: bid, time: candleTime };
-        }
-    
-        // Update current candle with latest tick
-        currentCandle.close = bid;
-        currentCandle.high = Math.max(currentCandle.high, bid);
-        currentCandle.low = Math.min(currentCandle.low, bid);
-    
-        candleSeries.update(currentCandle); // Update ongoing candle visually
-        document.getElementById('bid-price').innerText = bid.toFixed(4);
-        document.getElementById('ask-price').innerText = ask.toFixed(4);
-    
-      } catch (error) {
-        console.error("Error fetching real-time OHLC data:", error);
-      }
-    }
-
-    // const updateInterval = 60 * 1000; // 60 seconds
-    setInterval(() => {
-        loadCandleStickData(currentSymbol);
-    }, 10000);
-    
-    loadCandleStickData(currentSymbol);
-  };
+  
 
   $('.navigation').hover(
     function () {

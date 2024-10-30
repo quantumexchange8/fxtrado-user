@@ -150,6 +150,8 @@ class ForexController extends Controller
         $month = $currentDate->month;
         $year = $currentDate->year;
 
+        
+
         if ($currentDate->between($startOfPeriod, $endOfPeriod)) {
             // current date data
             $candle = HistoryChart::where('Symbol', $symbol)
@@ -157,6 +159,7 @@ class ForexController extends Controller
                     ->whereMonth('Date', $month) // Filters for the current month
                     ->whereYear('Date', $year)   // Filters for the current year
                     ->get();
+                    
         } else {
             // last 5 day open market data
             $candle = HistoryChart::where('Symbol', $symbol)
@@ -167,11 +170,26 @@ class ForexController extends Controller
         return response()->json($candle);
     }
 
-    public function getRealTimeOHLC()
+    public function getRealTimeOHLC(Request $request)
     {
+        $symbol = $request->symbol;
 
-        // $liveCandles = 
+        $latestTick = DB::table('ticks')
+            ->where('symbol', $symbol)
+            ->orderBy('Date', 'desc')
+            ->first(['Bid', 'Ask', 'Date']);
 
-        // return response()->json($liveCandles);
+        if (!$latestTick) {
+            return response()->json(['error' => 'Symbol not found or no data available'], 404);
+        }
+
+        $response = [
+            'currentSymbol' => $symbol,
+            'bid' => $latestTick->Bid,
+            'ask' => $latestTick->Ask,
+            'time' => strtotime($latestTick->Date), // Convert to UNIX timestamp
+        ];
+
+        return response()->json($response);
     }
 }

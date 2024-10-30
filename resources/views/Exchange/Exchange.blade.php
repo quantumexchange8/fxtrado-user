@@ -713,14 +713,17 @@
     </div>
   </div>
 
-  @if(count($allPairs) > 0)
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Call selectSymbol with the first symbol from $allPairs
-            selectSymbol("{{ $allPairs[0]->symbol_pair }}");
-        });
-    </script>
-  @endif
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Check if $allPairs is not empty
+        @if(count($allPairs) > 0)
+            // Delay the selection to ensure everything is ready
+            setTimeout(() => {
+                selectSymbol("{{ $allPairs[0]->symbol_pair }}");
+            }, 100); // Small delay to allow for other scripts to load
+        @endif
+    });
+  </script>
 
   <script>
     let socket;
