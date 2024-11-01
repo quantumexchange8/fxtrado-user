@@ -19,9 +19,7 @@
     $('body').toggleClass('mobile-nav');
   });
 
-let socket;
-let reconnectInterval = 1000; // Retry after 1 second
-let reconnectAttempts = 0;
+
 let currentSymbol = null;
 window.appEnv = "{{ env('APP_ENV') }}";
 let fetchInterval = null;
@@ -142,7 +140,8 @@ function initializeChart() {
       timeVisible: true,
       tickMarkFormatter: (time) => {
         const date = new Date(time * 1000);
-        return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const formattedTime = date.toUTCString().split(' ')[4]; // Gets "HH:MM:SS GMT"
+        return `${formattedTime.split(' GMT')[0]}`; // Excludes GMT part
       },
     }
   });
@@ -231,23 +230,27 @@ function getWebSocketProdUrl() {
 
 function liveUpdateWebSocket() {
 
-  if (socket && (socket.readyState === WebSocket.OPEN || socket.readyState === WebSocket.CONNECTING)) {
+  let liveSocket;
+  let reconnectLiveInterval = 1000; // Retry after 1 second
+  let reconnectLiveAttempts = 0;
+
+  if (liveSocket && (liveSocket.readyState === WebSocket.OPEN || liveSocket.readyState === WebSocket.CONNECTING)) {
     return;
   }
 
-  if (socket) {
-    socket.close();
+  if (liveSocket) {
+    liveSocket.close();
   }
 
   const wsProdUrl = getWebSocketProdUrl();
-  socket = new WebSocket(wsProdUrl); // Update this with your correct WebSocket URL
+  liveSocket = new WebSocket(wsProdUrl); // Update this with your correct WebSocket URL
 
-  socket.onopen = function() {
-    console.log('WebSocket connection established');
-    reconnectAttempts = 0;
+  liveSocket.onopen = function() {
+    console.log('Live WebSocket connection established');
+    reconnectLiveAttempts = 0;
   };
 
-  socket.onmessage = function(event) {
+  liveSocket.onmessage = function(event) {
     // Parse the incoming data (which should be JSON)
     const data = JSON.parse(event.data); 
 
@@ -262,20 +265,20 @@ function liveUpdateWebSocket() {
     }
   };
 
-  socket.onerror = function(error) {
+  liveSocket.onerror = function(error) {
     console.error('WebSocket error:', error);
     // Check if on mobile to increase interval
     if (/Mobi|Android/i.test(navigator.userAgent)) {
-      reconnectInterval = 2000; // Try 2 seconds on mobile
+      reconnectLiveInterval = 2000; // Try 2 seconds on mobile
     }
   };
 
-  socket.onclose = function(event) {
+  liveSocket.onclose = function(event) {
     console.warn('WebSocket closed:', event);
     if (event.wasClean === false) {
       console.log('Attempting to reconnect...');
-      setTimeout(liveUpdateWebSocket, reconnectInterval);
-      reconnectAttempts++;
+      setTimeout(liveUpdateWebSocket, reconnectLiveInterval);
+      reconnectLiveAttempts++;
     }
   };
 
@@ -315,8 +318,8 @@ window.onload = function() {
   liveUpdateWebSocket();
 };
 window.addEventListener('beforeunload', () => {
-  if (socket) {
-    socket.close();
+  if (liveSocket) {
+    liveSocket.close();
   }
 });
 // Reconnect on page load
