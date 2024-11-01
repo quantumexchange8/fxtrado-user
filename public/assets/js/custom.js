@@ -31,7 +31,6 @@ let currentCandle = { open: 0, high: 0, low: Infinity, close: 0, time: 0 };
 
 // trading chart version3
 window.selectSymbol = async function (currencyPair) {
-  console.log('selected symbol:', currencyPair);
   
   // Check if the selected currency pair is the same as the current one
   if (currencyPair === currentSymbol) {
@@ -222,12 +221,11 @@ function getWebSocketProdUrl() {
   const wsUrl = prodEnv === 'production' 
       ? 'wss://fxtrado-backend.currenttech.pro/forex_pair' 
       : 'ws://localhost:3000/forex_pair';
-  console.log('WebSocket URL:', wsUrl); // Log to check URL
+
   return wsUrl;
 }
 
 function liveUpdateWebSocket() {
-  console.log('current symbol', currentSymbol) //selected symbol is changing
 
   if (socket && (socket.readyState === WebSocket.OPEN || socket.readyState === WebSocket.CONNECTING)) {
     return;
@@ -277,21 +275,23 @@ function liveUpdateWebSocket() {
 
 function liveUpdateCandlestick(data) {
   // console.log('Updating candlestick with data:', data);
-  const currentTime = Math.floor(Date.now() / 1000);
+  const currentTime = Math.floor(Date.now() / 1000 / 60) * 60;
+  const startOfMinute = Math.floor(currentTime / 60) * 60;
 
-  if (latestCandleTime === 0 || latestCandleTime < currentTime - 60) {
-    latestCandleTime = currentTime;
+  if (latestCandleTime < startOfMinute) {
+    latestCandleTime = startOfMinute;
     currentCandle = {
       open: data.bid,
-      high: Math.max(data.bid, data.ask), // Use max of bid and ask for the high
-      low: Math.min(data.bid, data.ask),  // Use min of bid and ask for the low
+      high: Math.max(data.bid, data.ask),
+      low: Math.min(data.bid, data.ask),
       close: data.bid,
-      time: currentTime,
+      time: startOfMinute,
     };
   } else {
+    // Update the high and low with max/min of current high/low and new bid/ask
     currentCandle.high = Math.max(currentCandle.high, data.bid, data.ask);
     currentCandle.low = Math.min(currentCandle.low, data.bid, data.ask);
-    currentCandle.close = data.bid;
+    currentCandle.close = data.bid; // Close price updated with the latest bid
   }
 
   candleSeries.update({
