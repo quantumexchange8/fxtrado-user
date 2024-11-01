@@ -113,9 +113,12 @@ function initializeChart() {
     return;
   }
 
+  const width = selector.clientWidth;
+  const height = selector.clientHeight;
+
   chart = LightweightCharts.createChart(selector, {
-    width: window.innerWidth,
-    height: window.innerHeight,
+    width: width,
+    height: height,
     layout: {
       backgroundColor: '#ffffff05',
       textColor: '#ffffff',
@@ -139,8 +142,7 @@ function initializeChart() {
       timeVisible: true,
       tickMarkFormatter: (time) => {
         const date = new Date(time * 1000);
-        const formattedTime = date.toUTCString().split(' ')[4]; // Gets "HH:MM:SS GMT"
-        return `${formattedTime.split(' GMT')[0]}`; // Excludes GMT part
+        return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       },
     }
   });
@@ -173,8 +175,8 @@ function initializeChart() {
 
   window.addEventListener('resize', () => {
     chart.applyOptions({
-      width: $('#trading-chart-transparent').width(),
-      height: 400,
+      width: selector.clientWidth,
+      height: selector.clientHeight,
     });
     setTimeout(() => chart.timeScale().fitContent(), 0);
   });

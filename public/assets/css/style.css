@@ -1916,4 +1916,9 @@ i.fa.fa-caret-square-down {
     color: #178cff !important;
 }
 
+#trading-chart-transparent {
+    width: 100%;   /* Make it responsive */
+    height: 400px; /* Set a height; adjust as necessary */
+}
+
 /*# sourceMappingURL=style.css.map */
