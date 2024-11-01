@@ -323,7 +323,7 @@ window.addEventListener('beforeunload', () => {
   }
 });
 // Reconnect on page load
-window.onload = connectWebSocket;
+window.onload = liveUpdateWebSocket;
 
 // async function fetchRealTimeOHLC(symbol) {
 
