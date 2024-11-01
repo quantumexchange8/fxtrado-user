@@ -695,6 +695,9 @@
               // Update the ask price in the selected-pair-container div
               document.getElementById('ask-price').innerText = data.ask;
               document.getElementById('bid-price').innerText = data.bid;
+
+              liveUpdateCandlestick(data);
+              
             }
         };
 

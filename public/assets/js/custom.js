@@ -87,8 +87,6 @@ window.selectSymbol = async function (currencyPair) {
   // Fetch real-time data and set interval
   await fetchRealTimeData(currentSymbol);
 
-  // Start WebSocket connection for the selected symbol
-  liveUpdateWebSocket();
 };
 
 async function fetchRealTimeData(symbol) {
@@ -219,72 +217,7 @@ async function loadCandleStickData(currentSymbol) {
   }
 }
 
-function getWebSocketProdUrl() {
-  const prodEnv = "{{ env('APP_ENV') }}"; // Make sure this is rendered server-side
-  const wsUrl = prodEnv === 'production' 
-      ? 'wss://fxtrado-backend.currenttech.pro/forex_pair' 
-      : 'ws://localhost:3000/forex_pair';
-
-  return wsUrl;
-}
-
-function liveUpdateWebSocket() {
-
-  let liveSocket;
-  let reconnectLiveInterval = 1000; // Retry after 1 second
-  let reconnectLiveAttempts = 0;
-
-  if (liveSocket && (liveSocket.readyState === WebSocket.OPEN || liveSocket.readyState === WebSocket.CONNECTING)) {
-    return;
-  }
-
-  if (liveSocket) {
-    liveSocket.close();
-  }
-
-  const wsProdUrl = getWebSocketProdUrl();
-  liveSocket = new WebSocket(wsProdUrl); // Update this with your correct WebSocket URL
-
-  liveSocket.onopen = function() {
-    console.log('Live WebSocket connection established');
-    reconnectLiveAttempts = 0;
-  };
-
-  liveSocket.onmessage = function(event) {
-    // Parse the incoming data (which should be JSON)
-    const data = JSON.parse(event.data); 
-
-    // Check if the received data's symbol matches the currently selected symbol
-    if (data.symbol === currentSymbol) {
-      // Update the bid and ask prices on the UI
-      // document.getElementById('bid-price').innerText = data.bid.toFixed(5);
-      // document.getElementById('ask-price').innerText = data.ask.toFixed(5);
-
-      // Update the candlestick chart with the new data
-      liveUpdateCandlestick(data);
-    }
-  };
-
-  liveSocket.onerror = function(error) {
-    console.error('WebSocket error:', error);
-    // Check if on mobile to increase interval
-    if (/Mobi|Android/i.test(navigator.userAgent)) {
-      reconnectLiveInterval = 2000; // Try 2 seconds on mobile
-    }
-  };
-
-  liveSocket.onclose = function(event) {
-    console.warn('WebSocket closed:', event);
-    if (event.wasClean === false) {
-      console.log('Attempting to reconnect...');
-      setTimeout(liveUpdateWebSocket, reconnectLiveInterval);
-      reconnectLiveAttempts++;
-    }
-  };
-
-}
-
-function liveUpdateCandlestick(data) {
+window.liveUpdateCandlestick = function(data) {
   // console.log('Updating candlestick with data:', data);
   const currentTime = Math.floor(Date.now() / 1000);
   const startOfMinute = Math.floor(currentTime / 60) * 60;
@@ -313,17 +246,6 @@ function liveUpdateCandlestick(data) {
     close: currentCandle.close,
   });
 }
-
-window.onload = function() {
-  liveUpdateWebSocket();
-};
-window.addEventListener('beforeunload', () => {
-  if (liveSocket) {
-    liveSocket.close();
-  }
-});
-// Reconnect on page load
-window.onload = liveUpdateWebSocket;
 
 // async function fetchRealTimeOHLC(symbol) {
 
