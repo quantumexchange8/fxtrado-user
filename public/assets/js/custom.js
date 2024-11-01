@@ -173,12 +173,14 @@ function initializeChart() {
     },
   });
 
-  window.addEventListener('resize', () => {
-    chart.applyOptions({
-      width: selector.clientWidth,
-      height: selector.clientHeight,
-    });
-    setTimeout(() => chart.timeScale().fitContent(), 0);
+  window.addEventListener('orientationchange', () => {
+    if (chart) {
+      chart.applyOptions({
+        width: selector.clientWidth,
+        height: selector.clientHeight,
+      });
+      setTimeout(() => chart.timeScale().fitContent(), 0);
+    }
   });
 }
 
@@ -247,7 +249,7 @@ function liveUpdateWebSocket() {
 
   socket.onmessage = function(event) {
     // Parse the incoming data (which should be JSON)
-    const data = JSON.parse(event.data);
+    const data = JSON.parse(event.data); 
 
     // Check if the received data's symbol matches the currently selected symbol
     if (data.symbol === currentSymbol) {
@@ -262,6 +264,10 @@ function liveUpdateWebSocket() {
 
   socket.onerror = function(error) {
     console.error('WebSocket error:', error);
+    // Check if on mobile to increase interval
+    if (/Mobi|Android/i.test(navigator.userAgent)) {
+      reconnectInterval = 2000; // Try 2 seconds on mobile
+    }
   };
 
   socket.onclose = function(event) {
@@ -277,9 +283,9 @@ function liveUpdateWebSocket() {
 
 function liveUpdateCandlestick(data) {
   // console.log('Updating candlestick with data:', data);
-  const currentTime = Math.floor(Date.now() / 1000 / 60) * 60;
+  const currentTime = Math.floor(Date.now() / 1000);
   const startOfMinute = Math.floor(currentTime / 60) * 60;
-
+  
   if (latestCandleTime < startOfMinute) {
     latestCandleTime = startOfMinute;
     currentCandle = {
