@@ -89,19 +89,22 @@ window.selectSymbol = async function (currencyPair) {
 
   // Fetch real-time data and set interval
   await fetchRealTimeData(currentSymbol);
+
+  // Start WebSocket connection for the selected symbol
+  liveUpdateWebSocket();
 };
 
 async function fetchRealTimeData(symbol) {
   // console.log('fetch real-time symbol', symbol);
 
   // Initial fetch
-  await fetchRealTimeOHLC(symbol);
+  // await fetchRealTimeOHLC(symbol);
 
   // Set an interval for fetching real-time OHLC data every second
-  fetchInterval = setInterval(async () => {
-    // console.log('interval real-time symbol', symbol);
-    await fetchRealTimeOHLC(symbol);
-  }, 1000);
+  // fetchInterval = setInterval(async () => {
+  //   // console.log('interval real-time symbol', symbol);
+  //   await fetchRealTimeOHLC(symbol);
+  // }, 1000);
 }
 
 function initializeChart() {
@@ -214,54 +217,151 @@ async function loadCandleStickData(currentSymbol) {
   }
 }
 
-async function fetchRealTimeOHLC(symbol) {
-
-  try {
-    const response = await fetch(`/getRealTimeOHLC?symbol=${symbol}`);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch data for symbol ${symbol}. Status: ${response.status}`);
-    }
-
-    const { bid, ask, time } = await response.json();
-
-    if (!time || bid == null || ask == null) {
-      console.warn("Received incomplete data:", { time, bid, ask });
-      return;
-    }
-
-    // Assuming time is UNIX timestamp in seconds
-    const candleTime = Math.floor(time / 60) * 60; // Round to the minute
-
-    if (currentCandle.time === 0 || candleTime !== currentCandle.time) {
-      if (currentCandle.time !== 0 && currentCandle.time !== candleTime) {
-        candleSeries.update(currentCandle); // Finalize last candle
-      }
-
-      // Start a new candle
-      currentCandle = {
-        open: bid,
-        high: Math.max(bid, ask),
-        low: Math.min(bid, ask),
-        close: bid,
-        time: candleTime,
-      };  
-      latestCandleTime = candleTime;
-    } else {
-      // Update existing candle within the same minute
-      currentCandle.close = bid;
-      currentCandle.high = Math.max(currentCandle.high, bid, ask);
-      currentCandle.low = Math.min(currentCandle.low, bid, ask);
-    }
-
-    // Visual update of the ongoing candle
-    candleSeries.update(currentCandle);
-    document.getElementById('bid-price').innerText = bid.toFixed(4);
-    document.getElementById('ask-price').innerText = ask.toFixed(4);
-
-  } catch (error) {
-    console.error("Error fetching real-time OHLC data:", error);
-  }
+function getWebSocketProdUrl() {
+  const prodEnv = "{{ env('APP_ENV') }}"; // Make sure this is rendered server-side
+  const wsUrl = prodEnv === 'production' 
+      ? 'wss://fxtrado-backend.currenttech.pro/forex_pair' 
+      : 'ws://localhost:3000/forex_pair';
+  console.log('WebSocket URL:', wsUrl); // Log to check URL
+  return wsUrl;
 }
+
+function liveUpdateWebSocket() {
+  console.log('current symbol', currentSymbol) //selected symbol is changing
+
+  if (socket && (socket.readyState === WebSocket.OPEN || socket.readyState === WebSocket.CONNECTING)) {
+    return;
+  }
+
+  if (socket) {
+    socket.close();
+  }
+
+  const wsProdUrl = getWebSocketProdUrl();
+  socket = new WebSocket(wsProdUrl); // Update this with your correct WebSocket URL
+
+  socket.onopen = function() {
+    console.log('WebSocket connection established');
+    reconnectAttempts = 0;
+  };
+
+  socket.onmessage = function(event) {
+    // Parse the incoming data (which should be JSON)
+    const data = JSON.parse(event.data);
+
+    // Check if the received data's symbol matches the currently selected symbol
+    if (data.symbol === currentSymbol) {
+      // Update the bid and ask prices on the UI
+      // document.getElementById('bid-price').innerText = data.bid.toFixed(5);
+      // document.getElementById('ask-price').innerText = data.ask.toFixed(5);
+
+      // Update the candlestick chart with the new data
+      liveUpdateCandlestick(data);
+    }
+  };
+
+  socket.onerror = function(error) {
+    console.error('WebSocket error:', error);
+  };
+
+  socket.onclose = function(event) {
+    console.warn('WebSocket closed:', event);
+    if (event.wasClean === false) {
+      console.log('Attempting to reconnect...');
+      setTimeout(liveUpdateWebSocket, reconnectInterval);
+      reconnectAttempts++;
+    }
+  };
+
+}
+
+function liveUpdateCandlestick(data) {
+  // console.log('Updating candlestick with data:', data);
+  const currentTime = Math.floor(Date.now() / 1000);
+
+  if (latestCandleTime === 0 || latestCandleTime < currentTime - 60) {
+    latestCandleTime = currentTime;
+    currentCandle = {
+      open: data.bid,
+      high: Math.max(data.bid, data.ask), // Use max of bid and ask for the high
+      low: Math.min(data.bid, data.ask),  // Use min of bid and ask for the low
+      close: data.bid,
+      time: currentTime,
+    };
+  } else {
+    currentCandle.high = Math.max(currentCandle.high, data.bid, data.ask);
+    currentCandle.low = Math.min(currentCandle.low, data.bid, data.ask);
+    currentCandle.close = data.bid;
+  }
+
+  candleSeries.update({
+    time: currentCandle.time,
+    open: currentCandle.open,
+    high: currentCandle.high,
+    low: currentCandle.low,
+    close: currentCandle.close,
+  });
+}
+
+window.onload = function() {
+  liveUpdateWebSocket();
+};
+window.addEventListener('beforeunload', () => {
+  if (socket) {
+    socket.close();
+  }
+});
+// Reconnect on page load
+window.onload = connectWebSocket;
+
+// async function fetchRealTimeOHLC(symbol) {
+
+//   try {
+//     const response = await fetch(`/getRealTimeOHLC?symbol=${symbol}`);
+//     if (!response.ok) {
+//       throw new Error(`Failed to fetch data for symbol ${symbol}. Status: ${response.status}`);
+//     }
+
+//     const { bid, ask, time } = await response.json();
+
+//     if (!time || bid == null || ask == null) {
+//       console.warn("Received incomplete data:", { time, bid, ask });
+//       return;
+//     }
+
+//     // Assuming time is UNIX timestamp in seconds
+//     const candleTime = Math.floor(time / 60) * 60; // Round to the minute
+
+//     if (currentCandle.time === 0 || candleTime !== currentCandle.time) {
+//       if (currentCandle.time !== 0 && currentCandle.time !== candleTime) {
+//         candleSeries.update(currentCandle); // Finalize last candle
+//       }
+
+//       // Start a new candle
+//       currentCandle = {
+//         open: bid,
+//         high: Math.max(bid, ask),
+//         low: Math.min(bid, ask),
+//         close: bid,
+//         time: candleTime,
+//       };  
+//       latestCandleTime = candleTime;
+//     } else {
+//       // Update existing candle within the same minute
+//       currentCandle.close = bid;
+//       currentCandle.high = Math.max(currentCandle.high, bid, ask);
+//       currentCandle.low = Math.min(currentCandle.low, bid, ask);
+//     }
+
+//     // Visual update of the ongoing candle
+//     candleSeries.update(currentCandle);
+//     document.getElementById('bid-price').innerText = bid.toFixed(4);
+//     document.getElementById('ask-price').innerText = ask.toFixed(4);
+
+//   } catch (error) {
+//     console.error("Error fetching real-time OHLC data:", error);
+//   }
+// }
 
   
 
