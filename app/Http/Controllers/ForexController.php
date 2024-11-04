@@ -141,7 +141,6 @@ class ForexController extends Controller
         $symbol = $request->symbol;
         $currentDate = Carbon::now('UTC');
 
-        dd($currentDate);
 
         
         $startOfPeriod = $currentDate->copy()->subDays($currentDate->dayOfWeek)->setTime(17, 0, 0);
