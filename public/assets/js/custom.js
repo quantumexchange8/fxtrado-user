@@ -196,13 +196,18 @@ async function loadCandleStickData(currentSymbol) {
 
     latestCandleTime = new Date(data[data.length - 1].Date).getTime() / 1000;
 
-    const candles = data.map(candle => ({
-      time: parseInt(candle.Date),
-      open: parseFloat(candle.Open),
-      high: parseFloat(candle.High),
-      low: parseFloat(candle.Low),
-      close: parseFloat(candle.Close),
-    }));
+    const candles = data.map(candle => {
+      // Parse the ISO string in UTC and get the timestamp in seconds
+      const timestamp = Math.floor(new Date(candle.Date).getTime() / 1000);
+    
+      return {
+        time: timestamp,
+        open: parseFloat(candle.Open),
+        high: parseFloat(candle.High),
+        low: parseFloat(candle.Low),
+        close: parseFloat(candle.Close),
+      };
+    });
     candleSeries.setData(candles);
 
     // Optionally update volume data if applicable

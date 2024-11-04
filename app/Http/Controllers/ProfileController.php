@@ -29,32 +29,10 @@ class ProfileController extends Controller
             $user->name = $request->firstName;
         }
 
-        if (!is_null($request->lastName) && $request->lastName !== '') {
-            $user->last_name = $request->lastName;
-        }
+        
 
         if (!is_null($request->number) && $request->number !== '') {
             $user->phone_number = $request->number;
-        }
-
-        if (!is_null($request->address) && $request->address !== '') {
-            $user->address = $request->address;
-        }
-
-        if (!is_null($request->city) && $request->city !== '') {
-            $user->city = $request->city;
-        }
-
-        if (!is_null($request->state) && $request->state !== '') {
-            $user->state = $request->state;
-        }
-
-        if (!is_null($request->zipCode) && $request->zipCode !== '') {
-            $user->zip = $request->zipCode;
-        }
-
-        if (!is_null($request->country) && $request->country !== '') {
-            $user->country = $request->country;
         }
 
         if (!is_null($request->email) && $request->email !== '') {
@@ -62,12 +40,6 @@ class ProfileController extends Controller
                 'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
             ]);
 
-            $user->email = $request->email;
-
-            if ($request->verifyAcc === 'verifyUser') {
-                $user->sendEmailVerificationNotification();
-                // return Redirect::back()->with('message', 'Verification email has been sent.');
-            }
         }
 
         $user->save();
@@ -81,33 +53,7 @@ class ProfileController extends Controller
         $auth = Auth::user();
         $user = User::find($auth->id);
 
-        $request->validate([
-            'currentPassword' => ['required'],
-            'password' => ['required', 'confirmed', 'min:8'], // 'confirmed' ensures password and confirmPassword match
-        ], [
-            // Custom error messages (optional)
-            'currentPassword.required' => 'Please provide your current password.',
-            'password.required' => 'Please provide a new password.',
-            'password.confirmed' => 'The new password and confirm password do not match.',
-            'password.min' => 'The new password must be at least 8 characters.',
-        ]);
-
-        if (!Hash::check($request->currentPassword, $user->password)) {
-            if ($request->ajax()) {
-                return response()->json(['errors' => ['currentPassword' => ['The current password is incorrect.']]], 422);
-            }
-            return redirect()->back()->withErrors(['currentPassword' => ['The current password is incorrect.']]);
-        }
-
-        $user->secure_question = $request->securityOne;
-        $user->response = $request->securityAnsOne;
-        $user->username = $request->username;
-        $user->password = Hash::make($request->password);
-        $user->save();
-
-        if ($request->ajax()) {
-            return response()->json(['status' => 'Security details updated successfully.']);
-        }
+        
 
         return redirect()->route('profile')->with('status', 'Security details updated successfully.');
     }

@@ -12,7 +12,7 @@ class HistoryChart extends Model
     protected function casts(): array
     {
         return [
-            'Date' => 'timestamp',
+            'Date' => 'datetime',
             'local_date' => 'timestamp',
         ];
     }

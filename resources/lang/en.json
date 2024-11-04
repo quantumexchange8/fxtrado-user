@@ -72,7 +72,7 @@
     "to_wallet": "To Wallet",
 
     "general_info": "General Information",
-    "first_name": "First Name",
+    "first_name": "Full Name",
     "last_name": "Last Name",
     "phone": "Phone Number",
     "address": "Address",
@@ -88,7 +88,7 @@
     "enter_your_zip": "Enter Your Zip Code",
     "enter_your_country": "Enter Your Country",
     "save": "Save",
-    "security_info": "Security Info",
+    "security_info": "Forgot Password",
     "security_question": "Security questions",
     "choose": "Choose...",
     "petname": "What was the name of your first pet",
@@ -105,6 +105,7 @@
     "enter_your_fullname": "Enter Your Full name",
     "enter_current_password": "Enter Current Password",
     "save_verify": "Save and Verify Account",
+    "reset_password": "Reset Password",
 
     
     "email_required": "The email field is required.",
