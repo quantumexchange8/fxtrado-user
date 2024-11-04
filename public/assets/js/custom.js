@@ -197,7 +197,7 @@ async function loadCandleStickData(currentSymbol) {
     latestCandleTime = new Date(data[data.length - 1].Date).getTime() / 1000;
 
     const candles = data.map(candle => ({
-      time: parseInt(candle.local_date),
+      time: parseInt(candle.Date),
       open: parseFloat(candle.Open),
       high: parseFloat(candle.High),
       low: parseFloat(candle.Low),
