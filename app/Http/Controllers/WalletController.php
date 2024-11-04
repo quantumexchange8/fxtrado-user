@@ -62,6 +62,7 @@ class WalletController extends Controller
             'orderNumber' => $transaction_id,
             'userId' => $user->id,
             'merchantId' => $selectedPayout['merchantId'],
+            'appId' => $selectedPayout['appId'],
             'vCode' => $vCode,
             'token' => $token,
             'userName' => $user->name,
