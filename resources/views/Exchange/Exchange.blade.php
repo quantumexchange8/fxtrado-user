@@ -660,7 +660,7 @@
     function getWebSocketUrl() {
       const appEnv = "{{ env('APP_ENV') }}"; // Make sure this is rendered server-side
       return appEnv === 'production' 
-          ? 'wss://fxtrado-backend.currenttech.pro/forex_pair' 
+          ? 'wss://backend.fxtrado.com/forex_pair'
           : 'ws://localhost:3000/forex_pair';
     }
 

@@ -50,7 +50,7 @@ class WalletController extends Controller
         $payoutSetting = config('payment-gateway');
         $domain = $_SERVER['HTTP_HOST'];
 
-        if ($domain === 'fxtrado-user.com') {
+        if ($domain === 'user.fxtrado.com') {
             $selectedPayout = $payoutSetting['live'];
         } else {
             $selectedPayout = $payoutSetting['staging'];

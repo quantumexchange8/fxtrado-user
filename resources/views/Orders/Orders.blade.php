@@ -362,7 +362,7 @@
         function getWebSocketUrl() {
           const appEnv = "{{ env('APP_ENV') }}"; // Make sure this is rendered server-side
           return appEnv === 'production' 
-              ? 'wss://fxtrado-backend.currenttech.pro/getOrder' 
+              ? 'wss://backend.fxtrado.com/getOrder'
               : 'ws://localhost:3000/getOrder';
         }
 
