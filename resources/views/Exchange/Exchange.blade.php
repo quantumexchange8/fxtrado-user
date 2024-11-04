@@ -3,9 +3,26 @@
 
 <style>
 
+    .lotstyle2 {
+      display: block;
+    }
+
   @media (max-width: 768px) {
     .mobileHidden {
       display: none !important;
+    }
+
+    .h2style {
+      margin-bottom: 10px !important;
+    }
+    .lotstyle {
+      margin-bottom: 10px !important;
+    }
+    .lotstyle2 {
+      display: none;
+    }
+    .gridgapstyle {
+      gap: 32px !important;
     }
   }
 </style>
@@ -525,53 +542,27 @@
             <div class="tab-content" id="pills-tabContent">
               <div class="tab-pane fade show active" id="pills-market-order" role="tabpanel"
                 aria-labelledby="pills-market-order-tab">
-                <div class="exchange__widget__order">
+                <div class="exchange__widget__order gridgapstyle">
+                  <div class="exchange__widget__order-note-item lotstyle">
+                    <p>{{ __('lot_size') }}</p>
+                    <input id="order-amount" type="number" min="0.01" step="0.01" value="0.01" class="form-control" placeholder="Amount">
+                  </div>
+                  <div class="exchange__widget__order-note-item lotstyle2">
+                    
+                  </div>
                   <div class="exchange__widget__order-note">
-                    <h2><img src="assets/img/svg-icon/buy.svg" class="svgInject" alt="svg">{{ __('quick_buy') }}  </h2> 
-                    <div class="exchange__widget__order-note-item">
-                      <p>{{ __('lot_size') }}</p>
-                      <input id="order-amount" type="number" min="0.01" step="0.01" value="0.01" class="form-control" placeholder="Amount">
-                      {{-- <div class="exchange__widget__order-buy-coin"> --}}
-                        {{-- <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
-                          BTC
-                        </button> --}}
-                        {{-- <div class="dropdown-menu">
-                          <a class="dropdown-item" href="#!">btc</a>
-                          <a class="dropdown-item" href="#!">abt</a>
-                          <a class="dropdown-item" href="#!">act</a>
-                          <a class="dropdown-item" href="#!">actn</a>
-                          <a class="dropdown-item" href="#!">add</a>
-                          <a class="dropdown-item" href="#!">agi</a>
-                          <a class="dropdown-item" href="#!">amp</a>
-                          <a class="dropdown-item" href="#!">auto</a>
-                          <a class="dropdown-item" href="#!">bab</a>
-                          <a class="dropdown-item" href="#!">band</a>
-                          <a class="dropdown-item" href="#!">bch</a>
-                          <a class="dropdown-item" href="#!">bdl</a>
-                          <a class="dropdown-item" href="#!">beam</a>
-                          <a class="dropdown-item" href="#!">bnty</a>
-                          <a class="dropdown-item" href="#!">btcd</a>
-                          <a class="dropdown-item" href="#!">btch</a>
-                          <a class="dropdown-item" href="#!">btcz</a>
-                          <a class="dropdown-item" href="#!">cdn</a>
-                          <a class="dropdown-item" href="#!">chain</a>
-                          <a class="dropdown-item" href="#!">clam</a>
-                          <a class="dropdown-item" href="#!">cob</a>
-                          <a class="dropdown-item" href="#!">cvc</a>
-                          <a class="dropdown-item" href="#!">dew</a>
-                        </div> --}}
-                      {{-- </div> --}}
-                    </div>
+                    <h2 class="h2style"><img src="assets/img/svg-icon/buy.svg" class="svgInject" alt="svg">{{ __('quick_buy') }}  </h2> 
+                    
                     <button id="buyButton" class="btn-green" type="button" onclick="buyOrder()">
                       {{ __('buy') }}
                       <span id="ask-price">0.0000</span>
                     </button>
                   </div>
                   <div class="exchange__widget__order-note">
-                    <h2><img src="assets/img/svg-icon/sell.svg" class="svgInject" alt="svg">{{ __('quick_sell') }} </h2>
-                    <div class="exchange__widget__order-note-item" style="height: 52px">
+                    <h2 class="h2style"><img src="assets/img/svg-icon/sell.svg" class="svgInject" alt="svg">{{ __('quick_sell') }} </h2>
+                    {{-- <div class="exchange__widget__order-note-item" style="height: 52px">
                       
-                    </div>
+                    </div> --}}
                     
                     <button id="sellButton" class="btn-red" type="button" onclick="sellOrder()"> 
                       {{ __('sell') }}

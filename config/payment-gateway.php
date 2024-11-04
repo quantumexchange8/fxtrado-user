@@ -11,7 +11,7 @@ return [
     'live' => [
         'paymentUrl' => 'https://securepay.ttbvnk.com/',
         'appId' => 'fxtrado',
-        'ttKey' => '',
-        'merchantId' => '4'
+        'ttKey' => '5uBp33lSYYOUjiEhkFmU2yIApVO0GNlWl4JiCZAOL5mpNuMcyD',
+        'merchantId' => '5'
     ],
 ];

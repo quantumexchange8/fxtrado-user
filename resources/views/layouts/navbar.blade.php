@@ -1,6 +1,6 @@
 <style>
   @media (min-width: 768px) {
-        .language {
+        .language-mobile {
             display: none !important;
         }
     }
@@ -53,7 +53,7 @@
           <span class="navigation__item-label">{{ __('profile') }}</span>
         </a>
       </li>
-      <li class="navigation__item language" style="display: flex;items-center" onclick="toggleLanguage()">
+      <li class="navigation__item language-mobile" style="display: flex;items-center" onclick="toggleLanguage()">
         <span class="navigation__item-icon-wrapper">
           <i class="fa-solid fa-language" style="width: 40px;height:30px;cursor: pointer;color:white"></i>
         </span>

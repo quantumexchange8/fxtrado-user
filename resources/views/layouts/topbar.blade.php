@@ -42,11 +42,11 @@
             </div>
             <div class="header__user-profile-text">
                 <h2>{{Auth::user()->name}}</h2>
-                @if (Auth::user()->email_verified_at != null)
+                {{-- @if (Auth::user()->email_verified_at != null)
                     <span><img src="assets/img/svg-icon/check.svg" class="svgInject" alt="svg">{{ __('Verified') }} </span>
                 @else
                     <span style="color: #f87171"><img src="assets/img/svg-icon/check-error.svg" class="svgInject" alt="svg">{{ __('unverified') }} </span>
-                @endif
+                @endif --}}
             </div>
             </div>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">

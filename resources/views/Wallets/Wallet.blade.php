@@ -22,7 +22,7 @@
 
         @include('layouts.topbar')
 
-        @if ( Auth::user()->email_verified_at == null)
+        {{-- @if ( Auth::user()->email_verified_at == null)
           <div class="col-md-12">
             <div class="exchange__widget" style="background: #ca8a04;border-radius:6px">
               <div style="display: flex; gap:8px; align-items:center">
@@ -30,7 +30,7 @@
               </div>
             </div>
           </div>
-        @endif
+        @endif --}}
         <div class="col-md-12">
           <div class="exchange__widget">
             <h2 class="exchange__widget-title">{{ __('account') }}</h2>
@@ -49,11 +49,12 @@
                     </form>
 
                     {{-- withdrawal --}}
-                    @if ( Auth::user()->email_verified_at == null )
+                    {{-- @if ( Auth::user()->email_verified_at == null )
                       <button class="btn-red" disabled>{{ __('withdraw') }}</button>
                     @else
                       <button class="btn-red">{{ __('withdraw') }}</button>
-                    @endif
+                    @endif --}}
+                    <button class="btn-red">{{ __('withdraw') }}</button>
                     
                 </div>
                 {{-- <div class="col-lg-12 col-xl-6">

@@ -14,7 +14,7 @@
 
                 <div class="exchange__wrapper">
                     <div class="container-fluid">
-                      <div class="row sm-gutters">
+                      <div class="row sm-gutters" style="justify-content: center">
                         
                         <div class="col-md-6">
                           <div class="exchange__widget">
@@ -29,41 +29,20 @@
                                       {{-- <span><img src="assets/img/svg-icon/edit.svg" class="svgInject" alt="svg"></span> --}}
                                     </div>
                                   </div>
-                                  @if ($user->email_verified_at == null)
-                                    <div class="col-md-12" style="display: flex; gap:4px; flex-direction:column;">
-                                      {{-- <div style="display: flex; gap:24px; align-items:center">
-                                        <label for="email">Verify Account</label>
-                                        <button class="type" style="margin-top: 0px">Verify</button>
-                                      </div> --}}
-                                      <div style="display: flex; gap:8px;">
-                                        <i class="fa fa-exclamation-circle" style="color: white" aria-hidden="true"></i> <span class="text-white text-xs" style="font-size:14px">{{ __('send_email') }}.</span>
-                                      </div>
-                                    </div>
-                                  @endif
-                                  <div class="col-md-6">
+                                  
+                                  <div class="col-md-12">
                                     <label for="firstName">{{ __('first_name') }}</label>
                                     <input type="text" name="firstName" value="{{ $user->name}}" class="form-control" id="firstName" placeholder="First Name">
                                   </div>
-                                  <div class="col-md-6">
-                                    <label for="lastName">{{ __('last_name') }}</label>
-                                    <input type="text" name="lastName" value="{{ $user->last_name }}"  class="form-control" id="lastName" placeholder="{{ __('last_name') }}">
+                                  <div class="col-md-12">
+                                    <label for="email">{{ __('email') }}</label>
+                                    <input type="email" name="email" value="{{ $user->email }}" class="form-control" id="email" placeholder="{{ __('enter_your_email') }}">
                                   </div>
-                                  @if ($user->email_verified_at !== null)
-                                    <div class="col-md-12">
-                                      <label for="email">{{ __('email') }}</label>
-                                      <input type="email" name="email" value="{{ $user->email }}" class="form-control" id="email" placeholder="{{ __('enter_your_email') }}" disabled>
-                                    </div>
-                                  @else 
-                                    <div class="col-md-12">
-                                      <label for="email">{{ __('email') }}</label>
-                                      <input type="email" name="email" value="{{ $user->email }}" class="form-control" id="email" placeholder="{{ __('enter_your_email') }}">
-                                    </div>
-                                  @endif
                                   <div class="col-md-12">
                                     <label for="number">{{ __('phone') }}</label>
                                     <input type="number" name="number" value="{{ $user->phone_number }}" class="form-control" id="number" placeholder="{{ __('enter_your_phone') }}">
                                   </div>
-                                  <div class="col-md-12">
+                                  {{-- <div class="col-md-12">
                                     <label for="address">{{ __('address') }} </label>
                                     <input type="text" name="address" value="{{ $user->address }}" class="form-control" id="address" placeholder="{{ __('enter_your_address') }}">
                                   </div>
@@ -82,23 +61,16 @@
                                   <div class="col-md-6">
                                     <label for="country">{{ __('country') }} </label>
                                     <input type="text" name="country" value="{{ $user->country }}" class="form-control" id="country" placeholder="{{ __('enter_your_country') }}">
+                                  </div> --}}
+                                  <div class="col-md-12">
+                                    <button type="submit" id="saveVerifyButton">{{ __('save') }}</button>
                                   </div>
-                                  @if ($user->email_verified_at == null)
-                                    <input type="text" hidden name="verifyAcc" value="{{ 'verifyUser' }}" class="form-control" id="verifyAcc">
-                                    <div class="col-md-12">
-                                      <button type="submit" id="saveVerifyButton">{{ __('save_verify') }}</button>
-                                    </div>
-                                  @else
-                                    <div class="col-md-12">
-                                      <button type="submit" id="saveVerifyButton">{{ __('save') }}</button>
-                                    </div>
-                                  @endif
                                 </div>
                               </form>
                             </div>
                           </div>
                         </div>
-                        <div class="col-md-6">
+                        {{-- <div class="col-md-6">
                           <div class="exchange__widget">
                             <h2 class="exchange__widget-title">{{ __('security_info') }}</h2>
                             <div id="errors"></div>
@@ -107,49 +79,16 @@
                               <form id="securityForm" action="{{ route('updateSecurity') }}" method="POST">
                                 @csrf
                                 <div class="row">
-                                  <div class="col-md-6">
-                                    <label for="securityOne">{{ __('security_question') }}</label>
-                                    <select id="securityOne" name="securityOne" class="custom-select">
-                                      <option selected="">{{ __('choose') }}</option>
-                                      <option>{{ __('petname') }}?</option>
-                                      <option>{{ __('mothername') }}?</option>
-                                      <option>{{ __('schoolname') }}?</option>
-                                      <option>{{ __('travelname') }}?</option>
-                                    </select>
-                                  </div>
-                                  <div class="col-md-6">
-                                    <label for="securityAnsOne">{{ __('answer') }}</label>
-                                    <input id="securityAnsOne" name="securityAnsOne" type="text" class="form-control" placeholder="{{ __('enter_your_answer') }}">
-                                  </div>
                                   <div class="col-md-12">
-                                    <label for="username">{{ __('username') }}</label>
-                                    <input type="text" class="form-control" name="username" id="username" placeholder="{{ __('enter_your_username') }}">
-                                  </div>
-                                  <div class="col-md-12">
-                                    <label for="currentPassword">{{ __('current_password') }}</label>
-                                    <input type="password" class="form-control" name="currentPassword" id="currentPassword"
-                                      placeholder="{{ __('enter_current_password') }} ">
-                                    @error('currentPassword')
-                                      <div class="text-danger">{{ $message->errors->currentPassword }}</div>
-                                    @enderror
-                                  </div>
-                                  <div class="col-md-12">
-                                    <label for="password">{{ __('new_password') }}</label>
-                                    <input type="password" class="form-control" id="password" name="password" placeholder="{{ __('enter_your_password') }}">
-                                  </div>
-                                  <div class="col-md-12">
-                                    <label for="password_confirmation">{{ __('confirm_new_password') }}</label>
-                                    <input type="password" class="form-control" id="password_confirmation" name="password_confirmation"
-                                      placeholder="{{ __('confirm_new_password') }}">
-                                  </div>
-                                  <div class="col-md-12">
-                                    <button type="submit">{{ __('save') }}</button>
+                                    <button type="submit" >
+                                      {{ __('reset_password') }}
+                                    </button>
                                   </div>
                                 </div>
                               </form>
                             </div>
                           </div>
-                        </div>
+                        </div> --}}
                       </div>
                     </div>
                 </div>
