@@ -9,8 +9,9 @@ return [
         // 'language' => 'en',
     ],
     'live' => [
-        'paymentUrl' => 'https://securepay.ttpays.io',
-        'appId' => 'ttpay',
-        'merchantId' => '1'
+        'paymentUrl' => 'https://securepay.ttbvnk.com/',
+        'appId' => 'fxtrado',
+        'ttKey' => '',
+        'merchantId' => '4'
     ],
 ];

@@ -13,6 +13,7 @@ class HistoryChart extends Model
     {
         return [
             'Date' => 'timestamp',
+            'local_date' => 'timestamp',
         ];
     }
 }

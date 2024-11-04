@@ -39,6 +39,7 @@ class RegisterController extends Controller
             'email' => $request->email,
             'role' => 'member',
             'password' => Hash::make($request->password),
+            'status' => 'unverify',
         ]);
 
         $wallet = Wallet::create([
