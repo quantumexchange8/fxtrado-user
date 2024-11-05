@@ -84,6 +84,10 @@ window.selectSymbol = async function (currencyPair) {
   // Load candlestick data and wait for it to finish
   await loadCandleStickData(currentSymbol); // Initial load
 
+  // setInterval(() => {
+  //   loadCandleStickData(currentSymbol);
+  // }, 30000);
+
   // Fetch real-time data and set interval
   await fetchRealTimeData(currentSymbol);
 
@@ -222,7 +226,11 @@ async function loadCandleStickData(currentSymbol) {
   }
 }
 
-window.liveUpdateCandlestick = function(data) {
+window.liveUpdateCandlestick = function(data, spreadFactor = 0) { // Default spreadAdjustment to 0 if not provided
+  
+  const adjustedBid = parseFloat(data.bid) + spreadFactor;
+  const adjustedAsk = parseFloat(data.ask) + spreadFactor;
+
   // console.log('Updating candlestick with data:', data);
   const currentTime = Math.floor(Date.now() / 1000);
   const startOfMinute = Math.floor(currentTime / 60) * 60;
@@ -230,17 +238,17 @@ window.liveUpdateCandlestick = function(data) {
   if (latestCandleTime < startOfMinute) {
     latestCandleTime = startOfMinute;
     currentCandle = {
-      open: data.bid,
-      high: Math.max(data.bid, data.ask),
-      low: Math.min(data.bid, data.ask),
-      close: data.bid,
+      open: adjustedBid,
+      high: Math.max(adjustedBid, adjustedAsk),
+      low: Math.min(adjustedBid, adjustedAsk),
+      close: adjustedBid,
       time: startOfMinute,
     };
   } else {
     // Update the high and low with max/min of current high/low and new bid/ask
-    currentCandle.high = Math.max(currentCandle.high, data.bid, data.ask);
-    currentCandle.low = Math.min(currentCandle.low, data.bid, data.ask);
-    currentCandle.close = data.bid; // Close price updated with the latest bid
+    currentCandle.high = Math.max(currentCandle.high, adjustedBid, adjustedAsk);
+    currentCandle.low = Math.min(currentCandle.low, adjustedBid, adjustedAsk);
+    currentCandle.close = adjustedBid; // Close price updated with the latest adjusted bid
   }
 
   candleSeries.update({

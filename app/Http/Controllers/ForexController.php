@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ForexPair;
+use App\Models\GroupSymbol;
 use App\Models\HistoryChart;
 use App\Models\Order;
 use App\Models\Wallet;
@@ -21,6 +22,8 @@ class ForexController extends Controller
     {
         $user = Auth::user();
         $allPairs = ForexPair::where('status', 'active')->get();
+        $groupSymbol = GroupSymbol::where('group_name', $user->group)->get();
+        
         $orderHistories = Order::where('user_id', $user->id)
             ->where('status', 'closed')
             ->latest()
@@ -30,6 +33,7 @@ class ForexController extends Controller
         return view('Exchange/Exchange', [
             'allPairs' => $allPairs,
             'orderHistories' => $orderHistories,
+            'groupSymbol' => $groupSymbol,
         ]);
     }
 
@@ -137,7 +141,8 @@ class ForexController extends Controller
 
     public function getCandles(Request $request)
     {
-        
+        $user = Auth::user();
+
         $symbol = $request->symbol;
         $currentDate = Carbon::now('UTC');
 
@@ -155,6 +160,7 @@ class ForexController extends Controller
         if ($currentDate->between($startOfPeriod, $endOfPeriod)) {
             // current date data
             $candle = HistoryChart::where('Symbol', $symbol)
+                    ->where('group', $user->group)
                     ->whereDay('Date', $day)     // Filters records for the current day
                     ->whereMonth('Date', $month) // Filters for the current month
                     ->whereYear('Date', $year)   // Filters for the current year
