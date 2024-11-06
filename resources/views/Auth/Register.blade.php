@@ -1,11 +1,21 @@
 @extends('layouts.guest')
 @section('contents')
+<style>
+  .logoSize {
+      width: 50%;
+      margin-bottom: 20px
+  }
+</style>
+
 <div class="exchange__wrapper">
     <div class="container-fluid">
       <div class="row sm-gutters">
         <div class="col-md-12">
           <div class="exchange__widget_center">
             <div class="exchange__widget exchange-email-verify">
+              <div>
+                <img src="assets/img/fxtrado_logo.svg" class="logoSize" alt="fxtrado logo">
+              </div>
               <h2>{{ __('get_started_now') }}</h2>
               <form action="{{ route('storeRegister') }}" method="POST" id="registerForm">
                 @csrf

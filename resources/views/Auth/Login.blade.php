@@ -1,8 +1,31 @@
 @extends('layouts.guest')
 @section('contents')
+
+<style>
+    .language-selector {
+        background-color: black;
+        border: none;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        padding: 5px;
+    }
+
+    .language-selector:focus {
+        outline: none;
+    }
+    .logoSize {
+        width: 50%;
+        margin-bottom: 20px
+    }
+</style>
+
     <div class="col-md-12">
         <div class="exchange__widget_center">
             <div class="exchange__widget exchange-email-verify">
+                <div>
+                    <img src="assets/img/fxtrado_logo.svg" class="logoSize" alt="fxtrado logo">
+                </div>
                 <h2>{{ __('welcome') }}</h2>
                 {{-- <a href="#" class="google-button"><img src="assets/img/svg-icon/google.svg" class="svgInject" alt="svg">
                 login
@@ -12,7 +35,16 @@
                 <form action="{{ route('store') }}" method="POST" id="loginForm">
                     @csrf
                     <div style="display: flex;justify-content:flex-end">
-                        <i class="fa-solid fa-language" style="width: 50px;height:40px;cursor: pointer;" onclick="toggleLanguage()"></i>
+                        <select class="language-selector" onchange="changeLanguage(event)">
+                            <option value="en" {{ session('locale') === 'en' ? 'selected' : '' }}>English</option>
+                            <option value="tw" {{ session('locale') === 'tw' ? 'selected' : '' }}>繁體中文</option>
+                            <option value="cn" {{ session('locale') === 'cn' ? 'selected' : '' }}>简体中文</option>
+                            <option value="jpy" {{ session('locale') === 'jpy' ? 'selected' : '' }}>日本語</option>
+                            <option value="korea" {{ session('locale') === 'korea' ? 'selected' : '' }}>한국인</option>
+                            <option value="thai" {{ session('locale') === 'thai' ? 'selected' : '' }}>แบบไทย</option>
+                            <option value="vn" {{ session('locale') === 'vn' ? 'selected' : '' }}>Tiếng Việt</option>
+                            <!-- Add more languages if necessary -->
+                        </select>
                     </div>
                     <div class="text-left">
                         <label for="email">{{ __('email') }}</label>
@@ -49,15 +81,11 @@
     </script>
 
     <script>
-        function toggleLanguage() {
-            // Get current language from session or default to 'en'
-            const currentLang = "{{ session('locale', 'en') }}";
-            
-            // Determine next language based on current language
-            const nextLang = currentLang === 'en' ? 'tw' : 'en';
+        function changeLanguage(event) {
+            const selectedLang = event.target.value;
 
-            // Redirect to the switch language route
-            window.location.href = `/switch-language/${nextLang}`;
+            // Redirect to the appropriate route to switch language
+            window.location.href = `/switch-language/${selectedLang}`;
         }
     </script>
 @endsection

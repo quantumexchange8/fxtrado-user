@@ -8,6 +8,20 @@
             padding-left: 0px;
         }
     }
+
+    .language-selector {
+        background-color: black;
+        border: none;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        padding: 5px;
+    }
+
+    .language-selector:focus {
+        outline: none;
+    }
+
 </style>
 
 <div class="col-md-12">
@@ -22,7 +36,16 @@
             <img src="assets/img/svg-icon/left-bar.svg" class="svgInject" alt="svg">
             </div>
             <div class="header__user-profile language">
-                <i class="fa-solid fa-language" style="width: 50px;height:40px;cursor: pointer;color:white" onclick="toggleLanguage()"></i>
+                <select class="language-selector" onchange="changeLanguage(event)">
+                    <option value="en" {{ session('locale') === 'en' ? 'selected' : '' }}>English</option>
+                        <option value="tw" {{ session('locale') === 'tw' ? 'selected' : '' }}>繁體中文</option>
+                        <option value="cn" {{ session('locale') === 'cn' ? 'selected' : '' }}>简体中文</option>
+                        <option value="jpy" {{ session('locale') === 'jpy' ? 'selected' : '' }}>日本語</option>
+                        <option value="korea" {{ session('locale') === 'korea' ? 'selected' : '' }}>한국인</option>
+                        <option value="thai" {{ session('locale') === 'thai' ? 'selected' : '' }}>แบบไทย</option>
+                        <option value="vn" {{ session('locale') === 'vn' ? 'selected' : '' }}>Tiếng Việt</option>
+                    <!-- Add more languages if necessary -->
+                </select>
             </div>
             <div class="header__user-balance">
             <div class="header__user-balance-icon">
