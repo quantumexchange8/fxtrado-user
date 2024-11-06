@@ -40,6 +40,7 @@ class RegisterController extends Controller
             'role' => 'member',
             'password' => Hash::make($request->password),
             'status' => 'unverify',
+            'group' => 'Std' //temp std group
         ]);
 
         $wallet = Wallet::create([

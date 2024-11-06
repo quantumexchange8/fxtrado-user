@@ -36,7 +36,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/getChartData', [ForexController::class, 'getChartData'])->name('getChartData');
     Route::get('/getCandles', [ForexController::class, 'getCandles'])->name('getCandles');
     Route::get('/getRealTimeOHLC', [ForexController::class, 'getRealTimeOHLC'])->name('getRealTimeOHLC');
-    
+    Route::get('/group-symbols', [ForexController::class, 'getGroupSymbols'])->name('getGroupSymbols');
+
     // Orders
     Route::get('/orders', [OrderController::class, 'orders'])->name('orders');
 

@@ -342,6 +342,7 @@
           }
       </script>
     @endif
+    
     <script>
         let socket;
         let reconnectInterval = 5000;

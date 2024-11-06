@@ -644,7 +644,25 @@
   </script>
 
   <script>
-    const groupSymbols = @json($groupSymbol); // Now available as a JavaScript array of objects
+    async function fetchGroupSymbols() {
+        try {
+            const response = await fetch("{{ route('getGroupSymbols') }}");
+            const data = await response.json();
+            
+            // Update the groupSymbols variable or perform any UI updates
+            window.groupSymbols = data;
+
+            // If you need to update UI elements, do it here
+        } catch (error) {
+            console.error('Error fetching group symbols:', error);
+        }
+    }
+
+    // Call this function whenever you want to refresh groupSymbol data
+    fetchGroupSymbols();
+
+    // Optionally, set up an interval to periodically refresh data
+    setInterval(fetchGroupSymbols, 60000); // Fetch every 60 seconds
   </script>
 
   <script>
@@ -696,10 +714,10 @@
                 
                 const adjustedAsk = parseFloat(data.ask) + spreadFactor;
                 const adjustedBid = parseFloat(data.bid) + spreadFactor;
-  
+
                 // Update the ask price in the selected-pair-container div
-                document.getElementById('ask-price').innerText = adjustedAsk;
-                document.getElementById('bid-price').innerText = adjustedBid;
+                document.getElementById('ask-price').innerText = adjustedAsk.toFixed(data.digits);
+                document.getElementById('bid-price').innerText = adjustedBid.toFixed(data.digits);
   
                 liveUpdateCandlestick(data, spreadFactor);
                 

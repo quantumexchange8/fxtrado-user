@@ -22,7 +22,7 @@ class ForexController extends Controller
     {
         $user = Auth::user();
         $allPairs = ForexPair::where('status', 'active')->get();
-        $groupSymbol = GroupSymbol::where('group_name', $user->group)->get();
+        
         
         $orderHistories = Order::where('user_id', $user->id)
             ->where('status', 'closed')
@@ -33,8 +33,15 @@ class ForexController extends Controller
         return view('Exchange/Exchange', [
             'allPairs' => $allPairs,
             'orderHistories' => $orderHistories,
-            'groupSymbol' => $groupSymbol,
         ]);
+    }
+
+    public function getGroupSymbols()
+    {
+        $user = Auth::user();
+        $groupSymbols = GroupSymbol::where('group_name', $user->group)->where('status', 'active')->get();
+
+        return response()->json($groupSymbols);
     }
 
     public function openOrders(Request $request)
@@ -57,6 +64,7 @@ class ForexController extends Controller
                 'price' => $request->price,
                 'open_time' => now(),
                 'status' => 'open',
+                'group_name' => $user->group,
             ]);
 
             return response()->json(['success' => true, 'message' => 'Order successfully placed']);
