@@ -214,13 +214,6 @@ async function loadCandleStickData(currentSymbol) {
     });
     candleSeries.setData(candles);
 
-    // Optionally update volume data if applicable
-    // const volumes = data.map(candle => ({
-    //   time: new Date(candle.Date).getTime() / 1000,
-    //   value: Math.random() * 100,
-    //   color: candle.Close < candle.Open ? 'rgba(255, 128, 159, 0.25)' : 'rgba(107, 255, 193, 0.25)',
-    // }));
-    // volumeSeries.setData(volumes);
   } catch (error) {
     console.error("Error loading candlestick data:", error);
   }

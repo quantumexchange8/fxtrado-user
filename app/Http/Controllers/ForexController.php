@@ -105,6 +105,8 @@ class ForexController extends Controller
             $decimal = 100000;
         } elseif ($symbol->digits === 3) {
             $decimal = 1000;
+        } elseif ($symbol->digits === 2) {
+            $decimal = 100;
         } elseif ($symbol->digits === 1) {
             $decimal = 10;
         }

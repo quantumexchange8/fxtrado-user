@@ -662,7 +662,7 @@
     fetchGroupSymbols();
 
     // Optionally, set up an interval to periodically refresh data
-    setInterval(fetchGroupSymbols, 60000); // Fetch every 60 seconds
+    setInterval(fetchGroupSymbols, 5000); // Fetch every 60 seconds
   </script>
 
   <script>
