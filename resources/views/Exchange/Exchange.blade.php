@@ -701,27 +701,31 @@
             const selectedSymbolElement = document.getElementById('selected-symbol');
             const selectedSymbol = selectedSymbolElement.innerText.trim();
             
-            const selectedSymbolData = groupSymbols.find(item => item.symbol === selectedSymbol);
-
-            if (selectedSymbolData) {
-              const spreadAdjustment = selectedSymbolData.spread;
-
-              // Call the function to update the corresponding table row
-              updateTableRow(data.symbol, data.bid, data.ask, data.digits);
-              
-              if (data.symbol === selectedSymbol) {
-                const spreadFactor = spreadAdjustment / Math.pow(10, data.digits);
-                
-                const adjustedAsk = parseFloat(data.ask) + spreadFactor;
-                const adjustedBid = parseFloat(data.bid) + spreadFactor;
-
-                // Update the ask price in the selected-pair-container div
-                document.getElementById('ask-price').innerText = adjustedAsk.toFixed(data.digits);
-                document.getElementById('bid-price').innerText = adjustedBid.toFixed(data.digits);
+            if (window.groupSymbols) {
+              const selectedSymbolData = window.groupSymbols.find(item => item.symbol === selectedSymbol);
   
-                liveUpdateCandlestick(data, spreadFactor);
+              if (selectedSymbolData) {
+                const spreadAdjustment = selectedSymbolData.spread;
+  
+                // Call the function to update the corresponding table row
+                updateTableRow(data.symbol, data.bid, data.ask, data.digits);
                 
+                if (data.symbol === selectedSymbol) {
+                  const spreadFactor = spreadAdjustment / Math.pow(10, data.digits);
+                  
+                  const adjustedAsk = parseFloat(data.ask) + spreadFactor;
+                  const adjustedBid = parseFloat(data.bid) + spreadFactor;
+  
+                  // Update the ask price in the selected-pair-container div
+                  document.getElementById('ask-price').innerText = adjustedAsk.toFixed(data.digits);
+                  document.getElementById('bid-price').innerText = adjustedBid.toFixed(data.digits);
+    
+                  liveUpdateCandlestick(data, spreadFactor);
+                  
+                }
               }
+            } else {
+              console.error('groupSymbols is not defined');
             }
       
         };
