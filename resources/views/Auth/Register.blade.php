@@ -16,6 +16,18 @@
               <div>
                 <img src="assets/img/fxtrado_logo.svg" class="logoSize" alt="fxtrado logo">
               </div>
+              <div style="display:flex; justify-content:end">
+                <select class="language-selector" onchange="changeLanguage(event)">
+                  <option value="en" {{ session('locale') === 'en' ? 'selected' : '' }}>English</option>
+                      <option value="tw" {{ session('locale') === 'tw' ? 'selected' : '' }}>繁體中文</option>
+                      <option value="cn" {{ session('locale') === 'cn' ? 'selected' : '' }}>简体中文</option>
+                      <option value="jpy" {{ session('locale') === 'jpy' ? 'selected' : '' }}>日本語</option>
+                      <option value="korea" {{ session('locale') === 'korea' ? 'selected' : '' }}>한국인</option>
+                      <option value="thai" {{ session('locale') === 'thai' ? 'selected' : '' }}>แบบไทย</option>
+                      <option value="vn" {{ session('locale') === 'vn' ? 'selected' : '' }}>Tiếng Việt</option>
+                  <!-- Add more languages if necessary -->
+                </select>
+              </div>
               <h2>{{ __('get_started_now') }}</h2>
               <form action="{{ route('storeRegister') }}" method="POST" id="registerForm">
                 @csrf
@@ -57,7 +69,15 @@
     const translations = {
       processing: "{{ __('processing') }}"
     };
-</script>
+  </script>
+
+  <script>
+    function changeLanguage(event) {
+        const selectedLang = event.target.value;
+        // Redirect to the appropriate route to switch language
+        window.location.href = `/switch-language/${selectedLang}`;
+    }
+  </script>
 
   <script>
 
