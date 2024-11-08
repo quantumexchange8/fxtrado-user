@@ -156,25 +156,26 @@ class ForexController extends Controller
         $symbol = $request->symbol;
         $currentDate = Carbon::now('UTC');
 
-
+        // Start of today's date (00:00) in UTC
+        $startOfToday = $currentDate->copy()->startOfDay();
         
         $startOfPeriod = $currentDate->copy()->subDays($currentDate->dayOfWeek)->setTime(17, 0, 0);
         $endOfPeriod = $startOfPeriod->copy()->addDays(5);
 
-        $day = $currentDate->day;
-        $month = $currentDate->month;
-        $year = $currentDate->year;
-
+        // Start and end of yesterday's date (00:00 to 23:59:59) in UTC
+        $startOfYesterday = $currentDate->copy()->subDay()->startOfDay();
+        $endOfYesterday = $startOfToday->copy()->subSecond(); // 23:59:59 of the previous day
         
 
         if ($currentDate->between($startOfPeriod, $endOfPeriod)) {
             // current date data
             $candle = HistoryChart::where('Symbol', $symbol)
-                    ->where('group', $user->group)
-                    ->whereDay('Date', $day)     // Filters records for the current day
-                    ->whereMonth('Date', $month) // Filters for the current month
-                    ->whereYear('Date', $year)   // Filters for the current year
-                    ->get();
+                ->where('group', $user->group)
+                ->where(function($query) use ($startOfToday, $startOfYesterday, $endOfYesterday, $currentDate) {
+                    $query->whereBetween('Date', [$startOfYesterday, $endOfYesterday]) // Full day of yesterday
+                          ->orWhereBetween('Date', [$startOfToday, $currentDate]);     // From midnight today to now
+                })
+                ->get();
                     
         } else {
             // last 5 day open market data
