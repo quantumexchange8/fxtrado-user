@@ -1,6 +1,17 @@
 @extends('layouts.guest')
 @section('contents')
 <style>
+  .language-selector {
+        background-color: black;
+        border: none;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        padding: 5px;
+    }
+    .language-selector:focus {
+        outline: none;
+    }
   .logoSize {
       width: 50%;
       margin-bottom: 20px
