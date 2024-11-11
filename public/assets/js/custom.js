@@ -200,7 +200,16 @@ async function loadCandleStickData(currentSymbol) {
 
     latestCandleTime = new Date(data[data.length - 1].Date).getTime() / 1000;
 
-    const candles = data.map(candle => {
+    // Get the current timestamp (UTC time)
+    const currentTimestamp = Math.floor(new Date().getTime() / 1000); // in seconds
+
+    // Filter out candles that match the current timestamp
+    const filteredCandles = data.filter(candle => {
+      const candleTimestamp = Math.floor(new Date(candle.Date).getTime() / 1000);
+      return candleTimestamp !== currentTimestamp; // Exclude candles matching the current time
+    });
+
+    const candles = filteredCandles.map(candle => {
       // Parse the ISO string in UTC and get the timestamp in seconds
       const timestamp = Math.floor(new Date(candle.Date).getTime() / 1000);
     
@@ -243,6 +252,8 @@ window.liveUpdateCandlestick = function(data, spreadFactor = 0) { // Default spr
     currentCandle.low = Math.min(currentCandle.low, adjustedBid, adjustedAsk);
     currentCandle.close = adjustedBid; // Close price updated with the latest adjusted bid
   }
+
+  // console.log('t', currentCandle.time, 'o:', currentCandle.open, 'h', currentCandle.high, 'l', currentCandle.low, 'c', currentCandle.close)
 
   candleSeries.update({
     time: currentCandle.time,

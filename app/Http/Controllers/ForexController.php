@@ -156,6 +156,12 @@ class ForexController extends Controller
         $symbol = $request->symbol;
         $currentDate = Carbon::now('UTC');
 
+        // Normalize the current timestamp to only compare up to the minute (ignore seconds and microseconds)
+        $normalizedCurrentDate = $currentDate->copy()->setSecond(0)->setMillisecond(0);
+
+        // Format to 'Y-m-d H:i' (ignoring seconds and milliseconds)
+        $currentTimestamp = $normalizedCurrentDate->toDateTimeString(); // Format like '2024-11-11 05:48:00'
+
         // Start of today's date (00:00) in UTC
         $startOfToday = $currentDate->copy()->startOfDay();
         
@@ -169,13 +175,17 @@ class ForexController extends Controller
 
         if ($currentDate->between($startOfPeriod, $endOfPeriod)) {
             // current date data
-            $candle = HistoryChart::where('Symbol', $symbol)
+            $candleQuery  = HistoryChart::where('Symbol', $symbol)
                 ->where('group', $user->group)
                 ->where(function($query) use ($startOfToday, $startOfYesterday, $endOfYesterday, $currentDate) {
                     $query->whereBetween('Date', [$startOfYesterday, $endOfYesterday]) // Full day of yesterday
                           ->orWhereBetween('Date', [$startOfToday, $currentDate]);     // From midnight today to now
-                })
-                ->get();
+                });
+
+                 // Exclude candles with a timestamp that has the same minute as the current timestamp (ignores seconds)
+                $candleQuery->whereRaw('DATE_FORMAT(Date, "%Y-%m-%d %H:%i") != ?', [$normalizedCurrentDate->format('Y-m-d H:i')]);
+
+                $candle = $candleQuery->get();
                     
         } else {
             // last 5 day open market data
