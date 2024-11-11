@@ -644,6 +644,28 @@
   </script>
 
   <script>
+    async function fetchGroupSymbols() {
+        try {
+            const response = await fetch("{{ route('getGroupSymbols') }}");
+            const data = await response.json();
+            
+            // Update the groupSymbols variable or perform any UI updates
+            window.groupSymbols = data;
+
+            // If you need to update UI elements, do it here
+        } catch (error) {
+            console.error('Error fetching group symbols:', error);
+        }
+    }
+
+    // Call this function whenever you want to refresh groupSymbol data
+    fetchGroupSymbols();
+
+    // Optionally, set up an interval to periodically refresh data
+    setInterval(fetchGroupSymbols, 5000); // Fetch every 60 seconds
+  </script>
+
+  <script>
     let socket;
     let reconnectInterval = 1000; // Retry after 5 seconds
     let reconnectAttempts = 0;
@@ -663,7 +685,8 @@
 
         const wsUrl = getWebSocketUrl(); // Use the utility function to get the URL
         socket = new WebSocket(wsUrl); // Update this with your correct WebSocket URL
-
+        
+        
         // console.log(wsUrl) // for testing purpose
 
         socket.onopen = function() {
@@ -675,21 +698,36 @@
             // Parse the incoming data (which should be JSON)
             const data = JSON.parse(event.data);
             
-            // Call the function to update the corresponding table row
-            updateTableRow(data.symbol, data.bid, data.ask);
-
             const selectedSymbolElement = document.getElementById('selected-symbol');
             const selectedSymbol = selectedSymbolElement.innerText.trim();
             
-            if (data.symbol === selectedSymbol) {
-              
-              // Update the ask price in the selected-pair-container div
-              document.getElementById('ask-price').innerText = data.ask;
-              document.getElementById('bid-price').innerText = data.bid;
-
-              liveUpdateCandlestick(data);
-              
+            if (window.groupSymbols) {
+              const selectedSymbolData = window.groupSymbols.find(item => item.symbol === selectedSymbol);
+  
+              if (selectedSymbolData) {
+                const spreadAdjustment = selectedSymbolData.spread;
+  
+                // Call the function to update the corresponding table row
+                updateTableRow(data.symbol, data.bid, data.ask, data.digits);
+                
+                if (data.symbol === selectedSymbol) {
+                  const spreadFactor = spreadAdjustment / Math.pow(10, data.digits);
+                  
+                  const adjustedAsk = parseFloat(data.ask) + spreadFactor;
+                  const adjustedBid = parseFloat(data.bid) + spreadFactor;
+  
+                  // Update the ask price in the selected-pair-container div
+                  document.getElementById('ask-price').innerText = adjustedAsk.toFixed(data.digits);
+                  document.getElementById('bid-price').innerText = adjustedBid.toFixed(data.digits);
+    
+                  liveUpdateCandlestick(data, spreadFactor);
+                  
+                }
+              }
+            } else {
+              console.error('groupSymbols is not defined');
             }
+      
         };
 
         socket.onerror = function(error) {
@@ -709,7 +747,7 @@
     const previousPrices = {};
 
     // Function to update table rows with the bid/ask values
-    function updateTableRow(symbol, bid, ask) {
+    function updateTableRow(symbol, bid, ask, digits) {
         // Find the row with the data-symbol attribute matching the symbol (e.g., EUR/USD)
         const row = document.querySelector(`tr[data-symbol='${symbol}']`);
       
@@ -720,29 +758,39 @@
           
           // Check if bid and ask cells are found
           if (bidCell && askCell) {
+              const symbolData = groupSymbols.find(item => item.symbol === symbol);
+              const spreadAdjustment = symbolData ? symbolData.spread : 0;
+              
+              // Calculate spread factor based on the symbol's decimal places (digits)
+              const spreadFactor = spreadAdjustment / Math.pow(10, digits);
+              
+              const adjustedBid = parseFloat(bid) + spreadFactor;
+              const adjustedAsk = parseFloat(ask) + spreadFactor;
 
-              bidCell.innerText = bid;
-              askCell.innerText = ask;
+              // console.log('adjustedBid:', adjustedBid, 'bid:', bid, 'spreadFactor:', spreadFactor)
+
+              bidCell.innerText = adjustedBid.toFixed(digits);
+              askCell.innerText = adjustedAsk.toFixed(digits);
 
               // Get previous prices for this symbol
-              const prevBid = previousPrices[symbol]?.bid || 0;
-              const prevAsk = previousPrices[symbol]?.ask || 0;
+              const prevBid = previousPrices[symbol]?.adjustedBid || 0;
+              const prevAsk = previousPrices[symbol]?.adjustedAsk || 0;
 
               // Update the bid and ask values
               
 
               // Determine color change for bid
-              if (bid > prevBid || ask > prevAsk) {
+              if (adjustedBid > prevBid || adjustedAsk > prevAsk) {
                   bidCell.style.color = '#16a34a';  // Green for price increase
                   askCell.style.color = '#16a34a';  // Green for price increase
 
-              } else if (bid < prevBid || bid < prevBid) {
+              } else if (adjustedBid < prevBid || adjustedBid < prevBid) {
                   bidCell.style.color = '#dc2626';  // Red for price decrease
                   askCell.style.color = '#dc2626';  // Red for price decrease
               }
 
               // Store current prices as previous for next update
-              previousPrices[symbol] = { bid, ask };
+              previousPrices[symbol] = { adjustedBid, adjustedAsk };
           }
       } else {
           console.error(`Row not found for symbol: ${symbol}`);

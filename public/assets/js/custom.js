@@ -84,6 +84,10 @@ window.selectSymbol = async function (currencyPair) {
   // Load candlestick data and wait for it to finish
   await loadCandleStickData(currentSymbol); // Initial load
 
+  // setInterval(() => {
+  //   loadCandleStickData(currentSymbol);
+  // }, 30000);
+
   // Fetch real-time data and set interval
   await fetchRealTimeData(currentSymbol);
 
@@ -196,7 +200,16 @@ async function loadCandleStickData(currentSymbol) {
 
     latestCandleTime = new Date(data[data.length - 1].Date).getTime() / 1000;
 
-    const candles = data.map(candle => {
+    // Get the current timestamp (UTC time)
+    const currentTimestamp = Math.floor(new Date().getTime() / 1000); // in seconds
+
+    // Filter out candles that match the current timestamp
+    const filteredCandles = data.filter(candle => {
+      const candleTimestamp = Math.floor(new Date(candle.Date).getTime() / 1000);
+      return candleTimestamp !== currentTimestamp; // Exclude candles matching the current time
+    });
+
+    const candles = filteredCandles.map(candle => {
       // Parse the ISO string in UTC and get the timestamp in seconds
       const timestamp = Math.floor(new Date(candle.Date).getTime() / 1000);
     
@@ -210,19 +223,16 @@ async function loadCandleStickData(currentSymbol) {
     });
     candleSeries.setData(candles);
 
-    // Optionally update volume data if applicable
-    // const volumes = data.map(candle => ({
-    //   time: new Date(candle.Date).getTime() / 1000,
-    //   value: Math.random() * 100,
-    //   color: candle.Close < candle.Open ? 'rgba(255, 128, 159, 0.25)' : 'rgba(107, 255, 193, 0.25)',
-    // }));
-    // volumeSeries.setData(volumes);
   } catch (error) {
     console.error("Error loading candlestick data:", error);
   }
 }
 
-window.liveUpdateCandlestick = function(data) {
+window.liveUpdateCandlestick = function(data, spreadFactor = 0) { // Default spreadAdjustment to 0 if not provided
+  
+  const adjustedBid = parseFloat(data.bid) + spreadFactor;
+  const adjustedAsk = parseFloat(data.ask) + spreadFactor;
+
   // console.log('Updating candlestick with data:', data);
   const currentTime = Math.floor(Date.now() / 1000);
   const startOfMinute = Math.floor(currentTime / 60) * 60;
@@ -230,18 +240,20 @@ window.liveUpdateCandlestick = function(data) {
   if (latestCandleTime < startOfMinute) {
     latestCandleTime = startOfMinute;
     currentCandle = {
-      open: data.bid,
-      high: Math.max(data.bid, data.ask),
-      low: Math.min(data.bid, data.ask),
-      close: data.bid,
+      open: adjustedBid,
+      high: Math.max(adjustedBid, adjustedAsk),
+      low: Math.min(adjustedBid, adjustedAsk),
+      close: adjustedBid,
       time: startOfMinute,
     };
   } else {
     // Update the high and low with max/min of current high/low and new bid/ask
-    currentCandle.high = Math.max(currentCandle.high, data.bid, data.ask);
-    currentCandle.low = Math.min(currentCandle.low, data.bid, data.ask);
-    currentCandle.close = data.bid; // Close price updated with the latest bid
+    currentCandle.high = Math.max(currentCandle.high, adjustedBid, adjustedAsk);
+    currentCandle.low = Math.min(currentCandle.low, adjustedBid, adjustedAsk);
+    currentCandle.close = adjustedBid; // Close price updated with the latest adjusted bid
   }
+
+  // console.log('t', currentCandle.time, 'o:', currentCandle.open, 'h', currentCandle.high, 'l', currentCandle.low, 'c', currentCandle.close)
 
   candleSeries.update({
     time: currentCandle.time,

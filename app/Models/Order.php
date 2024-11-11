@@ -22,5 +22,6 @@ class Order extends Model
         'profit',
         'close_price',
         'closed_profit',
+        'group_name',
     ];
 }

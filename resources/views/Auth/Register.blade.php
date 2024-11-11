@@ -27,7 +27,8 @@
               <div>
                 <img src="assets/img/fxtrado_logo.svg" class="logoSize" alt="fxtrado logo">
               </div>
-              <div style="display:flex; justify-content:end">
+              <h2>{{ __('get_started_now') }}</h2>
+              <div style="display: flex; justify-content:end">
                 <select class="language-selector" onchange="changeLanguage(event)">
                   <option value="en" {{ session('locale') === 'en' ? 'selected' : '' }}>English</option>
                       <option value="tw" {{ session('locale') === 'tw' ? 'selected' : '' }}>繁體中文</option>
@@ -39,7 +40,6 @@
                   <!-- Add more languages if necessary -->
                 </select>
               </div>
-              <h2>{{ __('get_started_now') }}</h2>
               <form action="{{ route('storeRegister') }}" method="POST" id="registerForm">
                 @csrf
                 <div class="text-left">

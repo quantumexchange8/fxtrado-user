@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ForexPair;
+use App\Models\GroupSymbol;
 use App\Models\HistoryChart;
 use App\Models\Order;
 use App\Models\Wallet;
@@ -21,6 +22,8 @@ class ForexController extends Controller
     {
         $user = Auth::user();
         $allPairs = ForexPair::where('status', 'active')->get();
+        
+        
         $orderHistories = Order::where('user_id', $user->id)
             ->where('status', 'closed')
             ->latest()
@@ -31,6 +34,14 @@ class ForexController extends Controller
             'allPairs' => $allPairs,
             'orderHistories' => $orderHistories,
         ]);
+    }
+
+    public function getGroupSymbols()
+    {
+        $user = Auth::user();
+        $groupSymbols = GroupSymbol::where('group_name', $user->group)->where('status', 'active')->get();
+
+        return response()->json($groupSymbols);
     }
 
     public function openOrders(Request $request)
@@ -53,6 +64,7 @@ class ForexController extends Controller
                 'price' => $request->price,
                 'open_time' => now(),
                 'status' => 'open',
+                'group_name' => $user->group,
             ]);
 
             return response()->json(['success' => true, 'message' => 'Order successfully placed']);
@@ -93,6 +105,8 @@ class ForexController extends Controller
             $decimal = 100000;
         } elseif ($symbol->digits === 3) {
             $decimal = 1000;
+        } elseif ($symbol->digits === 2) {
+            $decimal = 100;
         } elseif ($symbol->digits === 1) {
             $decimal = 10;
         }
@@ -137,28 +151,41 @@ class ForexController extends Controller
 
     public function getCandles(Request $request)
     {
-        
+        $user = Auth::user();
+
         $symbol = $request->symbol;
         $currentDate = Carbon::now('UTC');
 
+        // Normalize the current timestamp to only compare up to the minute (ignore seconds and microseconds)
+        $normalizedCurrentDate = $currentDate->copy()->setSecond(0)->setMillisecond(0);
 
+        // Format to 'Y-m-d H:i' (ignoring seconds and milliseconds)
+        $currentTimestamp = $normalizedCurrentDate->toDateTimeString(); // Format like '2024-11-11 05:48:00'
+
+        // Start of today's date (00:00) in UTC
+        $startOfToday = $currentDate->copy()->startOfDay();
         
         $startOfPeriod = $currentDate->copy()->subDays($currentDate->dayOfWeek)->setTime(17, 0, 0);
         $endOfPeriod = $startOfPeriod->copy()->addDays(5);
 
-        $day = $currentDate->day;
-        $month = $currentDate->month;
-        $year = $currentDate->year;
-
+        // Start and end of yesterday's date (00:00 to 23:59:59) in UTC
+        $startOfYesterday = $currentDate->copy()->subDay()->startOfDay();
+        $endOfYesterday = $startOfToday->copy()->subSecond(); // 23:59:59 of the previous day
         
 
         if ($currentDate->between($startOfPeriod, $endOfPeriod)) {
             // current date data
-            $candle = HistoryChart::where('Symbol', $symbol)
-                    ->whereDay('Date', $day)     // Filters records for the current day
-                    ->whereMonth('Date', $month) // Filters for the current month
-                    ->whereYear('Date', $year)   // Filters for the current year
-                    ->get();
+            $candleQuery  = HistoryChart::where('Symbol', $symbol)
+                ->where('group', $user->group)
+                ->where(function($query) use ($startOfToday, $startOfYesterday, $endOfYesterday, $currentDate) {
+                    $query->whereBetween('Date', [$startOfYesterday, $endOfYesterday]) // Full day of yesterday
+                          ->orWhereBetween('Date', [$startOfToday, $currentDate]);     // From midnight today to now
+                });
+
+                 // Exclude candles with a timestamp that has the same minute as the current timestamp (ignores seconds)
+                $candleQuery->whereRaw('DATE_FORMAT(Date, "%Y-%m-%d %H:%i") != ?', [$normalizedCurrentDate->format('Y-m-d H:i')]);
+
+                $candle = $candleQuery->get();
                     
         } else {
             // last 5 day open market data
