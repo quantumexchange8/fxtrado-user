@@ -787,14 +787,14 @@
 
           if (data.symbol === selectedSymbol) {
             const spreadFactor = spreadAdjustment / Math.pow(10, data.digits);
-
-            liveUpdateCandlestick(data, spreadFactor);
+            const groupName = selectedSymbolData.group_name;
+            if (data.group === groupName) {
+              liveUpdateCandlestick(data, spreadFactor, groupName);
+            }
           }
 
         }
       }
-
-      // console.log('Received candlestick data:', data);
     }
 
     const previousPrices = {};

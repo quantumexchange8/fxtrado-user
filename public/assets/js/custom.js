@@ -230,9 +230,6 @@ async function loadCandleStickData(currentSymbol) {
 
 window.liveUpdateCandlestick = function(data, spreadFactor = 0) { // Default spreadAdjustment to 0 if not provided
   
-  const adjustedBid = parseFloat(data.bid) + spreadFactor;
-  const adjustedAsk = parseFloat(data.ask) + spreadFactor;
-
   // console.log('Updating candlestick with data:', data);
   const currentTime = Math.floor(Date.now() / 1000);
   const startOfMinute = Math.floor(currentTime / 60) * 60;
@@ -248,8 +245,8 @@ window.liveUpdateCandlestick = function(data, spreadFactor = 0) { // Default spr
     };
   } else {
     // Update the high and low with max/min of current high/low and new bid/ask
-    currentCandle.high = data.high;
-    currentCandle.low = data.low;
+    currentCandle.high = Math.max(currentCandle.high, data.high);
+    currentCandle.low = Math.min(currentCandle.low, data.low);
     currentCandle.close = data.close; // Close price updated with the latest adjusted bid
   }
 
