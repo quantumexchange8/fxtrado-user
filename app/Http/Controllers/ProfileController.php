@@ -21,30 +21,22 @@ class ProfileController extends Controller
 
     public function updateProfile(Request $request)
     {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . Auth::id(),
+            'phone' => 'nullable|unique:users,phone_number,' . Auth::id(),
+        ]);
 
-        $auth = Auth::user();
-        $user = User::find($auth->id);
+        $user = Auth::user();
 
-        if (!is_null($request->firstName) && $request->firstName !== '') {
-            $user->name = $request->firstName;
-        }
+        $user->update([
+            'name' => $request->name,
+            'phone_number' => $request->phone,
+            'email' => $request->email,
+        ]);
 
-        
 
-        if (!is_null($request->number) && $request->number !== '') {
-            $user->phone_number = $request->number;
-        }
-
-        if (!is_null($request->email) && $request->email !== '') {
-            $request->validate([
-                'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
-            ]);
-
-        }
-
-        $user->save();
-
-        return redirect()->route('profile');
+        return redirect()->back();
     }
 
     public function updateSecurity(Request $request)

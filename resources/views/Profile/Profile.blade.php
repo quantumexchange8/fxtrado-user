@@ -32,15 +32,24 @@
                                   
                                   <div class="col-md-12">
                                     <label for="firstName">{{ __('first_name') }}</label>
-                                    <input type="text" name="firstName" value="{{ $user->name}}" class="form-control" id="firstName" placeholder="First Name">
+                                    <input type="text" name="name" value="{{ $user->name}}" class="form-control" id="firstName" placeholder="First Name">
+                                      @error('name')
+                                          <small class="text-danger">{{ $message }}</small>
+                                      @enderror
                                   </div>
                                   <div class="col-md-12">
                                     <label for="email">{{ __('email') }}</label>
                                     <input type="email" name="email" value="{{ $user->email }}" class="form-control" id="email" placeholder="{{ __('enter_your_email') }}">
+                                      @error('email')
+                                          <small class="text-danger">{{ $message }}</small>
+                                      @enderror
                                   </div>
                                   <div class="col-md-12">
                                     <label for="number">{{ __('phone') }}</label>
-                                    <input type="number" name="number" value="{{ $user->phone_number }}" class="form-control" id="number" placeholder="{{ __('enter_your_phone') }}">
+                                    <input type="number" name="phone" value="{{ $user->phone_number }}" class="form-control" id="number" placeholder="{{ __('enter_your_phone') }}">
+                                      @error('phone')
+                                          <small class="text-danger">{{ $message }}</small>
+                                      @enderror
                                   </div>
                                   {{-- <div class="col-md-12">
                                     <label for="address">{{ __('address') }} </label>

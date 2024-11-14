@@ -42,6 +42,7 @@ class WalletController extends Controller
 
         $transaction = Transaction::create([
             'user_id' => $user->id,
+            'wallet_no' => $wallet->wallet_no,
             'transaction_number' => $transaction_id,
             'transaction_type' => 'Deposit',
             'status' => 'processing',

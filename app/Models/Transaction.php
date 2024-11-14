@@ -20,5 +20,6 @@ class Transaction extends Model
         'amount',
         'remark',
         'approved_at',
+        'wallet_no',
     ];
 }
