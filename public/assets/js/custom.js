@@ -240,17 +240,17 @@ window.liveUpdateCandlestick = function(data, spreadFactor = 0) { // Default spr
   if (latestCandleTime < startOfMinute) {
     latestCandleTime = startOfMinute;
     currentCandle = {
-      open: adjustedBid,
-      high: Math.max(adjustedBid, adjustedAsk),
-      low: Math.min(adjustedBid, adjustedAsk),
-      close: adjustedBid,
+      open: data.open,
+      high: data.high,
+      low: data.low,
+      close: data.close,
       time: startOfMinute,
     };
   } else {
     // Update the high and low with max/min of current high/low and new bid/ask
-    currentCandle.high = Math.max(currentCandle.high, adjustedBid, adjustedAsk);
-    currentCandle.low = Math.min(currentCandle.low, adjustedBid, adjustedAsk);
-    currentCandle.close = adjustedBid; // Close price updated with the latest adjusted bid
+    currentCandle.high = data.high;
+    currentCandle.low = data.low;
+    currentCandle.close = data.close; // Close price updated with the latest adjusted bid
   }
 
   // console.log('t', currentCandle.time, 'o:', currentCandle.open, 'h', currentCandle.high, 'l', currentCandle.low, 'c', currentCandle.close)

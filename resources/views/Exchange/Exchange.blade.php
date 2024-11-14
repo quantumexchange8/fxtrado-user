@@ -666,82 +666,135 @@
   </script>
 
   <script>
-    let socket;
-    let reconnectInterval = 1000; // Retry after 5 seconds
-    let reconnectAttempts = 0;
+    let forexSocket;
+    let candleSocket;
+    let forexReconnectInterval = 1000;
+    let candleReconnectInterval = 1000;
+    let forexReconnectAttempts = 0;
+    let candleReconnectAttempts = 0;
 
-    function getWebSocketUrl() {
-      const appEnv = "{{ env('APP_ENV') }}"; // Make sure this is rendered server-side
+    function getWebSocketUrl(path) {
+      const appEnv = "{{ env('APP_ENV') }}";
       return appEnv === 'production' 
-          ? 'wss://fxtrado-backend.currenttech.pro/forex_pair' 
-          : 'ws://localhost:3000/forex_pair';
+          ? `wss://fxtrado-backend.currenttech.pro/${path}`
+          : `ws://localhost:3000/${path}`;
     }
 
     // Function to establish WebSocket connection
-    function connectWebSocket() {
-        if (socket && (socket.readyState === WebSocket.OPEN || socket.readyState === WebSocket.CONNECTING)) {
+    function connectForexWebSocket() {
+        if (forexSocket && (forexSocket.readyState === WebSocket.OPEN || forexSocket.readyState === WebSocket.CONNECTING)) {
           return;
         }
 
-        const wsUrl = getWebSocketUrl(); // Use the utility function to get the URL
-        socket = new WebSocket(wsUrl); // Update this with your correct WebSocket URL
+        const wsUrl = getWebSocketUrl('forex_pair'); // Use the utility function to get the URL
+        forexSocket = new WebSocket(wsUrl); // Update this with your correct WebSocket URL
         
         
         // console.log(wsUrl) // for testing purpose
 
-        socket.onopen = function() {
-            console.log('WebSocket connection established');
-            reconnectAttempts = 0;
+        forexSocket.onopen = function() {
+            console.log('Forex WebSocket connection established');
+            forexReconnectAttempts = 0;
         };
 
-        socket.onmessage = function(event) {
+        forexSocket.onmessage = function(event) {
             // Parse the incoming data (which should be JSON)
             const data = JSON.parse(event.data);
-            
-            const selectedSymbolElement = document.getElementById('selected-symbol');
-            const selectedSymbol = selectedSymbolElement.innerText.trim();
-            
-            if (window.groupSymbols) {
-              const selectedSymbolData = window.groupSymbols.find(item => item.symbol === selectedSymbol);
-  
-              if (selectedSymbolData) {
-                const spreadAdjustment = selectedSymbolData.spread;
-  
-                // Call the function to update the corresponding table row
-                updateTableRow(data.symbol, data.bid, data.ask, data.digits);
-                
-                if (data.symbol === selectedSymbol) {
+            handleForexData(data);
+        };
+
+        forexSocket.onerror = function(error) {
+            console.error('Forex WebSocket error:', error);
+        };
+
+        forexSocket.onclose = function() {
+            console.warn('Forex WebSocket connection closed, attempting to reconnect...');
+            setTimeout(() => {
+              forexReconnectAttempts++;
+              forexReconnectInterval = Math.min(10000, forexReconnectInterval * 2); // Max wait time of 10 seconds
+              connectForexWebSocket();
+            }, forexReconnectInterval);
+        };
+    }
+
+    // Function to establish Candle WebSocket connection
+    function connectCandleWebSocket() {
+      if (candleSocket && (candleSocket.readyState === WebSocket.OPEN || candleSocket.readyState === WebSocket.CONNECTING)) {
+        return;
+      }
+
+      const wsUrl = getWebSocketUrl('live_candle');
+      candleSocket = new WebSocket(wsUrl);
+
+      candleSocket.onopen = function() {
+        console.log('Candle WebSocket connection established');
+        candleReconnectAttempts = 0;
+      };
+
+      candleSocket.onmessage = function(event) {
+          const data = JSON.parse(event.data);
+          handleCandleData(data); // New function to handle Candle data updates
+      };
+
+      candleSocket.onerror = function(error) {
+        console.error('Candle WebSocket error:', error);
+      };
+
+      candleSocket.onclose = function() {
+          console.warn('Candle WebSocket connection closed, attempting to reconnect...');
+          setTimeout(() => {
+              candleReconnectAttempts++;
+              candleReconnectInterval = Math.min(10000, candleReconnectInterval * 2);
+              connectCandleWebSocket();
+          }, candleReconnectInterval);
+      };
+    }
+
+    // Handle Forex Data
+    function handleForexData(data) {
+      // Your existing logic for handling forex data
+      const selectedSymbolElement = document.getElementById('selected-symbol');
+      const selectedSymbol = selectedSymbolElement.innerText.trim();
+      
+      if (window.groupSymbols) {
+          const selectedSymbolData = window.groupSymbols.find(item => item.symbol === selectedSymbol);
+          if (selectedSymbolData) {
+              const spreadAdjustment = selectedSymbolData.spread;
+              updateTableRow(data.symbol, data.bid, data.ask, data.digits);
+              if (data.symbol === selectedSymbol) {
                   const spreadFactor = spreadAdjustment / Math.pow(10, data.digits);
-                  
                   const adjustedAsk = parseFloat(data.ask) + spreadFactor;
                   const adjustedBid = parseFloat(data.bid) + spreadFactor;
-  
-                  // Update the ask price in the selected-pair-container div
                   document.getElementById('ask-price').innerText = adjustedAsk.toFixed(data.digits);
                   document.getElementById('bid-price').innerText = adjustedBid.toFixed(data.digits);
-    
-                  liveUpdateCandlestick(data, spreadFactor);
-                  
-                }
+                  // liveUpdateCandlestick(data, spreadFactor);
               }
-            } else {
-              console.error('groupSymbols is not defined');
-            }
-      
-        };
+          }
+      } else {
+          console.error('groupSymbols is not defined');
+      }
+    }
 
-        socket.onerror = function(error) {
-            console.error('WebSocket error:', error);
-        };
+    function handleCandleData(data) {
+      const selectedSymbolElement = document.getElementById('selected-symbol');
+      const selectedSymbol = selectedSymbolElement.innerText.trim();
 
-        socket.onclose = function() {
-            console.warn('WebSocket connection closed, attempting to reconnect...');
-            setTimeout(() => {
-              reconnectAttempts++;
-              reconnectInterval = Math.min(10000, reconnectInterval * 2); // Max wait time of 10 seconds
-              connectWebSocket();
-            }, reconnectInterval);
-        };
+      if (window.groupSymbols) {
+        const selectedSymbolData = window.groupSymbols.find(item => item.symbol === selectedSymbol);
+
+        if (selectedSymbolData) {
+          const spreadAdjustment = selectedSymbolData.spread;
+
+          if (data.symbol === selectedSymbol) {
+            const spreadFactor = spreadAdjustment / Math.pow(10, data.digits);
+
+            liveUpdateCandlestick(data, spreadFactor);
+          }
+
+        }
+      }
+
+      // console.log('Received candlestick data:', data);
     }
 
     const previousPrices = {};
@@ -799,16 +852,14 @@
 
     // Initialize WebSocket connection when the page loads
     window.onload = function() {
-        connectWebSocket();
+      connectForexWebSocket();
+      connectCandleWebSocket();
     };
 
     window.addEventListener('beforeunload', () => {
-      if (socket) {
-        socket.close();
-      }
+      if (forexSocket) forexSocket.close();
+      if (candleSocket) candleSocket.close();
     });
-    // Reconnect on page load
-    window.onload = connectWebSocket;
 
     // const selectSymbol = (currencyPair) => {
     //   const container = document.getElementById('selected-pair-container');
@@ -1134,6 +1185,5 @@
         }
     }
   </script>
-
 
 @endsection
