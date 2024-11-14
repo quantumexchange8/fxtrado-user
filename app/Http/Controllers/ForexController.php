@@ -129,8 +129,6 @@ class ForexController extends Controller
         $order->close_price = $closeprice;
         $order->save();
 
-        Log::debug(['calculation details', $order->order_id, $profit]);
-
         return redirect()->route('orders');
     }
 
