@@ -37,16 +37,9 @@ class WalletController extends Controller
     {
         $user = Auth::user();
         $wallet = Wallet::where('user_id', $user->id)->first();
-        $transaction_id = RunningNumberService::getID('transaction');
-        $token = Str::random(40);
-
-        $transaction = Transaction::create([
-            'user_id' => $user->id,
-            'wallet_no' => $wallet->wallet_no,
-            'transaction_number' => $transaction_id,
-            'transaction_type' => 'Deposit',
-            'status' => 'processing',
-        ]);
+        // $token = Str::random(40);
+        
+        $checkTransaction = Transaction::where('user_id', $user->id)->where('status', 'processing')->first();
 
         $payoutSetting = config('payment-gateway');
         $domain = $_SERVER['HTTP_HOST'];
@@ -57,19 +50,42 @@ class WalletController extends Controller
             $selectedPayout = $payoutSetting['staging'];
         }
 
-        $vCode = md5($selectedPayout['appId'] . $transaction_id . $selectedPayout['merchantId'] . $selectedPayout['ttKey']);
+        if ($checkTransaction) {
 
-        $params = [
-            'orderNumber' => $transaction_id,
-            'userId' => $user->id,
-            'merchantId' => $selectedPayout['merchantId'],
-            'appId' => $selectedPayout['appId'],
-            'vCode' => $vCode,
-            'token' => $token,
-            'userName' => $user->name,
-            'userEmail' => $user->email,
-            'locale' => app()->getLocale(),
-        ];
+            $vCode = md5($selectedPayout['appId'] . $checkTransaction->transaction_number . $selectedPayout['merchantId'] . $selectedPayout['ttKey']);
+
+            $params = [
+                'orderNumber' => $checkTransaction->transaction_number,
+                'userId' => $user->id,
+                'merchantId' => $selectedPayout['merchantId'],
+                'vCode' => $vCode,
+                // 'token' => $token,
+                'userName' => $user->name,
+                'userEmail' => $user->email,
+                'locale' => app()->getLocale(),
+            ];
+        } else {
+            $transaction_id = RunningNumberService::getID('transaction');
+            $vCode = md5($selectedPayout['appId'] . $transaction_id . $selectedPayout['merchantId'] . $selectedPayout['ttKey']);
+
+            $transaction = Transaction::create([
+                'user_id' => $user->id,
+                'transaction_number' => $transaction_id,
+                'transaction_type' => 'Deposit',
+                'status' => 'processing',
+            ]);
+
+            $params = [
+                'orderNumber' => $transaction_id,
+                'userId' => $user->id,
+                'merchantId' => $selectedPayout['merchantId'],
+                'vCode' => $vCode,
+                // 'token' => $token,
+                'userName' => $user->name,
+                'userEmail' => $user->email,
+                'locale' => app()->getLocale(),
+            ];
+        }
 
         $url = $selectedPayout['paymentUrl'] . '/payment';
         $redirectUrl = $url . "?" . http_build_query($params);
@@ -80,29 +96,9 @@ class WalletController extends Controller
     public function deposit_return(Request $request)
     {
         $data = $request->all();
-        Log::debug('data from return', $data);
+        // Log::debug('data from return', $data);
 
-        if ($data['response_status'] == 'success') {
-
-            $result = [
-                "amount" => $data['transfer_amount'],
-                "transaction_number" => $data['transaction_number'],
-                "txid" => $data['txID'],
-            ];
-
-            $transaction = Transaction::query()
-                ->where('transaction_number', $result['transaction_number'])
-                ->first();
-
-            $result['date'] = $transaction->approved_at;
-
-            return redirect()->route('forex_pair')->with('notification', [
-                'details' => $transaction,
-                'type' => 'deposit',
-            ]);
-        } else {
-            return to_route('forex_pair');
-        }
+        return to_route('forex_pair');
     }
 
     public function depositCallback(Request $request)
@@ -129,7 +125,7 @@ class WalletController extends Controller
         $payoutSetting = config('payment-gateway');
         $domain = $_SERVER['HTTP_HOST'];
 
-        if ($domain === 'fxtrado-user.com') {
+        if ($domain === 'user.fxtrado.com') {
             $selectedPayout = $payoutSetting['live'];
         } else {
             $selectedPayout = $payoutSetting['staging'];
@@ -149,16 +145,10 @@ class WalletController extends Controller
                 'approved_at' => now()
             ]);
 
-            if ($status === 'successful') {
-                $wallet->balance += $result['amount'];
-                $wallet->save();
-            }
+            $wallet->balance += $result['amount'];
+            $wallet->save();
 
-            if ($transaction->status == 'successful') {
-                if ($transaction->transaction_type === 'Deposit') {
-                    return response()->json(['success' => true, 'message' => 'Deposit Success']);
-                }
-            }
+            return response()->json(['success' => true, 'message' => 'Deposit Success']);
         }
 
         return response()->json(['success' => false, 'message' => 'Deposit Failed']);
