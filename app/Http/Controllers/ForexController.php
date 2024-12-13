@@ -47,7 +47,7 @@ class ForexController extends Controller
     public function openOrders(Request $request)
     {
         $user = Auth::user();
-
+        $now = Carbon::now();
         $wallet = Wallet::where('user_id', $user->id)->first();
 
         if ($request->price <= 0) {
@@ -62,7 +62,7 @@ class ForexController extends Controller
                 'type' => $request->type,
                 'volume' => $request->volume,
                 'price' => $request->price,
-                'open_time' => now(),
+                'open_time' => $now,
                 'status' => 'open',
                 'group_name' => $user->group,
             ]);
