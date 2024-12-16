@@ -49,6 +49,14 @@
     }
   </script>
 
+<script>
+  function changeLanguage(event) {
+      const selectedLang = event.target.value;
+      // Redirect to the appropriate route to switch language
+      window.location.href = `/switch-language/${selectedLang}`;
+  }
+</script>
+
 </body>
 
 </html>

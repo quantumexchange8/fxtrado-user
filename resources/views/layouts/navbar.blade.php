@@ -57,7 +57,18 @@
         <span class="navigation__item-icon-wrapper">
           <i class="fa-solid fa-language" style="width: 40px;height:30px;cursor: pointer;color:white"></i>
         </span>
-        <span class="navigation__item-label">{{ __('language') }}</span>
+        <div style="display: flex;justify-content:flex-end">
+          <select class="language-selector" onchange="changeLanguage(event)">
+              <option value="en" {{ session('locale') === 'en' ? 'selected' : '' }}>English</option>
+              <option value="tw" {{ session('locale') === 'tw' ? 'selected' : '' }}>繁體中文</option>
+              <option value="cn" {{ session('locale') === 'cn' ? 'selected' : '' }}>简体中文</option>
+              <option value="jpy" {{ session('locale') === 'jpy' ? 'selected' : '' }}>日本語</option>
+              <option value="korea" {{ session('locale') === 'korea' ? 'selected' : '' }}>한국인</option>
+              <option value="thai" {{ session('locale') === 'thai' ? 'selected' : '' }}>แบบไทย</option>
+              <option value="vn" {{ session('locale') === 'vn' ? 'selected' : '' }}>Tiếng Việt</option>
+              <!-- Add more languages if necessary -->
+          </select>
+        </div>
       </li>
     </ul>
   </div>
