@@ -170,27 +170,38 @@ class ForexController extends Controller
         $startOfYesterday = $currentDate->copy()->subDay()->startOfDay();
         $endOfYesterday = $startOfToday->copy()->subSecond(); // 23:59:59 of the previous day
         
+        $twoDaysAgo = $currentDate->copy()->subDays(2);
 
-        if ($currentDate->between($startOfPeriod, $endOfPeriod)) {
-            // current date data
-            $candleQuery  = HistoryChart::where('Symbol', $symbol)
-                ->where('group', $user->group)
-                ->where(function($query) use ($startOfToday, $startOfYesterday, $endOfYesterday, $currentDate) {
-                    $query->whereBetween('Date', [$startOfYesterday, $endOfYesterday]) // Full day of yesterday
-                          ->orWhereBetween('Date', [$startOfToday, $currentDate]);     // From midnight today to now
-                });
+        // $candle = HistoryChart::where('Symbol', $symbol)
+        //     ->whereBetween('Date', [$startOfRange, $endOfRange])
+        //     ->get();
 
-                 // Exclude candles with a timestamp that has the same minute as the current timestamp (ignores seconds)
-                $candleQuery->whereRaw('DATE_FORMAT(Date, "%Y-%m-%d %H:%i") != ?', [$normalizedCurrentDate->format('Y-m-d H:i')]);
 
-                $candle = $candleQuery->get();
+        // if ($currentDate->between($startOfPeriod, $endOfPeriod)) {
+        //     // current date data
+        //     $candleQuery  = HistoryChart::where('Symbol', $symbol)
+        //         ->where('group', $user->group)
+        //         ->where(function($query) use ($startOfToday, $startOfYesterday, $endOfYesterday, $currentDate) {
+        //             $query->whereBetween('Date', [$startOfYesterday, $endOfYesterday]) // Full day of yesterday
+        //                   ->orWhereBetween('Date', [$startOfToday, $currentDate]);     // From midnight today to now
+        //         });
+
+        //          // Exclude candles with a timestamp that has the same minute as the current timestamp (ignores seconds)
+        //         $candleQuery->whereRaw('DATE_FORMAT(Date, "%Y-%m-%d %H:%i") != ?', [$normalizedCurrentDate->format('Y-m-d H:i')]);
+
+        //         $candle = $candleQuery->get();
                     
-        } else {
-            // last 5 day open market data
-            $candle = HistoryChart::where('Symbol', $symbol)
-                    ->whereBetween('Date', [$startOfPeriod, $endOfPeriod])
+        // } else {
+        //     // last 5 day open market data
+        //     $candle = HistoryChart::where('Symbol', $symbol)
+        //             ->whereBetween('Date', [$startOfPeriod, $endOfPeriod])
+        //             ->get();
+        // }
+
+        $candle = HistoryChart::where('Symbol', $symbol)
+                    ->where('group', $user->group)
+                    ->whereBetween('Date', [$twoDaysAgo, $currentDate])
                     ->get();
-        }
 
         return response()->json($candle);
     }
