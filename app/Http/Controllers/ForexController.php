@@ -153,50 +153,8 @@ class ForexController extends Controller
 
         $symbol = $request->symbol;
         $currentDate = Carbon::now('UTC');
-
-        // Normalize the current timestamp to only compare up to the minute (ignore seconds and microseconds)
-        $normalizedCurrentDate = $currentDate->copy()->setSecond(0)->setMillisecond(0);
-
-        // Format to 'Y-m-d H:i' (ignoring seconds and milliseconds)
-        $currentTimestamp = $normalizedCurrentDate->toDateTimeString(); // Format like '2024-11-11 05:48:00'
-
-        // Start of today's date (00:00) in UTC
-        $startOfToday = $currentDate->copy()->startOfDay();
-        
-        $startOfPeriod = $currentDate->copy()->subDays($currentDate->dayOfWeek)->setTime(17, 0, 0);
-        $endOfPeriod = $startOfPeriod->copy()->addDays(5);
-
-        // Start and end of yesterday's date (00:00 to 23:59:59) in UTC
-        $startOfYesterday = $currentDate->copy()->subDay()->startOfDay();
-        $endOfYesterday = $startOfToday->copy()->subSecond(); // 23:59:59 of the previous day
         
         $twoDaysAgo = $currentDate->copy()->subDays(2);
-
-        // $candle = HistoryChart::where('Symbol', $symbol)
-        //     ->whereBetween('Date', [$startOfRange, $endOfRange])
-        //     ->get();
-
-
-        // if ($currentDate->between($startOfPeriod, $endOfPeriod)) {
-        //     // current date data
-        //     $candleQuery  = HistoryChart::where('Symbol', $symbol)
-        //         ->where('group', $user->group)
-        //         ->where(function($query) use ($startOfToday, $startOfYesterday, $endOfYesterday, $currentDate) {
-        //             $query->whereBetween('Date', [$startOfYesterday, $endOfYesterday]) // Full day of yesterday
-        //                   ->orWhereBetween('Date', [$startOfToday, $currentDate]);     // From midnight today to now
-        //         });
-
-        //          // Exclude candles with a timestamp that has the same minute as the current timestamp (ignores seconds)
-        //         $candleQuery->whereRaw('DATE_FORMAT(Date, "%Y-%m-%d %H:%i") != ?', [$normalizedCurrentDate->format('Y-m-d H:i')]);
-
-        //         $candle = $candleQuery->get();
-                    
-        // } else {
-        //     // last 5 day open market data
-        //     $candle = HistoryChart::where('Symbol', $symbol)
-        //             ->whereBetween('Date', [$startOfPeriod, $endOfPeriod])
-        //             ->get();
-        // }
 
         $candle = HistoryChart::where('Symbol', $symbol)
                     ->where('group', $user->group)
