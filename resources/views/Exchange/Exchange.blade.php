@@ -676,6 +676,8 @@
     function getWebSocketUrl(path) {
       const appEnv = "{{ env('APP_ENV') }}";
       return appEnv === 'production' 
+          ? `wss://fxtrado-backend.fxtrado.com/${path}`
+          appEnv === 'staging' 
           ? `wss://fxtrado-backend.currenttech.pro/${path}`
           : `ws://localhost:3000/${path}`;
     }
@@ -900,7 +902,7 @@
           lot = 0.01;
       }
 
-      const api = window.appEnv === 'production' ? 'https://fxtrado-backend.currenttech.pro/api/openOrders' : 'http://localhost:3000/api/openOrders';
+      const api = window.appEnv === 'production' ? 'https://fxtrado-backend.fxtrado.com/api/openOrders' ? window.appEnv === 'staging' ? 'https://fxtrado-backend.currenttech.pro/api/openOrders' : 'http://localhost:3000/api/openOrders';
       // Make sure a symbol is selected before sending the request
       if (selectedSymbol !== 'None') {
         const orderData = {
@@ -1049,7 +1051,7 @@
           lot = 0.01;
         }
 
-        const api = window.appEnv === 'production' ? 'https://fxtrado-backend.currenttech.pro/api/openOrders' : 'http://localhost:3000/api/openOrders';
+        const api = window.appEnv === 'production' ? 'https://fxtrado-backend.fxtrado.com/api/openOrders' ? window.appEnv === 'staging' ? 'https://fxtrado-backend.currenttech.pro/api/openOrders' : 'http://localhost:3000/api/openOrders';
 
         // Make sure a symbol is selected before sending the request
         if (selectedSymbol !== 'None') {
