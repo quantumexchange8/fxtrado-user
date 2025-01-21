@@ -63,6 +63,7 @@
     "processing": "Processing",
     "failed1": "Failed",
     "wallet_address": "Wallet Address",
+    "deposit2": "Deposit",
     "withdraw2": "Withdraw",
     "close": "Close",
     "transaction_detail": "Transaction Detail",
