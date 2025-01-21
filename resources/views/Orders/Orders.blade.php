@@ -363,7 +363,9 @@
         function getWebSocketUrl() {
           const appEnv = "{{ env('APP_ENV') }}"; // Make sure this is rendered server-side
           return appEnv === 'production' 
-              ? 'wss://backend.fxtrado.com/getOrder'
+              ? 'wss://fxtrado-backend.fxtrado.com/getOrder'
+              : appEnv === 'staging'
+              ? 'wss://fxtrado-backend.currenttech.pro/getOrder'
               : 'ws://localhost:3000/getOrder';
         }
 
@@ -497,7 +499,11 @@
           closeButton.disabled = true;
           closeButton.style.setProperty('background', '#374151', 'important');
 
-          const api = window.appEnv === 'production' ? 'https://fxtrado-backend.currenttech.pro/api/closeOrder' : 'http://localhost:3000/api/closeOrder';
+          const api = window.appEnv === 'production' 
+          ? 'https://fxtrado-backend.fxtrado.com/api/closeOrder' 
+          : window.appEnv === 'staging'
+          ? 'https://fxtrado-backend.currenttech.pro/api/closeOrder'
+          : 'http://localhost:3000/api/closeOrder';
 
           if (orderId || positionId) {
             const orderData = {

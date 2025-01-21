@@ -27,6 +27,9 @@ class AppServiceProvider extends ServiceProvider
         if (App::environment('production')) {
             resolve(\Illuminate\Routing\UrlGenerator::class)->forceScheme('https');
             $this->app['request']->server->set('HTTPS', true);
+        } else if (App::environment('staging')) {
+            resolve(\Illuminate\Routing\UrlGenerator::class)->forceScheme('https');
+            $this->app['request']->server->set('HTTPS', true);
         }
     }
 }
