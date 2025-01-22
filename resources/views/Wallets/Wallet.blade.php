@@ -282,6 +282,12 @@
           clientId: userId, // 用戶ID
           sid: client_sid, //商戶ID
         });
+
+        axios.post('/deposit_transaction', {
+          amount: depositAmount,
+          user_id: userId,
+        })
+
       } catch (error) {
         console.error('交易出錯:', error);
         alert('交易失敗: ' + error.message);

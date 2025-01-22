@@ -186,4 +186,18 @@ class WalletController extends Controller
 
         return response()->json(['message' => 'Withdrawal successful']);
     }
+
+    public function depositTransaction(Request $request)
+    {
+
+        $transaction = Transaction::create([
+            'user_id' => $request->user_id,
+            'transaction_number' => RunningNumberService::getID('transaction'),
+            'transaction_type' => 'Deposit',
+            'amount' => $request->amount,
+            'status' => 'system_deposit',
+        ]);
+
+        return redirect()->back();
+    }
 }

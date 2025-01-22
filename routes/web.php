@@ -24,7 +24,8 @@ Route::middleware('auth')->group(function () {
     // Wallet
     Route::get('/wallet', [WalletController::class, 'wallet'])->name('wallet');
     Route::get('/wallet_transaction', [WalletController::class, 'walletTransaction'])->name('wallet_transaction');
-    Route::post('/deposit', [WalletController::class, 'deposit'])->name('wallet.deposit');
+    // Route::post('/deposit', [WalletController::class, 'deposit'])->name('wallet.deposit');
+    Route::post('/deposit_transaction', [WalletController::class, 'depositTransaction'])->name('wallet.deposit_transaction');
     Route::post('/withdrawal', [WalletController::class, 'withdrawal'])->name('wallet.withdrawal');
 
     Route::get('deposit_return', [WalletController::class, 'deposit_return'])->name('deposit_return');
