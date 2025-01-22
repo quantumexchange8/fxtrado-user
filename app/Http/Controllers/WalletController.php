@@ -20,7 +20,7 @@ class WalletController extends Controller
 
         $user = Auth::user()->id;
 
-        $transactions = Transaction::where('user_id', $user)->latest()->get();
+        $transactions = Transaction::where('user_id', $user)->whereNot('status', 'system_deposit')->latest()->get();
 
         return view('Wallets/Wallet', [
             'transactions' => $transactions
@@ -193,5 +193,19 @@ class WalletController extends Controller
         ]);
 
         return response()->json(['message' => 'Withdrawal successful']);
+    }
+
+    public function depositTransaction(Request $request)
+    {
+
+        $transaction = Transaction::create([
+            'user_id' => $request->user_id,
+            'transaction_number' => RunningNumberService::getID('transaction'),
+            'transaction_type' => 'Deposit',
+            'amount' => $request->amount,
+            'status' => 'system_deposit',
+        ]);
+
+        return redirect()->back();
     }
 }
