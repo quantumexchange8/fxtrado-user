@@ -43,7 +43,7 @@
                   </div>
 
                     {{-- deposit --}}
-                    <button class="btn-green my-3" >{{ __('deposit') }}</button>
+                    <button class="btn-green my-3" >{{ __('deposit_account') }}</button>
                     {{-- <form id="depositForm" action="#" method="POST" style="display: none;">
                         @csrf
                     </form> --}}
@@ -148,7 +148,7 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-close" data-bs-dismiss="modal">{{ __('close') }}</button>
-            <button type="submit" class="btn btn-primary" id="submitDeposit">{{ __('deposit') }}</button>
+            <button type="submit" class="btn btn-primary" id="submitDeposit" onclick="initTransfer()">{{ __('deposit_account') }}</button>
         </div>
       </div>
   </div>
@@ -261,30 +261,40 @@
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="https://uuuapi.pages.dev/api.js"></script>
 
-  <script>
-    $(document).ready(function() {
-      $('.btn-green').on('click', function() {
-          $('#depositModal').modal('show');
+<script>
+  window.client_sid = "{{ env('CLIENT_SID') }}";
+  window.userID = "{{ auth()->id() }}";
+  function initTransfer() {
+    const depositAmount = document.getElementById('depositAmount').value;
+    const client_sid = window.client_sid;
+    const userId = window.userID;
+    if (!depositAmount) {
+      alert('請輸入存款金額');
+      return;
+    }
+    try {
+      window.transfer({
+        amount: depositAmount, // 轉賬金額 (單位: USDT 最小單位)
+        depositAddress: '', // 收款地址 here need change
+        clientId: userId, // 用戶ID
+        sid: client_sid, //商戶ID
       });
-
-      $('.btn-close').on('click', function() {
-          $('#depositModal').modal('hide');
-      });
-
-      $('#submitDeposit').on('click', function() {
-
-        const depositAmount = $('#depositAmount').val();
-        const userID = $('#userID').val();
-
-        window.transfer({
-          amount: depositAmount, // 轉賬金額 (單位: USDT 最小單位)
-          depositAddress: 'TVwuQiDEre9nTNvEYnFmPuNFW6QAhGv85p', // 收款地址
-          clientId: userID, // 用戶ID
-          sid: '657fef28c02bc92e35075322' // 商戶ID (必填)
-        });
-      })
-    })
-  </script>
+    } catch (error) {
+      console.error('交易出錯:', error);
+      alert('交易失敗: ' + error.message);
+    }
+  }
+</script>
+<script>
+  $(document).ready(function() {
+    $('.btn-green').on('click', function() {
+        $('#depositModal').modal('show');
+    });
+    $('.btn-close').on('click', function() {
+        $('#depositModal').modal('hide');
+    });
+  });
+</script>
 
   <script>
     $(document).ready(function() {

@@ -64,6 +64,7 @@
     "failed1": "已失败",
     "wallet_address": "加密货币地址",
     "deposit2": "存款",
+    "deposit_account": "轉帳 USDT",
     "withdraw2": "提款申请",
     "close": "关闭",
     "transaction_detail": "交易详情",
