@@ -63,6 +63,8 @@
     "processing": "處理中",
     "failed1": "已失敗",
     "wallet_address": "加密貨幣地址",
+    "deposit2": "存款",
+    "deposit_account": "轉帳 USDT",
     "withdraw2": "提款申請",
     "close": "關閉",
     "transaction_detail": "交易詳情",

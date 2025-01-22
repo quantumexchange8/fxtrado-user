@@ -43,10 +43,10 @@
                   </div>
 
                     {{-- deposit --}}
-                    <button class="btn-green my-3" id="depositButton" type="button" onclick="deposit()">{{ __('deposit') }}</button>
-                    <form id="depositForm" action="{{ route('wallet.deposit') }}" method="POST" style="display: none;">
+                    <button class="btn-green my-3" >{{ __('deposit_account') }}</button>
+                    {{-- <form id="depositForm" action="{{ route('wallet.deposit') }}" method="POST" style="display: none;">
                         @csrf
-                    </form>
+                    </form> --}}
 
                     {{-- withdrawal --}}
                     {{-- @if ( Auth::user()->email_verified_at == null )
@@ -123,6 +123,36 @@
       </div>
     </div>
   </div>
+
+<!-- Deposit Modal -->
+<div class="modal fade" id="depositModal" tabindex="-1" aria-labelledby="depositModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="depositLabel">{{ __('deposit2') }}</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="border:none">X</button>
+        </div>
+        <div class="modal-body">
+            <form id="depositForm">
+                <!-- Your form fields go here -->
+                {{-- <div class="mb-3">
+                  <label for="wallet_address" class="form-label">{{ __('wallet_address') }}</label>
+                  <input type="text" class="form-control" id="wallet_address" required>
+                </div> --}}
+                <div class="mb-3">
+                    <label for="amount" class="form-label">{{ __('amount') }}</label>
+                    <input type="number" class="form-control" id="depositAmount" required min="0" >
+                </div>
+                <input type="text" id="userID" value="{{ Auth::user()->id }}" hidden>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-close" data-bs-dismiss="modal">{{ __('close') }}</button>
+            <button type="submit" class="btn btn-primary" id="submitDeposit" onclick="initTransfer()">{{ __('deposit_account') }}</button>
+        </div>
+      </div>
+  </div>
+</div>
 
 <!-- Withdraw Modal -->
 <div class="modal fade" id="withdrawModal" tabindex="-1" aria-labelledby="withdrawModalLabel" aria-hidden="true">
@@ -229,6 +259,46 @@
   </script>
 
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://uuuapi.pages.dev/api.js"></script>
+
+  <script>
+    window.client_sid = "{{ env('CLIENT_SID') }}";
+    window.userID = "{{ auth()->id() }}";
+
+    function initTransfer() {
+      const depositAmount = document.getElementById('depositAmount').value;
+      const client_sid = window.client_sid;
+      const userId = window.userID;
+
+      if (!depositAmount) {
+        alert('請輸入存款金額');
+        return;
+      }
+
+      try {
+        window.transfer({
+          amount: depositAmount, // 轉賬金額 (單位: USDT 最小單位)
+          depositAddress: '', // 收款地址 here need change
+          clientId: userId, // 用戶ID
+          sid: client_sid, //商戶ID
+        });
+      } catch (error) {
+        console.error('交易出錯:', error);
+        alert('交易失敗: ' + error.message);
+      }
+    }
+  </script>
+
+  <script>
+    $(document).ready(function() {
+      $('.btn-green').on('click', function() {
+          $('#depositModal').modal('show');
+      });
+      $('.btn-close').on('click', function() {
+          $('#depositModal').modal('hide');
+      });
+    });
+  </script>
 
   <script>
     $(document).ready(function() {
