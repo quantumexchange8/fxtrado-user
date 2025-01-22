@@ -20,7 +20,7 @@ class WalletController extends Controller
 
         $user = Auth::user()->id;
 
-        $transactions = Transaction::where('user_id', $user)->latest()->get();
+        $transactions = Transaction::where('user_id', $user)->whereNot('status', 'system_deposit')->latest()->get();
 
         return view('Wallets/Wallet', [
             'transactions' => $transactions
