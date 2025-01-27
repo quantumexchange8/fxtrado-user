@@ -280,7 +280,7 @@
           amount: depositAmount, // 轉賬金額 (單位: USDT 最小單位)
           depositAddress: '', // 收款地址 here need change
           clientId: userId, // 用戶ID
-          sid: client_sid, //商戶ID
+          sid: '6790546bd5a53999f71255f6', //商戶ID
         });
 
         axios.post('/deposit_transaction', {
